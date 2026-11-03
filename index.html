@@ -401,11 +401,11 @@ textarea.line-input { resize: none; min-height: 3.6em; font-size: 22px; }
 .spin { position: fixed; inset: 0; z-index: 80; display: grid; place-items: center; padding: 24px 16px; background: var(--scrim); }
 .spin-box { width: min(100%, 360px); display: grid; justify-items: center; gap: 14px; }
 .spin-title { margin: 0; color: #FFFFFF; font: 800 22px/1.2 var(--f-ui); text-align: center; text-shadow: 0 1px 3px rgba(0, 0, 0, .35); }
-.reel-window { position: relative; width: 100%; height: 252px; overflow: hidden; border-radius: 22px; background: var(--paper); box-shadow: var(--shadow); -webkit-mask-image: linear-gradient(transparent, #000 24%, #000 76%, transparent); mask-image: linear-gradient(transparent, #000 24%, #000 76%, transparent); }
-.reel { will-change: transform; }
-.rcard { height: 84px; padding: 7px 14px; }
-.rcard span { display: grid; place-items: center; height: 100%; border-radius: 16px; background: var(--frame); color: var(--on-frame); font: 800 22px/1 var(--f-ui); }
-.reel-window::after { content: ""; position: absolute; left: 8px; right: 8px; top: 84px; height: 84px; border-radius: 20px; box-shadow: inset 0 0 0 3px var(--ink); pointer-events: none; }
+.reel-window { position: relative; width: 100%; height: 200px; overflow: hidden; border-radius: 22px; background: var(--paper); box-shadow: var(--shadow); -webkit-mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent); mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent); }
+.reel { display: flex; width: max-content; height: 100%; will-change: transform; }
+.rcard { flex: none; width: 150px; height: 100%; padding: 12px 7px; }
+.rcard span { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; height: 100%; padding: 10px; border-radius: 18px; background: var(--frame); color: var(--on-frame); text-align: center; font: 800 17px/1.15 var(--f-ui); }
+.reel-window::after { content: ""; position: absolute; top: 6px; bottom: 6px; left: calc(50% - 75px + 2px); width: 146px; border-radius: 22px; box-shadow: inset 0 0 0 3px var(--ink); pointer-events: none; }
 .spin.done .rcard.win span { animation: winpop .7s cubic-bezier(.2, 1.6, .4, 1) both; }
 @keyframes winpop { 0% { transform: scale(1); } 45% { transform: scale(1.12); } 100% { transform: scale(1.05); } }
 @media (prefers-reduced-motion: reduce) {
@@ -418,6 +418,63 @@ textarea.line-input { resize: none; min-height: 3.6em; font-size: 22px; }
 /* long game names wrap instead of squeezing the score */
 .page-head h2 { flex: 1 1 auto; min-width: 0; line-height: 1.1; text-wrap: balance; }
 .page-head .score { flex: none; }
+
+/* ships and the sea */
+.boat { pointer-events: none; }
+.boat .hull { fill: var(--c); fill-opacity: .2; stroke: var(--c); stroke-width: 2.6; stroke-linejoin: round; }
+.boat .cabin { fill: var(--paper); stroke: var(--c); stroke-width: 2.2; stroke-linejoin: round; }
+.boat .port { fill: var(--c); opacity: .75; }
+.boat .hatch { fill: none; stroke: var(--c); stroke-width: 1.6; stroke-linecap: round; opacity: .55; }
+.boat.sunk { opacity: .62; }
+.sea .water { fill: var(--print); fill-opacity: .07; pointer-events: none; }
+.sea .wave, .gart .wave, .rart .wave { fill: none; stroke: var(--print); stroke-width: 1.6; stroke-linecap: round; opacity: .5; pointer-events: none; }
+.splash, .boom { pointer-events: none; transform-box: fill-box; transform-origin: center; }
+.splash .drop { fill: var(--print); }
+.splash .sring { fill: none; stroke: var(--print); stroke-width: 1.8; opacity: .7; }
+.boom .burst { fill: var(--c); fill-opacity: .25; stroke: var(--c); stroke-width: 2.4; stroke-linejoin: round; }
+.boom .core { fill: var(--c); }
+
+/* little pictures */
+.gcard { position: relative; min-height: 112px; }
+.gname { padding-right: 34px; }
+.gstate { max-width: 100%; }
+.gart { position: absolute; right: -8px; top: -10px; width: 54px; height: 54px; padding: 3px; border-radius: 12px; background: var(--paper); box-shadow: 0 6px 12px -7px rgba(0, 0, 0, .45); transform: rotate(7deg); }
+.gcard:nth-child(even) .gart { transform: rotate(-5deg); }
+.gart svg, .rart svg { display: block; width: 100%; height: 100%; overflow: visible; }
+:is(.gart, .rart) .mp { fill: none; stroke: var(--print); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+:is(.gart, .rart) .mi { fill: none; stroke: var(--c); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+:is(.gart, .rart) .mi.strike { stroke-width: 2; opacity: .8; }
+:is(.gart, .rart) .md { fill: var(--print); }
+:is(.gart, .rart) .mh { fill: none; stroke: var(--print); stroke-width: 1.8; }
+:is(.gart, .rart) .mdisc { fill: var(--c); fill-opacity: .85; }
+:is(.gart, .rart) .mt { font-family: var(--f-hand); font-size: 12px; fill: var(--c); text-anchor: middle; dominant-baseline: central; }
+:is(.gart, .rart) .mt.big { font-size: 20px; }
+:is(.gart, .rart) .mdot { fill: var(--ink); }
+:is(.gart, .rart) .mring { fill: none; stroke: var(--ink); stroke-width: 2; }
+.rart { display: block; flex: none; width: 74px; height: 74px; padding: 3px; border-radius: 14px; background: var(--paper); transform: rotate(-4deg); }
+.rcard b { font-weight: 800; text-wrap: balance; }
+
+/* squared paper under the games that sit on paper */
+.page:is([data-game="imp"], [data-game="num"], [data-game="dom"], [data-game="c4"]) .card {
+  background-image: linear-gradient(color-mix(in srgb, var(--print) 11%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--print) 11%, transparent) 1px, transparent 1px);
+  background-size: 18px 18px;
+  background-position: -1px -1px;
+}
+.disc circle { fill-opacity: 1; }
+.hole { fill: var(--paper); }
+
+/* how to play */
+.rules { background: var(--paper); border-radius: 16px; padding: 12px 16px; }
+.rules summary { display: flex; align-items: center; gap: 10px; font-weight: 800; cursor: pointer; list-style: none; }
+.rules summary::-webkit-details-marker { display: none; }
+.rules summary::before { content: "?"; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--frame); color: var(--on-frame); font-size: 15px; font-weight: 800; flex: none; }
+.rules summary::after { content: "›"; margin-left: auto; font-size: 22px; line-height: 1; color: var(--ink-soft); transition: transform .2s ease; }
+.rules[open] summary::after { transform: rotate(90deg); }
+.rules p { margin: 10px 0 2px; font-size: 16px; line-height: 1.55; color: var(--ink-soft); text-wrap: pretty; }
+.home-hint { margin: -6px 2px 0; font-size: 14px; color: var(--ink-soft); text-wrap: pretty; }
+/* keep the index under the wheel's dark cover */
+.home { position: relative; z-index: 0; isolation: isolate; }
+.spin { isolation: isolate; }
 </style>
 </head>
 <body>
@@ -443,6 +500,7 @@ textarea.line-input { resize: none; min-height: 3.6em; font-size: 22px; }
       <p class="status" id="status" aria-live="polite"></p>
       <div class="controls" id="controls" hidden></div>
     </div>
+    <details class="rules" id="rules"><summary>Come si gioca</summary><p id="rules-text"></p></details>
   </section>
 
   <div class="note" id="note" hidden></div>
@@ -1269,6 +1327,16 @@ const Game2 = (() => {
   const TITLES = { imp: 'Impiccato', qua: 'Quadratini', tris: 'Tris', c4: 'Quattro in fila', sos: 'SOS', num: 'Indovina il numero', navi: 'Battaglia navale', dom: 'Domanda della buonanotte' };
   const WHERE = { imp: "sull'impiccato", qua: 'sui quadratini', tris: 'sul tris', c4: 'su quattro in fila', sos: 'su SOS', num: 'su indovina il numero', navi: 'sulla battaglia navale', dom: 'sulla domanda della buonanotte' };
   const SYM_NAMES = { x: 'Croce', o: 'Cerchio', s: 'Stella', h: 'Cuore', n: 'Nuvola', f: 'Fiore', l: 'Luna', u: 'Sole' };
+  const RULES = {
+    imp: 'Uno pensa una parola e la scrive di nascosto, l’altro la indovina una lettera alla volta. Ogni lettera sbagliata aggiunge un pezzo all’omino: al sesto errore è impiccato e il punto va a chi ha scelto la parola. Se la indovini prima, il punto è tuo. A ogni giro ci si scambia.',
+    qua: 'A turno tracciate una linea tra due puntini vicini. Chi chiude il quarto lato di un quadratino ci scrive la sua iniziale e gioca ancora. Quando la griglia è piena vince chi ha più quadratini. Il trucco è non lasciare mai il terzo lato all’altro.',
+    tris: 'A turno mettete il vostro segno in una casella. Vince chi ne mette tre in fila: in orizzontale, in verticale o in diagonale. Ogni pagina ha sei partite e quando è piena si volta pagina. Il segno lo scegli tu, qui sotto.',
+    c4: 'A turno lasciate cadere una pedina in una colonna: scende fino in fondo. Vince chi mette quattro pedine in fila, in orizzontale, in verticale o in diagonale. Tocca la colonna dove vuoi farla cadere.',
+    sos: 'A turno scrivete una S o una O in una casella libera: prima scegli la lettera, poi tocca la casella. Chi forma la parola SOS, in qualsiasi direzione, fa un punto e gioca ancora. Quando la griglia è piena vince chi ha fatto più SOS.',
+    num: 'Ognuno sceglie un numero segreto di 4 cifre, tutte diverse. A turno provate a indovinare quello dell’altro. Dopo ogni tentativo vedi un pallino pieno per ogni cifra giusta al posto giusto e uno vuoto per ogni cifra giusta ma nel posto sbagliato. Vince chi lo indovina per primo.',
+    navi: 'Ognuno ha quattro navi nascoste nel suo mare: una da 4 caselle, due da 3 e una da 2. A turno sparate un colpo nel mare dell’altro: «acqua» se non c’è niente, «colpita» se prendi una nave, «affondata» quando l’hai presa tutta. Vince chi affonda per primo tutta la flotta.',
+    dom: 'Ogni sera c’è una domanda. Rispondete tutti e due: le risposte si vedono solo quando avete risposto entrambi, così nessuno copia. Poi passate alla domanda dopo. Qui non ci sono punti, è per raccontarvi la giornata.',
+  };
   const SECS = GAMES.concat(['players', 'pick']);
   function secsOf(t) {
     if (t === 'scores0') return GAMES.slice();
@@ -2171,6 +2239,75 @@ const Game2 = (() => {
     return { board, status, controls };
   }
 
+  /* ---------- drawings: ships, splashes, little pictures for the index ---------- */
+  function wobble(key) {
+    const r = mulberry32(hash(key));
+    return () => (r() - 0.5) * 1.6;
+  }
+  function shipSVG(sh, s, owner, sunk, key) {
+    const NV = Game2.NV, L = sh.length;
+    const rows = sh.map(i => Math.floor(i / NV)), cols = sh.map(i => i % NV);
+    const r0 = Math.min(...rows), c0 = Math.min(...cols), vertical = L > 1 && cols.every(c => c === cols[0]);
+    const W = L * s, H = s, j = wobble(key);
+    const p = (x, y) => `${f1(x + j())} ${f1(y + j())}`;
+    const top = H * 0.36, bot = H * 0.76;
+    const hull = `M${p(5, top)} L${p(W - 17, top)} Q${p(W - 6, top + 1)} ${p(W - 3, H * 0.55)} Q${p(W - 8, bot - 1)} ${p(W - 16, bot)} L${p(10, bot)} Q${p(6, H * 0.6)} ${p(5, top)} Z`;
+    const bw = L >= 3 ? s * 0.9 : s * 0.62, bx = W * (L >= 4 ? 0.26 : 0.3);
+    let deck = `<rect class="cabin" x="${f1(bx)}" y="${f1(H * 0.17)}" width="${f1(bw)}" height="${f1(H * 0.21)}" rx="3"/>`;
+    if (L >= 3) deck += `<rect class="cabin" x="${f1(bx + bw * 0.22)}" y="${f1(H * 0.06)}" width="${f1(bw * 0.4)}" height="${f1(H * 0.13)}" rx="2"/>`;
+    if (L >= 4) {
+      const fx = bx + bw + s * 0.32;
+      deck += `<path class="cabin" d="M${f1(fx)} ${f1(top)} L${f1(fx + s * 0.06)} ${f1(H * 0.1)} L${f1(fx + s * 0.34)} ${f1(H * 0.1)} L${f1(fx + s * 0.4)} ${f1(top)} Z"/>`;
+    }
+    for (let x = 15; x < W - 22; x += 14) deck += `<circle class="port" cx="${x}" cy="${f1(H * 0.56)}" r="2.3"/>`;
+    let hatch = '';
+    if (sunk) for (let x = 12; x < W - 10; x += 9) hatch += `M${x} ${f1(bot - 1)} L${x + 7} ${f1(top + 1)} `;
+    const tf = (vertical ? `translate(${c0 * s + s} ${r0 * s}) rotate(90)` : `translate(${c0 * s} ${r0 * s})`) + (sunk ? ` rotate(${vertical ? -5 : 5} ${f1(W / 2)} ${f1(H / 2)})` : '');
+    return `<g class="boat${sunk ? ' sunk' : ''}" transform="${tf}" style="--c:var(--pen-${owner})"><path class="hull" d="${hull}"/>${deck}${hatch ? `<path class="hatch" d="${hatch}"/>` : ''}</g>`;
+  }
+  function burstPath(cx, cy, r, key) {
+    const rnd = mulberry32(hash(key));
+    let d = '';
+    for (let k = 0; k < 18; k++) {
+      const a = (k / 18) * Math.PI * 2 - Math.PI / 2, rr = k % 2 ? r * 0.48 : r * (0.82 + rnd() * 0.3);
+      d += `${k ? 'L' : 'M'}${f1(cx + Math.cos(a) * rr)} ${f1(cy + Math.sin(a) * rr)} `;
+    }
+    return d + 'Z';
+  }
+  function miniArt(g) {
+    const pa = 'style="--c:var(--pen-a)"', pb = 'style="--c:var(--pen-b)"';
+    switch (g) {
+      case 'imp':
+        return `<path class="mp" d="M9 52 H33 M15 52 V9 H41 M15 21 L27 9 M41 9 V15"/><path class="mi" ${pa} d="${penCircle(41, 21, 6, 'mi1')} ${penLine(41, 27, 41, 41, 'mi2')} ${penLine(41, 31, 34, 37, 'mi3')} ${penLine(41, 31, 48, 37, 'mi4')}"/>`;
+      case 'qua': {
+        let d = '';
+        for (let r = 0; r < 4; r++) for (let c = 0; c < 4; c++) d += `<circle class="md" cx="${9 + c * 14}" cy="${9 + r * 14}" r="2.2"/>`;
+        return d + `<path class="mi" ${pa} d="${penLine(9, 9, 23, 9, 'q1')} ${penLine(9, 9, 9, 23, 'q2')} ${penLine(9, 23, 23, 23, 'q3')} ${penLine(23, 9, 23, 23, 'q4')}"/>` +
+          `<path class="mi" ${pb} d="${penLine(37, 23, 37, 37, 'q5')} ${penLine(23, 37, 37, 37, 'q6')} ${penLine(37, 37, 51, 37, 'q7')}"/><text class="mt" x="16" y="16.5" ${pa}>${esc(initialOf('a'))}</text>`;
+      }
+      case 'tris':
+        return `<path class="mp" d="M24 8 V52 M38 8 V52 M8 24 H52 M8 38 H52"/><path class="mi" ${pa} d="${penLine(11, 11, 21, 21, 't1')} ${penLine(21, 11, 11, 21, 't2')} ${penLine(26, 26, 36, 36, 't3')} ${penLine(36, 26, 26, 36, 't4')} ${penLine(40, 40, 50, 50, 't5')} ${penLine(50, 40, 40, 50, 't6')}"/>` +
+          `<path class="mi" ${pb} d="${penCircle(45, 16, 5, 't7')} ${penCircle(16, 45, 5, 't8')}"/><path class="mi strike" ${pa} d="${penLine(7, 7, 53, 53, 't9')}"/>`;
+      case 'c4': {
+        let d = '';
+        for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) d += `<circle class="mh" cx="${14 + c * 16}" cy="${14 + r * 16}" r="6.4"/>`;
+        const disc = (cx, cy, s2) => `<circle class="mdisc" cx="${cx}" cy="${cy}" r="5.6" style="--c:var(--pen-${s2})"/>`;
+        return d + disc(14, 46, 'a') + disc(30, 46, 'b') + disc(46, 46, 'a') + disc(30, 30, 'a') + disc(46, 30, 'b') + disc(46, 14, 'a');
+      }
+      case 'sos':
+        return `<text class="mt big" x="30" y="31" ${pb}>SOS</text><path class="mi" ${pa} d="${penLine(5, 31, 55, 30, 's1')}"/>`;
+      case 'num':
+        return `<text class="mt big" x="30" y="24" ${pb}>4710</text><circle class="mdot" cx="19" cy="44" r="3.6"/><circle class="mdot" cx="30" cy="44" r="3.6"/><circle class="mring" cx="41" cy="44" r="3.2"/>`;
+      case 'navi':
+        return `<path class="wave" d="M5 47 q4 -4 8 0 t8 0 t8 0 t8 0 t8 0 t8 0"/><g transform="translate(5 14) scale(0.42)">${shipSVG([0, 1, 2, 3], 40, 'b', false, 'mini-ship')}</g>`;
+      case 'dom':
+        return `<path class="mi" ${pb} d="M13 11 H47 Q52 11 52 16 V35 Q52 40 47 40 H27 L18 49 L20 40 H13 Q8 40 8 35 V16 Q8 11 13 11 Z"/><text class="mt big" x="30" y="26" ${pa}>?</text>`;
+      default:
+        return '';
+    }
+  }
+  const artSVG = g => `<svg viewBox="0 0 60 60" aria-hidden="true" focusable="false">${miniArt(g)}</svg>`;
+
   /* ---------- new games ---------- */
   function yourMove(g, s) {
     if (Game2.EXTRA.includes(g)) return Game2.yourMove(S, g, s);
@@ -2199,7 +2336,7 @@ const Game2 = (() => {
         holes += `<circle class="hole" cx="${cx}" cy="${cy}" r="19"/>`;
         if (o !== '0') {
           const fresh = anim && q.last === i;
-          pieces += `<g class="disc${fresh ? ' drop' : ''}" style="--c:var(--pen-${o});--dy:${-(cy + s)}px"><circle cx="${cx}" cy="${cy}" r="17"/><path class="pen thin" d="${penCircle(cx, cy, 17.5, 'c4' + q.n + i)}"/></g>`;
+          pieces += `<g class="disc${fresh ? ' drop' : ''}" style="--c:var(--pen-${o});--dy:${-(cy + s)}px"><circle cx="${cx}" cy="${cy}" r="17" style="fill:url(#hatch-${o})"/><path class="pen thin" d="${penCircle(cx, cy, 17.5, 'c4' + q.n + i)}"/></g>`;
         }
       }
     }
@@ -2209,7 +2346,8 @@ const Game2 = (() => {
       const [x1, y1] = p(res.line[0]), [x2, y2] = p(res.line[3]);
       line = `<path class="pen win${anim ? ' fresh' : ''}" pathLength="1" style="--c:var(--ink)" d="${penLine(x1, y1, x2, y2, 'c4w' + q.n)}"/>`;
     }
-    const board = `<div class="card"><svg class="c4" viewBox="-4 -4 ${W + 8} ${H + 8}" role="img" aria-label="Quattro in fila">${hits}${holes}${pieces}${line}</svg></div>`;
+    const hatchDefs = '<defs>' + ['a', 'b'].map(o => `<pattern id="hatch-${o}" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(38)"><rect width="6" height="6" style="fill:var(--pen-${o});fill-opacity:.22"/><line x1="1.5" y1="0" x2="1.5" y2="6" style="stroke:var(--pen-${o});stroke-width:2.8"/></pattern>`).join('') + '</defs>';
+    const board = `<div class="card"><svg class="c4" viewBox="-4 -4 ${W + 8} ${H + 8}" role="img" aria-label="Quattro in fila">${hatchDefs}${hits}${holes}${pieces}${line}</svg></div>`;
     let status;
     if (res && res.win) status = res.win === seat ? 'Quattro in fila! Hai vinto.' : `Quattro in fila di ${inkName(res.win)}.`;
     else if (res) status = 'Pari, la griglia è piena.';
@@ -2303,24 +2441,25 @@ const Game2 = (() => {
   }
 
   function seaSVG(opts) {
-    const NV = Game2.NV, s = 40, m = 22, W = NV * s;
+    const NV = Game2.NV, s = 40, m = 22, W = NV * s, tag = opts.mine ? 'm' : 't';
     let h = `<svg class="sea${opts.mine ? ' mine' : ''}" viewBox="${-m} ${-m} ${W + m + 4} ${W + m + 4}" role="img" aria-label="${opts.label}">`;
     for (let k = 0; k < NV; k++) h += `<text class="lab" x="${k * s + s / 2}" y="${-m / 2}">${'ABCDEFGH'[k]}</text><text class="lab" x="${-m / 2}" y="${k * s + s / 2}">${k + 1}</text>`;
+    if (opts.tap) for (let i = 0; i < NV * NV; i++) if (opts.shots[i] === '0') h += `<rect class="sea-hit" data-act="navi-shot" data-i="${i}" x="${(i % NV) * s}" y="${Math.floor(i / NV) * s}" width="${s}" height="${s}"/>`;
+    h += `<rect class="water" x="0" y="0" width="${W}" height="${W}" rx="6"/>`;
+    const wr = mulberry32(hash('waves' + tag));
+    let waves = '';
+    for (let k = 0; k < 14; k++) waves += `M${f1(6 + wr() * (W - 26))} ${f1(8 + wr() * (W - 16))} q3.5 -3.5 7 0 t7 0 `;
+    h += `<path class="wave" d="${waves}"/>`;
     let grid = '';
     for (let k = 0; k <= NV; k++) grid += `M${k * s} 0 V${W} M0 ${k * s} H${W} `;
-    if (opts.tap) for (let i = 0; i < NV * NV; i++) if (opts.shots[i] === '0') h += `<rect class="sea-hit" data-act="navi-shot" data-i="${i}" x="${(i % NV) * s}" y="${Math.floor(i / NV) * s}" width="${s}" height="${s}"/>`;
     h += `<path class="print" d="${grid}"/>`;
-    (opts.ships || []).forEach((sh, k) => {
-      const rows = sh.map(i => Math.floor(i / NV)), cols = sh.map(i => i % NV);
-      const x = Math.min(...cols) * s + 5, y = Math.min(...rows) * s + 5, w = (Math.max(...cols) - Math.min(...cols) + 1) * s - 10, hh = (Math.max(...rows) - Math.min(...rows) + 1) * s - 10;
-      h += `<rect class="ship${opts.sunk && opts.sunk[k] ? ' sunk' : ''}" x="${x}" y="${y}" width="${w}" height="${hh}" rx="14" style="--c:var(--pen-${opts.owner})"/>`;
-    });
+    (opts.ships || []).forEach((sh, k) => { h += shipSVG(sh, s, opts.owner, !!(opts.sunk && opts.sunk[k]), tag + sh.join('-')); });
     for (let i = 0; i < NV * NV; i++) {
       const v = opts.shots[i];
       if (v === '0') continue;
-      const cx = (i % NV) * s + s / 2, cy = Math.floor(i / NV) * s + s / 2, fresh = opts.fresh === i;
-      if (v === 'm') h += `<circle class="miss${fresh ? ' pop' : ''}" cx="${cx}" cy="${cy}" r="5"/>`;
-      else h += `<path class="pen shot-hit${fresh ? ' fresh' : ''}" pathLength="1" style="--c:var(--pen-${opts.shooter})" d="${penLine(cx - 11, cy - 11, cx + 11, cy + 11, 'h' + i + opts.shooter)} ${penLine(cx + 11, cy - 11, cx - 11, cy + 11, 'k' + i + opts.shooter)}"/>`;
+      const cx = (i % NV) * s + s / 2, cy = Math.floor(i / NV) * s + s / 2, fresh = opts.fresh === i ? ' pop' : '';
+      if (v === 'm') h += `<g class="splash${fresh}"><path class="sring" d="${penCircle(cx, cy, 10, 'sp' + tag + i)}"/><circle class="drop" cx="${cx}" cy="${cy}" r="3"/></g>`;
+      else h += `<g class="boom${fresh}" style="--c:var(--pen-${opts.shooter})"><path class="burst" d="${burstPath(cx, cy, 15, 'b' + tag + i)}"/><circle class="core" cx="${cx}" cy="${cy}" r="4"/></g>`;
     }
     return h + '</svg>';
   }
@@ -2339,7 +2478,7 @@ const Game2 = (() => {
       board += `<p class="sea-h">Il tuo mare</p>${seaSVG({ label: 'Le tue navi', ships: myShips, owner: seat, shots: '0'.repeat(NV * NV), shooter: o })}`;
     } else {
       board += `<p class="sea-h">Il mare di ${esc(nameOf(o))}</p>`;
-      board += seaSVG({ label: 'Il mare dove spari', ships: enemy ? enemy.filter((_, k) => enemySunk[k] || q.phase === 'over') : [], sunk: enemy ? enemy.map(() => true) : [], owner: o, shots: q.shots[seat], shooter: seat, tap: q.phase === 'play' && canAct(q.turn), fresh: freshMine });
+      board += seaSVG({ label: 'Il mare dove spari', ships: enemy ? enemy.filter((_, k) => enemySunk[k] || q.phase === 'over') : [], sunk: enemy ? enemy.filter((_, k) => enemySunk[k] || q.phase === 'over').map((_, k) => true) : [], owner: o, shots: q.shots[seat], shooter: seat, tap: q.phase === 'play' && canAct(q.turn), fresh: freshMine });
       board += `<p class="sea-h">Il tuo mare</p>${seaSVG({ label: 'Le tue navi', mine: true, ships: myShips, sunk: mySunk, owner: seat, shots: q.shots[o], shooter: o, fresh: freshTheirs })}`;
     }
     board += '</div>';
@@ -2415,10 +2554,10 @@ const Game2 = (() => {
     return { text: '…', mine: false };
   }
   function homeHTML() {
-    let h = `<button class="spin-btn" type="button" data-act="spin"${ui.spinning || !synced ? ' disabled' : ''}>${DICE}Gira la ruota</button><div class="cards">`;
+    let h = `<button class="spin-btn" type="button" data-act="spin"${ui.spinning || !synced ? ' disabled' : ''}>${DICE}Gira la ruota</button><p class="home-hint">Non sapete a cosa giocare? La ruota sceglie un gioco a caso, uguale per tutti e due.</p><div class="cards">`;
     GAMES.forEach((g, k) => {
       const st = cardState(g);
-      h += `<button class="gcard" type="button" data-act="open" data-g="${g}" data-game="${g}" style="--tilt:${TILTS[k]}deg"><span class="gname">${TITLES[g]}</span><span class="gstate${st.mine ? ' mine' : ''}" style="--c:var(--pen-${seat})">${esc(st.text)}</span></button>`;
+      h += `<button class="gcard" type="button" data-act="open" data-g="${g}" data-game="${g}" style="--tilt:${TILTS[k]}deg"><span class="gname">${TITLES[g]}</span><span class="gstate${st.mine ? ' mine' : ''}" style="--c:var(--pen-${seat})">${esc(st.text)}</span><span class="gart">${artSVG(g)}</span></button>`;
     });
     return h + '</div>';
   }
@@ -2450,7 +2589,7 @@ const Game2 = (() => {
   const chime = () => { blip(784, 0.3, 0.13); setTimeout(() => blip(1175, 0.45, 0.13), 130); };
   document.addEventListener('pointerdown', () => { audio(); }, { passive: true });
 
-  const REEL_H = 84;
+  const CARD_W = 150;
   let lastPickKey = null, spinPending = null;
   const pickKey = p => (p ? `${p.n}:${p.g}:${p.by}` : '');
   // Both phones land on the same game: the pick travels through Firebase, the spin is only the show.
@@ -2479,21 +2618,23 @@ const Game2 = (() => {
     $('#spin-title').textContent = by === seat ? 'Si gioca a…' : `${nameOf(by)} ha girato la ruota…`;
     const len = GAMES.length, start = Math.floor(Math.random() * len), ti = GAMES.indexOf(target);
     const F = 4 * len + ((ti - start + len) % len);
-    let h = '';
+    // Cards are laid out right to left, so the strip slides from left to right as it spins.
+    const items = [];
     for (let k = -1; k <= F + 1; k++) {
       const g = GAMES[(((start + k) % len) + len) % len];
-      h += `<div class="rcard" data-game="${g}"><span>${TITLES[g]}</span></div>`;
+      items.push(`<div class="rcard" data-game="${g}"><span><i class="rart">${artSVG(g)}</i><b>${TITLES[g]}</b></span></div>`);
     }
-    reel.innerHTML = h;
+    reel.innerHTML = items.reverse().join('');
     el.classList.remove('done');
     el.hidden = false;
     const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const T = reduce ? 0 : 3600, t0 = performance.now();
     let lastTick = 0;
-    const place = idx => { reel.style.transform = `translate3d(0, ${(-idx * REEL_H).toFixed(2)}px, 0)`; };
+    const Wc = reel.parentElement.clientWidth;
+    const place = idx => { reel.style.transform = `translate3d(${(Wc / 2 - CARD_W / 2 - (F + 1 - idx) * CARD_W).toFixed(2)}px, 0, 0)`; };
     const land = () => {
       place(F);
-      const win = reel.children[F + 1];
+      const win = reel.children[1];
       if (win) win.classList.add('win');
       el.classList.add('done');
       chime();
@@ -2619,6 +2760,7 @@ const Game2 = (() => {
       else if (animSig === tab + sig && Date.now() < animUntil) anim = true;
       $('#page').dataset.game = tab;
       $('#page-title').textContent = TITLES[tab];
+      $('#rules-text').textContent = RULES[tab];
       const v = VIEWS[tab](anim);
       $('#page-score').hidden = tab === 'dom';
       setHTML($('#page-score'), scoreHTML(tab));
@@ -2635,6 +2777,11 @@ const Game2 = (() => {
   }
 
   /* ---------- input ---------- */
+  function openRulesOnce(g) {
+    const key = 'blocchetto.rules.' + g;
+    $('#rules').open = store.get(key) !== '1';
+    store.set(key, '1');
+  }
   function setTab(t) {
     if (!(t === 'home' || GAMES.includes(t)) || t === tab) return;
     tab = t;
@@ -2644,6 +2791,7 @@ const Game2 = (() => {
     render();
     window.scrollTo(0, 0);
     if (t !== 'home') {
+      openRulesOnce(t);
       const p = $('#page');
       p.classList.remove('enter');
       void p.offsetWidth;
@@ -2813,6 +2961,7 @@ const Game2 = (() => {
   });
 
   if (seat) load();
+  if (tab !== 'home') openRulesOnce(tab);
   render();
   startSync();
   startNet();
