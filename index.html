@@ -1515,6 +1515,12 @@ const Game2 = (() => {
         N.dom = { q: nextQuestion(d.q, a.q), ans: { a: '', b: '' }, hist, n: d.n + 1 };
         return N;
       }
+      case 'dom.new': {
+        const d = N.dom;
+        if (!isSeat(s) || (!d.ans.a && !d.ans.b) || a.force !== true) return null;
+        N.dom = { q: nextQuestion(d.q, a.q), ans: { a: '', b: '' }, hist: d.hist, n: d.n + 1 };
+        return N;
+      }
       case 'dom.skip': {
         const d = N.dom;
         if (!isSeat(s) || d.ans.a || d.ans.b) return null;
@@ -1936,6 +1942,12 @@ const Game3 = (() => {
         const q = N.dis;
         if (q.phase !== 'done') return null;
         N.dis = disFresh(other(q.drawer), q.n + 1);
+        return N;
+      }
+      case 'dis.take': {
+        const q = N.dis;
+        if (q.phase !== 'choose' || s === q.drawer) return null;
+        N.dis = disFresh(s, q.n + 1);
         return N;
       }
       case 'dis.new': {
@@ -3304,11 +3316,11 @@ const Game3 = (() => {
       status = canAct(drawer)
         ? (t.picked.length ? `Ancora ${left === 1 ? 'una carta' : left + ' carte'}.` : `Scegli ${t.spread === 1 ? 'una carta' : t.spread + ' carte'} dal tavolo.`)
         : `${inkName(drawer)} sta scegliendo le carte…`;
-      if (canManage()) controls = '<button class="btn ghost small" type="button" data-act="taro-cancel">Rimetti le carte nel mazzo</button>';
+      if (canManage()) controls = restartCtl('taro');
     } else if (t.phase === 'spread') {
       board = `<div class="card">${q}${spreadHTML(t, true, false)}</div>`;
       status = 'Le carte sono sul tavolo, coperte.';
-      if (canManage()) controls = '<button class="btn" type="button" data-act="taro-flip">Gira le carte</button>';
+      if (canManage()) controls = `<button class="btn" type="button" data-act="taro-flip">Gira le carte</button><div class="row">${restartCtl('taro')}</div>`;
     } else {
       board = `<div class="card">${q}${spreadHTML(t, false, anim && !t.reading)}` +
         (t.reading ? `<div class="reading" style="--c:var(--pen-${reader})"><span class="who">La lettura di ${esc(nameOf(reader))}</span><p>${esc(t.reading)}</p></div>` : '') + '</div>';
@@ -3317,6 +3329,7 @@ const Game3 = (() => {
         controls = `<form id="taro-form" class="form dom-form" autocomplete="off" novalidate><label class="lbl" for="taro-text">${t.reading ? 'Vuoi cambiare qualcosa?' : 'La tua lettura'}</label><textarea class="line-input" id="taro-text" name="text" rows="4" maxlength="800">${esc(t.reading)}</textarea><p id="taro-err" class="err" role="alert"></p><div class="row"><button class="btn${t.reading ? ' ghost' : ''}" type="submit">${t.reading ? 'Aggiorna' : 'Invia'}</button></div></form>`;
       }
       if (t.reading && canManage()) controls += '<div class="row"><button class="btn" type="button" data-act="taro-done">Salva nel quaderno</button><button class="btn ghost small" type="button" data-act="taro-cancel">Non salvare</button></div>';
+      else if (canManage()) controls += `<div class="row">${restartCtl('taro')}</div>`;
     }
     return { board: board + taroHistory(t), status, controls };
   }
@@ -3548,10 +3561,12 @@ const Game3 = (() => {
       if (canManage()) controls = '<button class="btn" type="button" data-act="dom-next">Un’altra domanda</button>';
     } else if (d.ans[seat]) {
       status = `Aspettiamo la risposta di ${inkName(o)}.`;
+      if (canManage()) controls = ui.confirm === 'restart-dom' ? restartCtl('dom') : '<button class="btn ghost small" type="button" data-act="ask-restart" data-g="dom">Cambia domanda</button>';
     } else {
       status = d.ans[o] ? `${inkName(o)} ha già risposto. Le risposte si vedono quando rispondi anche tu.` : 'Scrivi la tua risposta: la vedrete insieme quando avete risposto tutti e due.';
       if (canManage()) {
         controls = `<form id="dom-form" class="form dom-form" autocomplete="off" novalidate><label class="lbl" for="dom-text">La tua risposta</label><textarea class="line-input" id="dom-text" name="text" rows="3" maxlength="280" enterkeyhint="send"></textarea><p id="dom-err" class="err" role="alert"></p><div class="row"><button class="btn" type="submit">Invia</button>${d.ans[o] ? '' : '<button class="btn ghost" type="button" data-act="dom-skip">Cambia domanda</button>'}</div></form>`;
+        if (d.ans[o]) controls += `<div class="row">${ui.confirm === 'restart-dom' ? restartCtl('dom') : '<button class="btn ghost small" type="button" data-act="ask-restart" data-g="dom">Cambia domanda</button>'}</div>`;
       }
     }
     return { board, status, controls };
@@ -3767,6 +3782,7 @@ const Game3 = (() => {
       } else {
         board = `<div class="card dis-wait"><svg viewBox="0 0 120 70" aria-hidden="true"><path class="ti" d="M12 54 Q30 30 48 50 T84 46"/><path class="tp" d="M84 46 L104 14 L111 18 L91 50 L82 53 Z"/><path class="ty" d="M104 14 L111 18 L114 13 L107 9 Z"/></svg></div>`;
         status = `${inkName(drawer)} sta scegliendo cosa disegnare…`;
+        if (canManage()) controls = '<button class="btn ghost small" type="button" data-act="dis-take">Disegno io</button>';
       }
       return { board, status, controls };
     }
@@ -3906,7 +3922,7 @@ const Game3 = (() => {
     t += `<div class="nrow tot"><span class="ncat">Totale</span>${cols.map(s => `<span style="--c:var(--pen-${s})">${s === 'a' ? P.ta : P.tb}</span>`).join('')}</div></div>`;
     board = `<div class="card ncc">${letter}${t}</div>`;
     status = 'Controllate le parole: se una non va bene toccate «non vale».';
-    if (canManage()) controls = '<button class="btn" type="button" data-act="ncc-done">Segna i punti</button>';
+    if (canManage()) controls = `<button class="btn" type="button" data-act="ncc-done">Segna i punti</button><div class="row">${restartCtl('ncc')}</div>`;
     return { board, status, controls };
   }
 
@@ -4328,7 +4344,9 @@ const Game3 = (() => {
         const g = el.getAttribute('data-g');
         ui.confirm = '';
         if (g === 'navi') ui.naviDraft = null;
-        act({ t: g + '.new', seat, force: true });
+        if (g === 'taro') act({ t: 'taro.cancel', seat });
+        else if (g === 'dom') act({ t: 'dom.new', seat, force: true, q: pickQuestion() });
+        else act({ t: g + '.new', seat, force: true });
         render();
         break;
       }
@@ -4374,6 +4392,7 @@ const Game3 = (() => {
         act({ t: 'dis.clear', seat });
         break;
       case 'dis-give': act({ t: 'dis.give', seat }); break;
+      case 'dis-take': act({ t: 'dis.take', seat }); break;
       case 'dis-next': act({ t: 'dis.next', seat }); break;
       case 'ncc-start': act({ t: 'ncc.start', seat, letter: nccLetter() }); break;
       case 'ncc-veto': act({ t: 'ncc.veto', seat, who: el.getAttribute('data-who'), k: Number(el.getAttribute('data-k')) }); break;
