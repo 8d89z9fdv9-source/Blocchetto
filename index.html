@@ -475,6 +475,303 @@ textarea.line-input { resize: none; min-height: 3.6em; font-size: 22px; }
 /* keep the index under the wheel's dark cover */
 .home { position: relative; z-index: 0; isolation: isolate; }
 .spin { isolation: isolate; }
+
+/* tarocchi */
+:root { --taro: #7A2C4E; --taro-print: #9A3B63; --t-red: #D3312A; --t-yel: #E8B23A; --t-blu: #3570DA; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --taro: #5C2139; --taro-print: #E59BBD; } }
+:root[data-theme="dark"] { --taro: #5C2139; --taro-print: #E59BBD; }
+.page[data-game="taro"], [data-game="taro"] { --frame: var(--taro); --print: var(--taro-print); }
+.gcard[data-game="taro"] { grid-column: 1 / -1; min-height: 100px; }
+:is(.gart, .rart) .mback { fill: var(--frame); stroke: var(--paper); stroke-width: 1.5; }
+:is(.gart, .rart) .mcard { fill: var(--paper); }
+.tback { display: block; aspect-ratio: 5 / 8; border: 0; padding: 0; border-radius: 8px; cursor: default;
+  background:
+    radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--paper) 90%, transparent) 0 12%, transparent 13%),
+    repeating-linear-gradient(45deg, color-mix(in srgb, var(--paper) 22%, transparent) 0 1.5px, transparent 1.5px 8px),
+    repeating-linear-gradient(-45deg, color-mix(in srgb, var(--paper) 22%, transparent) 0 1.5px, transparent 1.5px 8px),
+    var(--frame);
+  box-shadow: inset 0 0 0 3px var(--frame), inset 0 0 0 4.5px color-mix(in srgb, var(--paper) 75%, transparent), 0 3px 8px -4px rgba(0, 0, 0, .45);
+  transform: rotate(var(--r, 0deg)) translateY(var(--y, 0px)); }
+button.tback { cursor: pointer; transition: transform .15s ease; }
+@media (hover: hover) { button.tback:hover { transform: rotate(0deg) translateY(-6px); } }
+button.tback:active { transform: scale(.95); }
+.tback.gone { visibility: hidden; }
+.tback.deal { animation: deal .42s cubic-bezier(.2, .8, .3, 1.2) both; animation-delay: calc(var(--k) * 28ms); }
+@keyframes deal { from { opacity: 0; transform: translateY(-30px) scale(.7) rotate(0deg); } }
+.ttable { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px 9px; padding: 14px 4px 6px; }
+.taro-q { margin: 0 0 12px; font: 400 22px/1.3 var(--f-hand); text-align: center; color: var(--ink); text-wrap: balance; }
+.spread { display: grid; gap: 12px; justify-content: center; }
+.spread.s1 { grid-template-columns: minmax(0, 160px); }
+.spread.s3 { grid-template-columns: repeat(3, minmax(0, 120px)); }
+.spread.s5 { gap: 8px 12px; grid-template-columns: repeat(3, minmax(0, 86px)); grid-template-areas: ". top ." "left center right" ". bottom ."; }
+.spread.mini.s1 { grid-template-columns: 84px; }
+.spread.mini.s3 { grid-template-columns: repeat(3, 84px); }
+.spread.mini.s5 { grid-template-columns: repeat(3, 76px); gap: 6px 8px; }
+.spread.mini .tback, .spread.mini .tslot { width: 48px; margin: 0 auto; }
+.spread.mini .tpos-l { margin-top: 4px; font-size: 11px; }
+.tslot { display: block; aspect-ratio: 5 / 8; border-radius: 8px; border: 2px dashed var(--print); opacity: .6; }
+.tpos { min-width: 0; text-align: center; }
+.tpos-l { margin: 6px 0 0; font-size: 12px; font-weight: 800; color: var(--ink-soft); line-height: 1.2; }
+.tpos-n { margin: 2px 0 0; font: 400 17px/1.2 var(--f-hand); color: var(--ink); }
+.tpos-n span { display: block; font-size: 14px; color: var(--pen-a); }
+.tcard { position: relative; aspect-ratio: 5 / 8; perspective: 900px; }
+.tcard .inner { position: absolute; inset: 0; transform-style: preserve-3d; -webkit-transform-style: preserve-3d; }
+.tcard.down .inner { transform: rotateY(180deg); }
+.tcard .face { position: absolute; inset: 0; border-radius: 9px; overflow: hidden; -webkit-backface-visibility: hidden; backface-visibility: hidden; box-shadow: 0 6px 14px -8px rgba(0, 0, 0, .5); }
+.tcard .face.back { transform: rotateY(180deg); }
+.tcard .face.back, .tback.mini { background:
+    radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--paper) 90%, transparent) 0 12%, transparent 13%),
+    repeating-linear-gradient(45deg, color-mix(in srgb, var(--paper) 22%, transparent) 0 1.5px, transparent 1.5px 8px),
+    repeating-linear-gradient(-45deg, color-mix(in srgb, var(--paper) 22%, transparent) 0 1.5px, transparent 1.5px 8px),
+    var(--frame); }
+.tcard .face.front svg { display: block; width: 100%; height: 100%; }
+.tcard.rev .face.front svg { transform: rotate(180deg); }
+.tcard.flip .inner { animation: tflip .85s cubic-bezier(.3, .7, .3, 1) both; animation-delay: calc(var(--k) * .45s + .1s); }
+@keyframes tflip { from { transform: rotateY(180deg); } to { transform: rotateY(0deg); } }
+.tframe { fill: var(--paper); stroke: var(--ink); stroke-width: 2; }
+.tinner { fill: none; stroke: var(--print); stroke-width: 1.2; }
+.tnum { font-family: var(--f-hand); font-size: 17px; fill: var(--ink); text-anchor: middle; dominant-baseline: central; }
+.tname { font: 800 6.6px/1 var(--f-ui); letter-spacing: .04em; fill: var(--ink); text-anchor: middle; dominant-baseline: central; }
+.ti { fill: none; stroke: var(--ink); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.tr, .ty, .tb, .tp { stroke: var(--ink); stroke-width: 2.2; stroke-linejoin: round; }
+.tr { fill: var(--t-red); fill-opacity: .55; }
+.ty { fill: var(--t-yel); fill-opacity: .6; }
+.tb { fill: var(--t-blu); fill-opacity: .45; }
+.tp { fill: var(--paper); }
+.tk { fill: var(--ink); }
+.reading { margin-top: 16px; padding: 12px 14px; border-radius: 12px; background: var(--paper-2); }
+.reading .who { font-size: 12px; font-weight: 800; color: var(--c); }
+.reading p { margin: 4px 0 0; font: 400 21px/1.35 var(--f-hand); color: var(--c); white-space: pre-wrap; overflow-wrap: anywhere; }
+.spreads { display: grid; gap: 10px; }
+.sp-btn { display: flex; align-items: center; gap: 14px; width: 100%; padding: 12px 14px; border: 2px solid var(--paper-2); border-radius: 14px; background: var(--paper); color: var(--ink); text-align: left; cursor: pointer; }
+.sp-btn[aria-pressed="true"] { border-color: var(--frame); box-shadow: inset 0 0 0 1px var(--frame); }
+.sp-txt { display: grid; gap: 2px; }
+.sp-txt b { font-size: 16px; }
+.sp-txt small { font-size: 13px; color: var(--ink-soft); }
+.sp-mini { display: grid; gap: 3px; flex: none; width: 46px; justify-content: center; }
+.sp-mini i { display: block; width: 12px; height: 19px; border-radius: 3px; background: var(--frame); }
+.sp-mini.m1 { grid-template-columns: 12px; }
+.sp-mini.m3 { grid-template-columns: repeat(3, 12px); }
+.sp-mini.m5 { grid-template-columns: repeat(3, 12px); grid-template-areas: ". a ." "b c d" ". e ."; }
+.sp-mini.m5 i:nth-child(1) { grid-area: a; } .sp-mini.m5 i:nth-child(2) { grid-area: b; } .sp-mini.m5 i:nth-child(3) { grid-area: c; } .sp-mini.m5 i:nth-child(4) { grid-area: d; } .sp-mini.m5 i:nth-child(5) { grid-area: e; }
+.taro-hist { margin-top: 12px; padding: 12px 16px; border-radius: 16px; background: var(--paper); font-size: 14px; color: var(--ink-soft); }
+.taro-hist summary { cursor: pointer; font-weight: 800; color: var(--ink); }
+.hentry { padding: 10px 0; border-bottom: 1.5px dashed var(--paper-2); }
+.hentry:last-child { border-bottom: 0; }
+.hquest { margin: 4px 0 0; font: 400 18px/1.3 var(--f-hand); color: var(--ink); }
+.hcards { margin: 4px 0 0; font-weight: 700; color: var(--ink); }
+@media (prefers-reduced-motion: reduce) { .tcard.flip .inner, .tback.deal { animation: none; } }
+
+/* five more pages: briscola, memory, disegna, nomi cose città, chi mi conosce */
+:root {
+  --bri: #2E6B45; --bri-print: #2E6B45;
+  --mem: #C0443C; --mem-print: #C0443C;
+  --dis: #9A5B2E; --dis-print: #9A5B2E;
+  --ncc: #66791C; --ncc-print: #66791C;
+  --chi: #8A3FA8; --chi-print: #8A3FA8;
+  --t-grn: #3E8A3A; --d-grn: #2E8B57; --d-yel: #E8A82A;
+  --s0: #D3312A; --s1: #B07614; --s2: #3570DA; --s3: #3E8A3A;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bri: #23533A; --bri-print: #7FD0A0;
+    --mem: #97352F; --mem-print: #F2A097;
+    --dis: #774624; --dis-print: #E2AE84;
+    --ncc: #4F5E15; --ncc-print: #C4D77A;
+    --chi: #6B3183; --chi-print: #D9A6EE;
+    --s0: #FF8678; --s1: #F0BE5A; --s2: #8FB0FF; --s3: #86D07E; --d-grn: #5FD08F;
+  }
+}
+:root[data-theme="dark"] {
+  --bri: #23533A; --bri-print: #7FD0A0;
+  --mem: #97352F; --mem-print: #F2A097;
+  --dis: #774624; --dis-print: #E2AE84;
+  --ncc: #4F5E15; --ncc-print: #C4D77A;
+  --chi: #6B3183; --chi-print: #D9A6EE;
+  --s0: #FF8678; --s1: #F0BE5A; --s2: #8FB0FF; --s3: #86D07E; --d-grn: #5FD08F;
+}
+.page[data-game="bri"], [data-game="bri"] { --frame: var(--bri); --print: var(--bri-print); }
+.page[data-game="mem"], [data-game="mem"] { --frame: var(--mem); --print: var(--mem-print); }
+.page[data-game="dis"], [data-game="dis"] { --frame: var(--dis); --print: var(--dis-print); }
+.page[data-game="ncc"], [data-game="ncc"] { --frame: var(--ncc); --print: var(--ncc-print); }
+.page[data-game="chi"], [data-game="chi"] { --frame: var(--chi); --print: var(--chi-print); }
+.gcard[data-game="dom"] { grid-column: 1 / -1; min-height: 96px; }
+.tg { fill: var(--t-grn); fill-opacity: .5; stroke: var(--ink); stroke-width: 2.2; stroke-linejoin: round; }
+.pts2 { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 18px; font: 400 21px/1.2 var(--f-hand); }
+.pts2 span { color: var(--c); }
+.pts2 b { font-weight: 400; font-size: 26px; }
+
+/* shared card back */
+.bback, .mcard .back {
+  background:
+    radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--paper) 90%, transparent) 0 11%, transparent 12%),
+    repeating-linear-gradient(45deg, color-mix(in srgb, var(--paper) 22%, transparent) 0 1.5px, transparent 1.5px 7px),
+    repeating-linear-gradient(-45deg, color-mix(in srgb, var(--paper) 22%, transparent) 0 1.5px, transparent 1.5px 7px),
+    var(--frame);
+  box-shadow: inset 0 0 0 3px color-mix(in srgb, var(--paper) 75%, transparent), 0 4px 10px -6px rgba(0, 0, 0, .45);
+}
+
+/* briscola */
+.bri { display: grid; gap: 14px; }
+.bcard { display: block; position: relative; aspect-ratio: 60 / 96; min-width: 0; }
+.bcard svg { display: block; width: 100%; height: 100%; filter: drop-shadow(0 3px 5px rgba(0, 0, 0, .16)); }
+.blab { font-family: var(--f-hand); font-size: 13px; text-anchor: middle; dominant-baseline: central; }
+.blab.s0 { fill: var(--s0); } .blab.s1 { fill: var(--s1); } .blab.s2 { fill: var(--s2); } .blab.s3 { fill: var(--s3); }
+.bback { display: block; aspect-ratio: 60 / 96; border-radius: 7px; }
+.bri-opp { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.bri-who { font-weight: 800; color: var(--c); }
+.bri-ohand { display: flex; }
+.bback.sm { width: 30px; margin-left: -10px; transform: rotate(calc((var(--k) - 1) * 6deg)); }
+.bback.sm:first-child { margin-left: 0; }
+.bri-mid { display: grid; grid-template-columns: 118px minmax(0, 1fr); gap: 10px; align-items: center; min-height: 128px; }
+.bri-stock { position: relative; height: 128px; }
+.bcard.brisc { position: absolute; left: 24px; top: 4px; width: 56px; transform: rotate(-90deg); }
+.bback.stack { position: absolute; left: 56px; top: 0; width: 60px; }
+.bback.stack b { position: absolute; left: 0; right: 0; bottom: 8px; text-align: center; font: 800 13px/1 var(--f-ui); color: var(--on-frame); }
+.bri-bs { position: absolute; left: 0; right: 0; bottom: -2px; display: grid; justify-items: center; font-size: 11px; font-weight: 700; color: var(--ink-soft); line-height: 1.2; }
+.bri-bs b { font: 400 17px/1.1 var(--f-hand); }
+.bri-bs.s0 b { color: var(--s0); } .bri-bs.s1 b { color: var(--s1); } .bri-bs.s2 b { color: var(--s2); } .bri-bs.s3 b { color: var(--s3); }
+.bri-trick { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px; }
+.bslot { width: 66px; aspect-ratio: 60 / 96; border-radius: 8px; }
+.bslot.empty { border: 2px dashed color-mix(in srgb, var(--print) 45%, transparent); }
+.bslot .bcard { width: 100%; }
+.bslot:first-child .bcard { transform: rotate(-4deg); }
+.bslot:nth-child(2) .bcard { transform: rotate(5deg); }
+.bcard.on.in-me { animation: bin-me .36s cubic-bezier(.2, .8, .3, 1.15) both; }
+.bcard.on.in-op { animation: bin-op .36s cubic-bezier(.2, .8, .3, 1.15) both; }
+@keyframes bin-me { from { opacity: 0; translate: 0 90px; scale: 1.15; } to { opacity: 1; translate: 0 0; scale: 1; } }
+@keyframes bin-op { from { opacity: 0; translate: 0 -90px; scale: .8; } to { opacity: 1; translate: 0 0; scale: 1; } }
+.bri-took { flex-basis: 100%; margin: 2px 0 0; text-align: center; font-weight: 800; font-size: 14px; color: var(--c); }
+.bri-hand { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; padding: 0 4px; }
+.bcard.hand { padding: 0; border: 0; background: none; cursor: default; opacity: 1; transition: transform .15s ease; -webkit-tap-highlight-color: transparent; }
+.bri-hand.live .bcard.hand { cursor: pointer; }
+.bri-hand.live .bcard.hand:nth-child(1) { animation: nudge 2.4s ease-in-out infinite; }
+.bri-hand.live .bcard.hand:active { transform: translateY(-10px) scale(1.02); }
+@media (hover: hover) { .bri-hand.live .bcard.hand:hover { transform: translateY(-6px); } }
+@keyframes nudge { 0%, 80%, 100% { translate: 0 0; } 90% { translate: 0 -4px; } }
+.bri-idle { display: grid; justify-items: center; gap: 12px; padding: 22px 16px; }
+.bri-fan { display: flex; }
+.bri-fan .bback { width: 64px; margin-left: -26px; transform: rotate(calc((var(--k) - 1) * 12deg)) translateY(calc(var(--k) * 0px)); }
+.bri-fan .bback:first-child { margin-left: 0; }
+.bri-note { margin: 0; color: var(--ink-soft); font-weight: 600; }
+
+/* memory */
+.memc { display: grid; gap: 12px; }
+.mgrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.mcard { position: relative; aspect-ratio: 4 / 5; min-width: 0; padding: 0; border: 0; background: none; perspective: 700px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.mcard:disabled { cursor: default; opacity: 1; }
+.mcard .inner { position: absolute; inset: 0; transform-style: preserve-3d; -webkit-transform-style: preserve-3d; transform: rotateY(180deg); }
+.mcard.up .inner { transform: none; }
+.mcard .face { position: absolute; inset: 0; display: grid; place-items: center; border-radius: 11px; -webkit-backface-visibility: hidden; backface-visibility: hidden; }
+.mcard .front { background: var(--paper); box-shadow: inset 0 0 0 2px var(--ink), 0 4px 10px -6px rgba(0, 0, 0, .45); }
+.mcard .front svg { width: 86%; height: auto; }
+.mcard .front :is(.ti, .tr, .ty, .tb, .tp, .tg) { stroke-width: 3.6; }
+.mcard .back { transform: rotateY(180deg); border-radius: 11px; }
+.mcard.got .front { box-shadow: inset 0 0 0 3px var(--c), 0 4px 10px -6px rgba(0, 0, 0, .45); background: color-mix(in srgb, var(--c) 9%, var(--paper)); }
+.mcard:not(:disabled):active .inner { scale: .96; }
+.mcard.flip .inner { animation: mflip .42s cubic-bezier(.3, .7, .3, 1) both; }
+.mcard.unflip .inner { animation: munflip .42s cubic-bezier(.3, .7, .3, 1) both; }
+@keyframes mflip { from { transform: rotateY(180deg); } to { transform: rotateY(0deg); } }
+@keyframes munflip { from { transform: rotateY(0deg); } to { transform: rotateY(180deg); } }
+.mcard.nope .front { animation: nope .45s .42s ease both; }
+@keyframes nope { 0%, 100% { translate: 0 0; rotate: 0deg; } 25% { translate: -4px 0; rotate: -2deg; } 75% { translate: 4px 0; rotate: 2deg; } }
+.mcard.yay .front { animation: yay .5s .34s ease both; }
+@keyframes yay { 50% { scale: 1.1; } }
+
+/* disegna e indovina */
+.disc { display: grid; gap: 10px; }
+.dis-word { margin: 0; font-size: 15px; font-weight: 700; color: var(--ink-soft); }
+.dis-word b { font: 400 26px/1 var(--f-hand); color: var(--ink); }
+.dsheet-wrap { border-radius: 14px; overflow: hidden; box-shadow: inset 0 0 0 2px var(--paper-2), 0 0 0 2px var(--paper-2); }
+.dsheet { display: block; width: 100%; height: auto; aspect-ratio: 1; }
+.dsheet.can { touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; cursor: crosshair; }
+.dpaper { fill: var(--paper); }
+.dstroke { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.dstroke.ink0 { stroke: var(--ink); } .dstroke.ink1 { stroke: var(--pen-a); } .dstroke.ink2 { stroke: var(--pen-b); }
+.dstroke.ink3 { stroke: var(--d-grn); } .dstroke.ink4 { stroke: var(--d-yel); } .dstroke.ink5 { stroke: var(--paper); }
+.dtools { display: grid; gap: 10px; }
+.inks, .sizes { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.inkbtn { width: 36px; height: 36px; padding: 0; border-radius: 50%; border: 3px solid var(--paper); box-shadow: 0 0 0 2px var(--paper-2); cursor: pointer; }
+.inkbtn[aria-pressed="true"] { box-shadow: 0 0 0 3px var(--ink); }
+.inkbtn.ink0 { background: var(--ink); } .inkbtn.ink1 { background: var(--pen-a); } .inkbtn.ink2 { background: var(--pen-b); }
+.inkbtn.ink3 { background: var(--d-grn); } .inkbtn.ink4 { background: var(--d-yel); }
+.inkbtn.ink5 { background: repeating-linear-gradient(-45deg, var(--paper-2) 0 3px, var(--paper) 3px 6px); }
+.sizebtn { display: grid; place-items: center; width: 44px; height: 36px; padding: 0; border-radius: 10px; border: 2px solid var(--paper-2); background: var(--paper); cursor: pointer; }
+.sizebtn i { width: var(--w); height: var(--w); border-radius: 50%; background: var(--ink); }
+.sizebtn[aria-pressed="true"] { border-color: var(--ink); }
+.dis-gl { margin: 4px 0 0; font-size: 13px; font-weight: 800; color: var(--ink-soft); }
+.dis-guesses { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 0; padding: 0; list-style: none; font: 400 21px/1.25 var(--f-hand); color: var(--ink-soft); }
+.dis-guesses li { text-decoration: line-through; text-decoration-color: var(--pen-a); text-decoration-thickness: 2px; overflow-wrap: anywhere; }
+.dis-guesses li.ok { text-decoration: underline; text-decoration-color: var(--d-grn); color: var(--ink); }
+.dis-choose { display: grid; gap: 10px; }
+.dis-lead { margin: 0; font-size: 18px; font-weight: 800; }
+.dis-opts { display: grid; gap: 10px; }
+.dis-opt { padding: 14px 16px; border: 2px solid var(--paper-2); border-radius: 14px; background: var(--paper); color: var(--ink); font: 400 27px/1.1 var(--f-hand); text-align: left; cursor: pointer; transition: transform .12s ease; }
+.dis-opt:active { transform: scale(.98); border-color: var(--frame); }
+.dis-choose > .btn { justify-self: start; }
+.dis-own { margin-top: 8px; }
+.dis-wait svg { display: block; width: 170px; margin: 18px auto; }
+
+/* nomi cose città */
+.ncc { display: grid; gap: 10px; }
+.ncc-letter { display: grid; place-items: center; width: 96px; height: 96px; margin: 0 auto 4px; border-radius: 50%; border: 3px solid var(--print); font: 400 66px/1 var(--f-hand); color: var(--ink); }
+.ncc-letter.idle { border-style: dashed; color: var(--ink-soft); }
+.ncc-letter.pop { animation: lpop .7s cubic-bezier(.2, .8, .3, 1.35) both; }
+@keyframes lpop { from { opacity: 0; transform: scale(.2) rotate(-200deg); } to { opacity: 1; transform: none; } }
+.ncc-cats { margin: 0; text-align: center; font-size: 14px; color: var(--ink-soft); text-wrap: balance; }
+.ncc-stop { margin: 0; text-align: center; font-size: 17px; font-weight: 800; color: var(--c); animation: lpop .5s cubic-bezier(.2, .8, .3, 1.35) both; }
+.ncc-form { display: grid; gap: 6px; }
+.ncc-row { display: grid; grid-template-columns: 92px minmax(0, 1fr); align-items: end; gap: 10px; }
+.ncc-row span { padding-bottom: 9px; font-size: 13px; font-weight: 800; color: var(--ink-soft); line-height: 1.15; }
+.ncc-row .line-input { font-size: 23px; padding: 2px 2px 4px; letter-spacing: .02em; }
+.btn.stop { justify-self: start; margin-top: 10px; }
+.ncc-mine p { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 10px; margin: 0; padding: 6px 0; border-bottom: 1.5px dashed var(--paper-2); }
+.ncc-mine span { font-size: 13px; font-weight: 800; color: var(--ink-soft); }
+.ncc-mine b { font: 400 22px/1.15 var(--f-hand); color: var(--c); overflow-wrap: anywhere; }
+.ncc-table { display: grid; }
+.nrow { display: grid; grid-template-columns: 70px minmax(0, 1fr) minmax(0, 1fr); align-items: start; gap: 8px; padding: 8px 0; border-bottom: 1.5px dashed var(--paper-2); }
+.nrow.head { padding-top: 0; }
+.nrow.head span { font-size: 14px; font-weight: 800; color: var(--c); }
+.ncat { padding-top: 5px; font-size: 12px; font-weight: 800; color: var(--ink-soft); line-height: 1.15; }
+.nw { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 6px; min-width: 0; }
+.nw b { font: 400 21px/1.15 var(--f-hand); color: var(--c); overflow-wrap: anywhere; }
+.nw.no b { text-decoration: line-through; text-decoration-thickness: 2px; opacity: .55; }
+.np { font-style: normal; font-size: 12px; font-weight: 800; color: var(--ink-soft); }
+.veto { flex-basis: 100%; padding: 2px 0; border: 0; background: none; color: var(--ink-soft); font-size: 12px; font-weight: 700; text-align: left; text-decoration: underline; cursor: pointer; }
+.nrow.tot { border-bottom: 0; }
+.nrow.tot span:not(.ncat) { font: 400 28px/1 var(--f-hand); color: var(--c); }
+.ncc-hist { padding: 10px 0 0; font-size: 14px; color: var(--ink-soft); }
+.ncc-hist summary { cursor: pointer; font-weight: 800; color: var(--ink); }
+.ncc-hist p { display: flex; gap: 14px; align-items: baseline; margin: 6px 0 0; }
+.ncc-hist .hl { font: 400 22px/1 var(--f-hand); color: var(--ink); min-width: 18px; }
+.ncc-hist span { color: var(--c); font-weight: 700; }
+
+/* chi mi conosce meglio */
+.chi { display: grid; gap: 6px; }
+.chi-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 12px; }
+.chi-k { font-size: 13px; font-weight: 800; color: var(--ink-soft); }
+.chi-top .pts2 { font-size: 18px; } .chi-top .pts2 b { font-size: 22px; }
+.chi-q { margin: 10px 0 4px; font: 400 31px/1.15 var(--f-hand); text-align: center; color: var(--ink); text-wrap: balance; }
+.chi-q span { font-size: 22px; color: var(--ink-soft); }
+.chi-lbl { margin: 12px 0 2px; font-size: 14px; font-weight: 800; color: var(--ink-soft); }
+.chi-opts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.chi-opt { min-height: 58px; padding: 10px; border: 2px solid var(--paper-2); border-radius: 14px; background: var(--paper); color: var(--ink); font: 400 22px/1.15 var(--f-hand); cursor: pointer; transition: transform .12s ease; overflow-wrap: anywhere; }
+.chi-opt:active { transform: scale(.97); }
+.chi-opt[aria-pressed="true"] { border-color: var(--c); box-shadow: inset 0 0 0 1px var(--c); background: color-mix(in srgb, var(--c) 9%, var(--paper)); color: var(--c); }
+.chi-mine { margin-top: 8px; }
+.chi-mine p { margin: 6px 0; color: var(--ink-soft); font-weight: 600; }
+.chi-mine b { font: 400 23px/1.1 var(--f-hand); color: var(--c); }
+.chi-rev { display: grid; gap: 10px; margin-top: 10px; }
+.chi-p { padding: 12px 14px; border-radius: 14px; background: var(--paper-2); }
+.chi-p p { margin: 0; color: var(--ink-soft); font-weight: 600; }
+.chi-p .ink-name { color: var(--c); }
+.chi-a { font: 400 25px/1.1 var(--f-hand); color: var(--c); }
+.chi-g { margin-top: 4px !important; font-size: 14px; }
+.chi-g i { font-style: normal; font-weight: 800; color: var(--pen-a); }
+.chi-g.ok i { color: var(--d-grn); }
+@media (prefers-reduced-motion: reduce) {
+  .bcard.on.in-me, .bcard.on.in-op, .bri-hand.live .bcard.hand, .mcard.flip .inner, .mcard.unflip .inner, .mcard.nope .front, .mcard.yay .front, .ncc-letter.pop, .ncc-stop { animation: none; }
+}
 </style>
 </head>
 <body>
@@ -881,8 +1178,8 @@ const Game = (() => {
 <script id="logic2">
 // Rules for the games added after the first three. Same contract as Game: apply() returns the next state or null.
 const Game2 = (() => {
-  const GAMES = ['imp', 'qua', 'tris', 'c4', 'sos', 'num', 'navi', 'dom'];
-  const EXTRA = ['c4', 'sos', 'num', 'navi', 'dom'];
+  const GAMES = ['taro', 'imp', 'qua', 'tris', 'bri', 'mem', 'dis', 'c4', 'sos', 'num', 'navi', 'ncc', 'chi', 'dom'];
+  const EXTRA = ['c4', 'sos', 'num', 'navi', 'dom', 'taro'];
   const other = s => (s === 'a' ? 'b' : 'a');
   const isSeat = s => s === 'a' || s === 'b';
   const seatOr = (s, d) => (isSeat(s) ? s : d);
@@ -1062,17 +1359,34 @@ const Game2 = (() => {
     return Number.isInteger(wanted) && wanted >= 0 && wanted < QUESTIONS.length && wanted !== cur ? wanted : (cur + 1) % QUESTIONS.length;
   }
 
+  /* ----- Tarocchi: the 22 Major Arcana, Marseille order ----- */
+  const TAROT = [
+    ['0', 'Il Matto'], ['I', 'Il Bagatto'], ['II', 'La Papessa'], ['III', 'L’Imperatrice'], ['IV', 'L’Imperatore'],
+    ['V', 'Il Papa'], ['VI', 'L’Innamorato'], ['VII', 'Il Carro'], ['VIII', 'La Giustizia'], ['IX', 'L’Eremita'],
+    ['X', 'La Ruota di Fortuna'], ['XI', 'La Forza'], ['XII', 'L’Appeso'], ['XIII', 'L’Arcano senza nome'], ['XIV', 'La Temperanza'],
+    ['XV', 'Il Diavolo'], ['XVI', 'La Torre'], ['XVII', 'La Stella'], ['XVIII', 'La Luna'], ['XIX', 'Il Sole'],
+    ['XX', 'Il Giudizio'], ['XXI', 'Il Mondo'],
+  ];
+  const SPREADS = {
+    1: ['La carta della sera'],
+    3: ['Passato', 'Presente', 'Futuro'],
+    5: ['A favore', 'Contro', 'Il consiglio', 'Come andrà', 'Il cuore della questione'],
+  };
+  // A card on the table is card * 2 + 1 when it lies upside down.
+  const deckOk = d => Array.isArray(d) && d.length === TAROT.length && d.every(v => Number.isInteger(v) && v >= 0 && v < TAROT.length * 2) && new Set(d.map(v => v >> 1)).size === TAROT.length;
+  const taroFresh = n => ({ phase: 'idle', spread: 3, drawer: 'a', deck: [], picked: [], question: '', reading: '', hist: [], n });
+
   /* ----- shared ----- */
   function freshExtra() {
     return {
-      c4: c4Fresh('a', 1), sos: sosFresh('a', 1), num: numFresh('a', 1), navi: naviFresh('a', 1), dom: domFresh(0, 1),
+      c4: c4Fresh('a', 1), sos: sosFresh('a', 1), num: numFresh('a', 1), navi: naviFresh('a', 1), dom: domFresh(0, 1), taro: taroFresh(1),
       pick: { g: '', n: 0, by: '', at: 0 },
-      score: { c4: { a: 0, b: 0 }, sos: { a: 0, b: 0 }, num: { a: 0, b: 0 }, navi: { a: 0, b: 0 }, dom: { a: 0, b: 0 } },
+      score: { c4: { a: 0, b: 0 }, sos: { a: 0, b: 0 }, num: { a: 0, b: 0 }, navi: { a: 0, b: 0 }, dom: { a: 0, b: 0 }, taro: { a: 0, b: 0 } },
     };
   }
   const zeroScores = () => Object.fromEntries(GAMES.map(g => [g, { a: 0, b: 0 }]));
 
-  const handles = t => typeof t === 'string' && (t === 'scores0' || t === 'pick' || /^(c4|sos|num|navi|dom)\./.test(t));
+  const handles = t => typeof t === 'string' && (t === 'scores0' || t === 'pick' || /^(c4|sos|num|navi|dom|taro)\./.test(t));
 
   function apply(S, a, cleanText) {
     if (!S || !a || typeof a !== 'object') return null;
@@ -1207,6 +1521,45 @@ const Game2 = (() => {
         d.q = nextQuestion(d.q, a.q);
         return N;
       }
+      case 'taro.shuffle': {
+        const t = N.taro;
+        if (!isSeat(s) || t.phase !== 'idle' || !SPREADS[a.spread] || !deckOk(a.deck)) return null;
+        N.taro = { phase: 'pick', spread: a.spread, drawer: s, deck: a.deck.slice(), picked: [], question: cleanText(a.question, 140), reading: '', hist: t.hist, n: t.n + 1 };
+        return N;
+      }
+      case 'taro.pick': {
+        const t = N.taro, pos = a.pos;
+        if (t.phase !== 'pick' || s !== t.drawer || !Number.isInteger(pos) || pos < 0 || pos >= t.deck.length || t.picked.includes(pos)) return null;
+        t.picked.push(pos);
+        if (t.picked.length === t.spread) t.phase = 'spread';
+        return N;
+      }
+      case 'taro.flip': {
+        if (!isSeat(s) || N.taro.phase !== 'spread') return null;
+        N.taro.phase = 'reveal';
+        return N;
+      }
+      case 'taro.read': {
+        const t = N.taro;
+        if (t.phase !== 'reveal' || s !== other(t.drawer)) return null;
+        const text = cleanText(a.text, 800);
+        if (!text || text === t.reading) return null;
+        t.reading = text;
+        return N;
+      }
+      case 'taro.done': {
+        const t = N.taro;
+        if (!isSeat(s) || t.phase !== 'reveal') return null;
+        const entry = { at: Date.now(), sp: t.spread, c: t.picked.map(pos => t.deck[pos]), q: t.question, r: t.reading, d: t.drawer };
+        N.taro = { phase: 'idle', spread: t.spread, drawer: t.drawer, deck: [], picked: [], question: '', reading: '', hist: [entry].concat(t.hist).slice(0, 10), n: t.n + 1 };
+        return N;
+      }
+      case 'taro.cancel': {
+        const t = N.taro;
+        if (!isSeat(s) || t.phase === 'idle') return null;
+        N.taro = { phase: 'idle', spread: t.spread, drawer: t.drawer, deck: [], picked: [], question: '', reading: '', hist: t.hist, n: t.n + 1 };
+        return N;
+      }
       default:
         return null;
     }
@@ -1282,12 +1635,31 @@ const Game2 = (() => {
       };
     }
 
+    const T = R.taro;
+    if (T && typeof T === 'object') {
+      const spread = SPREADS[T.spread] ? T.spread : 3;
+      const deck = deckOk(T.deck) ? T.deck.slice() : [];
+      const picked = deck.length ? (Array.isArray(T.picked) ? T.picked : []).filter((v, k, arr) => Number.isInteger(v) && v >= 0 && v < deck.length && arr.indexOf(v) === k).slice(0, spread) : [];
+      let phase = ['idle', 'pick', 'spread', 'reveal'].includes(T.phase) ? T.phase : 'idle';
+      if (phase !== 'idle' && !deck.length) phase = 'idle';
+      if ((phase === 'spread' || phase === 'reveal') && picked.length !== spread) phase = picked.length < spread ? 'pick' : phase;
+      const hist = (Array.isArray(T.hist) ? T.hist : []).filter(h => h && typeof h === 'object' && SPREADS[h.sp] && Array.isArray(h.c) && h.c.length === h.sp && h.c.every(v => Number.isInteger(v) && v >= 0 && v < TAROT.length * 2))
+        .slice(0, 10).map(h => ({ at: intIn(h.at, 0, 1e15, 0), sp: h.sp, c: h.c.slice(), q: cleanTextLite(h.q, 140), r: cleanTextLite(h.r, 800), d: seatOr(h.d, 'a') }));
+      out.taro = {
+        phase, spread, drawer: seatOr(T.drawer, 'a'), deck: phase === 'idle' ? [] : deck, picked: phase === 'idle' ? [] : picked,
+        question: cleanTextLite(T.question, 140), reading: cleanTextLite(T.reading, 800), hist, n: intIn(T.n, 1, 1e9, 1),
+      };
+      if (phase === 'idle') { out.taro.question = ''; out.taro.reading = ''; }
+    }
+
     const P = R.pick;
     if (P && typeof P === 'object' && GAMES.includes(P.g)) {
       out.pick = { g: P.g, n: intIn(P.n, 0, 1e9, 0), by: seatOr(P.by, 'a'), at: intIn(P.at, 0, 1e15, 0) };
     }
     return out;
   }
+
+  const cleanTextLite = (v, max) => (typeof v === 'string' ? Array.from(v).slice(0, max).join('') : '');
 
   // Whether it's this seat's move in a new game (true), the other's (false), or nobody's (null).
   function yourMove(S, g, seat) {
@@ -1307,14 +1679,468 @@ const Game2 = (() => {
         return q.turn === seat;
       }
       case 'dom': return S.dom.ans[seat] ? (S.dom.ans[other(seat)] ? null : false) : true;
+      case 'taro': {
+        const t = S.taro;
+        if (t.phase === 'pick' || t.phase === 'spread') return t.drawer === seat;
+        if (t.phase === 'reveal') return t.reading ? null : other(t.drawer) === seat;
+        return null;
+      }
       default: return null;
     }
   }
 
   return {
-    GAMES, EXTRA, QUESTIONS, C4R, C4C, SN, NV, FLEET,
+    GAMES, EXTRA, QUESTIONS, C4R, C4C, SN, NV, FLEET, TAROT, SPREADS, deckOk,
     hide, show, handles, apply, sanitizeExtra, freshExtra, yourMove,
     c4Result, sosOver, sosFind, numOk, numScore, fleetOk, fleetOf, sunkList, randomFleet,
+  };
+})();
+</script>
+<script id="logic3">
+// Rules for the third batch: Briscola, Memory, Disegna e indovina, Nomi cose città, Chi mi conosce meglio.
+// Same contract as Game and Game2: apply() returns the next state or null.
+const Game3 = (() => {
+  const EXTRA = ['bri', 'mem', 'dis', 'ncc', 'chi'];
+  const other = s => (s === 'a' ? 'b' : 'a');
+  const isSeat = s => s === 'a' || s === 'b';
+  const seatOr = (s, d) => (isSeat(s) ? s : d);
+  const clone = o => JSON.parse(JSON.stringify(o));
+  const int = (v, d) => (typeof v === 'number' && Number.isFinite(v) ? Math.trunc(v) : d);
+  const intIn = (v, lo, hi, d) => { const n = int(v, d); return n >= lo && n <= hi ? n : d; };
+  const str = (v, max) => (typeof v === 'string' ? v.slice(0, max) : '');
+  const hide = s => Game2.hide(s);
+  const show = s => Game2.show(s);
+  const unpack = (s, ok) => { try { const v = JSON.parse(show(s)); return ok(v) ? v : null; } catch (e) { return null; } };
+  const norm = s => Game.normWord(s).replace(/['-]/g, ' ').replace(/\s+/g, ' ').trim();
+
+  /* ----- Briscola: 40 Italian cards, id = suit * 10 + rank ----- */
+  const SUITS = ['Coppe', 'Denari', 'Spade', 'Bastoni'];
+  const RANKS = ['Asso', 'Due', 'Tre', 'Quattro', 'Cinque', 'Sei', 'Sette', 'Fante', 'Cavallo', 'Re'];
+  const POINTS = [11, 0, 10, 0, 0, 0, 0, 2, 3, 4];
+  const POWER = [9, 0, 8, 1, 2, 3, 4, 5, 6, 7];
+  const suitOf = c => Math.floor(c / 10), rankOf = c => c % 10;
+  const cardOk = c => Number.isInteger(c) && c >= 0 && c < 40;
+  const cardsOk = v => Array.isArray(v) && v.length <= 40 && v.every(cardOk) && new Set(v).size === v.length;
+  const bdeckOk = d => cardsOk(d) && d.length === 40;
+  // Does the second card take the first? Same suit: the stronger one. Otherwise only a briscola takes.
+  const beats = (f, l, bs) => (suitOf(f) === suitOf(l) ? POWER[rankOf(f)] > POWER[rankOf(l)] : suitOf(f) === bs);
+  const briFresh = (first, n) => ({ phase: 'idle', first, turn: first, deck: '', hands: { a: '', b: '' }, brisc: -1, left: 0, table: [], last: null, pts: { a: 0, b: 0 }, n });
+  const handOf = (q, s) => unpack(q.hands[s], cardsOk) || [];
+  const deckOf = q => unpack(q.deck, cardsOk) || [];
+
+  /* ----- Memory: 20 cards, 10 pairs ----- */
+  const MEM_N = 20, MEM_K = 10;
+  const layoutOk = s => typeof s === 'string' && s.length === MEM_N && /^[0-9]+$/.test(s) && Array.from({ length: MEM_K }, (_, k) => s.split(String(k)).length - 1).every(c => c === 2);
+  const memFresh = (first, n) => ({ lay: '', found: '0'.repeat(MEM_N), open: [], miss: [], turn: first, first, pts: { a: 0, b: 0 }, n });
+  const memOver = q => !!q.lay && !q.found.includes('0');
+  const layOf = q => { const s = show(q.lay); return layoutOk(s) ? s : ''; };
+
+  /* ----- Disegna e indovina ----- */
+  const WORDS = [
+    'gatto', 'cane', 'casa', 'albero', 'sole', 'luna', 'stella', 'pizza', 'gelato', 'mare', 'montagna', 'bicicletta',
+    'macchina', 'aereo', 'nave', 'treno', 'fiore', 'farfalla', 'pesce', 'tartaruga', 'ombrello', 'occhiali', 'cappello', 'scarpa',
+    'chitarra', 'cuore', 'torta', 'candela', 'chiave', 'orologio', 'telefono', 'libro', 'tazza', 'forchetta', 'banana', 'mela',
+    'ananas', 'fragola', 'carota', 'uovo', 'nuvola', 'pioggia', 'arcobaleno', 'fulmine', 'pupazzo di neve', 'castello', 'razzo', 'robot',
+    'fantasma', 'drago', 'sirena', 'corona', 'spada', 'palloncino', 'regalo', 'letto', 'cuscino', 'divano', 'lampada', 'finestra',
+    'ponte', 'faro', 'tenda', 'zaino', 'valigia', 'spazzolino', 'forbici', 'matita', 'cactus', 'fungo', 'foglia', 'serpente',
+    'giraffa', 'elefante', 'coniglio', 'pinguino', 'ape', 'ragno', 'chiocciola', 'balena', 'polpo', 'gufo', 'unicorno', 'dinosauro',
+    'occhio', 'mano', 'bocca', 'naso', 'bacio', 'anello', 'caffè', 'panino', 'spaghetti', 'hamburger', 'cornetto', 'birra',
+    'semaforo', 'altalena', 'scivolo', 'aquilone', 'pallone', 'piscina', 'spiaggia', 'vulcano', 'isola', 'tramonto', 'luna di miele', 'bacchetta magica',
+  ];
+  // Kept well under the 20000 characters a section may hold in Firebase.
+  const INKS = 6, SIZES = 3, MAX_INK = 13000, MAX_STROKES = 250, MAX_GUESSES = 30;
+  const strokeOk = x => Array.isArray(x) && x.length === 3 && Number.isInteger(x[0]) && x[0] >= 0 && x[0] < INKS && Number.isInteger(x[1]) && x[1] >= 0 && x[1] < SIZES &&
+    typeof x[2] === 'string' && x[2].length >= 4 && x[2].length % 4 === 0 && x[2].length <= 2400 && /^[0-9a-z]+$/.test(x[2]);
+  const inkUsed = strokes => strokes.reduce((n, x) => n + x[2].length, 0);
+  const disFresh = (drawer, n) => ({ phase: 'choose', drawer, word: '', strokes: [], guesses: [], win: '', n });
+  const ARTICLES = /^(IL|LO|LA|I|GLI|LE|L|UN|UNO|UNA) /;
+  const guessKey = s => norm(s).replace(ARTICLES, '');
+  const wordOk = w => typeof w === 'string' && norm(w).replace(/ /g, '').length >= 2 && norm(w).length <= 24;
+
+  /* ----- Nomi cose città ----- */
+  const CATS = ['Nome', 'Cosa', 'Città', 'Animale', 'Frutta o verdura', 'Mestiere'];
+  const LETTERS = 'ABCDEFGILMNOPRSTUVZ';
+  const nccFresh = n => ({ phase: 'idle', letter: '', ans: { a: '', b: '' }, stop: '', veto: '0'.repeat(CATS.length * 2), used: '', hist: [], n });
+  const wordsOk = v => Array.isArray(v) && v.length === CATS.length && v.every(w => typeof w === 'string' && w.length <= 40);
+  const nccWords = (q, s) => unpack(q.ans[s], wordsOk) || CATS.map(() => '');
+  const nccValid = (letter, w) => { const k = norm(w); return k.replace(/ /g, '').length >= 2 && k[0] === letter; };
+  // 10 points for a word of your own, 5 when you both wrote the same one, 20 when the other left it empty or it doesn't count.
+  function nccPoints(letter, A, B, veto) {
+    const out = { a: [], b: [], ta: 0, tb: 0 };
+    CATS.forEach((_, k) => {
+      const va = nccValid(letter, A[k]) && veto[k] !== '1', vb = nccValid(letter, B[k]) && veto[CATS.length + k] !== '1';
+      let pa = 0, pb = 0;
+      if (va && vb) { const same = norm(A[k]) === norm(B[k]); pa = pb = same ? 5 : 10; }
+      else if (va) pa = 20;
+      else if (vb) pb = 20;
+      out.a.push(pa); out.b.push(pb); out.ta += pa; out.tb += pb;
+    });
+    return out;
+  }
+
+  /* ----- Chi mi conosce meglio: this or that ----- */
+  const PAIRS = [
+    ['Mare', 'Montagna'], ['Pizza', 'Sushi'], ['Cane', 'Gatto'], ['Alba', 'Tramonto'], ['Film', 'Serie tv'], ['Dolce', 'Salato'],
+    ['Caffè', 'Tè'], ['Estate', 'Inverno'], ['Libro', 'Film'], ['Serata a casa', 'Serata fuori'], ['Messaggio', 'Chiamata'], ['Colazione dolce', 'Colazione salata'],
+    ['Svegliarsi presto', 'Fare tardi'], ['Città', 'Campagna'], ['Pasta', 'Riso'], ['Cioccolato fondente', 'Cioccolato al latte'], ['Viaggio organizzato', 'Partire all’avventura'], ['Spiaggia', 'Piscina'],
+    ['Doccia', 'Bagno'], ['Pioggia', 'Sole'], ['Horror', 'Commedia'], ['Gelato', 'Torta'], ['Treno', 'Aereo'], ['Concerto', 'Cinema'],
+    ['Vino', 'Birra'], ['Cucinare', 'Ordinare'], ['Abbracci', 'Baci'], ['Ordine', 'Caos'], ['Sneakers', 'Scarpe eleganti'], ['Primo', 'Secondo'],
+    ['Pizza margherita', 'Pizza con tutto'], ['Parlare', 'Ascoltare'], ['Foto', 'Video'], ['Natale', 'Capodanno'], ['Lunedì', 'Venerdì'], ['Dormire tanto', 'Fare tante cose'],
+    ['Musica alta', 'Silenzio'], ['Mattina', 'Sera'], ['Sorpresa', 'Sapere tutto prima'], ['Coperte', 'Lenzuolo'], ['Divano', 'Letto'], ['Patatine', 'Popcorn'],
+    ['Montagne russe', 'Ruota panoramica'], ['Neve', 'Caldo'], ['Giochi da tavolo', 'Videogiochi'], ['Andare in vacanza al mare', 'Andare in una città nuova'], ['Fragole', 'Ciliegie'], ['Lasagne', 'Carbonara'],
+    ['Passeggiata', 'Corsa'], ['Disordine in camera', 'Camera perfetta'], ['Tatuaggio', 'Piercing'], ['Profumo dolce', 'Profumo fresco'], ['Ristorante elegante', 'Trattoria'], ['Ritardo', 'Anticipo'],
+    ['Cartoni animati', 'Documentari'], ['Ketchup', 'Maionese'], ['Notte in tenda', 'Notte in hotel'], ['Telefono sempre acceso', 'Telefono spento'], ['Mangiare piccante', 'Mangiare delicato'], ['Romantico', 'Avventuroso'],
+  ];
+  const ROUNDS = 10;
+  const chiFresh = (q, n) => ({ phase: 'play', q, k: 1, ans: { a: '', b: '' }, pts: { a: 0, b: 0 }, hist: [], n });
+  const chiAnsOk = s => typeof s === 'string' && /^[01]{2}$/.test(s);
+  const nextPair = (cur, wanted) => (Number.isInteger(wanted) && wanted >= 0 && wanted < PAIRS.length && wanted !== cur ? wanted : (cur + 7) % PAIRS.length);
+
+  /* ----- shared ----- */
+  function fresh() {
+    return {
+      bri: briFresh('a', 1), mem: memFresh('a', 1), dis: disFresh('a', 1), ncc: nccFresh(1), chi: chiFresh(0, 1),
+      score: Object.fromEntries(EXTRA.map(g => [g, { a: 0, b: 0 }])),
+    };
+  }
+  const handles = t => typeof t === 'string' && /^(bri|mem|dis|ncc|chi)\./.test(t);
+
+  function apply(S, a, cleanText) {
+    if (!S || !a || typeof a !== 'object') return null;
+    const N = clone(S);
+    const s = a.seat;
+    if (!isSeat(s)) return null;
+    switch (a.t) {
+      case 'bri.deal': {
+        const q = N.bri;
+        if ((q.phase !== 'idle' && q.phase !== 'over') || !bdeckOk(a.deck)) return null;
+        const d = a.deck, first = q.phase === 'over' ? other(q.first) : q.first, second = other(first);
+        const hands = { [first]: [d[0], d[2], d[4]], [second]: [d[1], d[3], d[5]] };
+        // The seventh card is turned up: it sets the briscola and is the last one drawn.
+        const rest = d.slice(7).concat([d[6]]);
+        N.bri = { phase: 'play', first, turn: first, deck: hide(JSON.stringify(rest)), hands: { a: hide(JSON.stringify(hands.a)), b: hide(JSON.stringify(hands.b)) }, brisc: d[6], left: rest.length, table: [], last: null, pts: { a: 0, b: 0 }, n: q.n + 1 };
+        return N;
+      }
+      case 'bri.play': {
+        const q = N.bri, c = a.card;
+        if (q.phase !== 'play' || s !== q.turn || !cardOk(c)) return null;
+        const hand = handOf(q, s);
+        if (!hand.includes(c)) return null;
+        const hands = { a: handOf(q, 'a'), b: handOf(q, 'b') };
+        hands[s] = hand.filter(x => x !== c);
+        if (!q.table.length) {
+          q.table = [[s, c]];
+          q.turn = other(s);
+        } else {
+          const [ls, lc] = q.table[0];
+          const win = beats(c, lc, suitOf(q.brisc)) ? s : ls;
+          q.pts[win] += POINTS[rankOf(lc)] + POINTS[rankOf(c)];
+          q.last = { t: [[ls, lc], [s, c]], w: win };
+          q.table = [];
+          const rest = deckOf(q);
+          if (rest.length >= 2) { hands[win].push(rest.shift()); hands[other(win)].push(rest.shift()); }
+          q.deck = hide(JSON.stringify(rest));
+          q.left = rest.length;
+          q.turn = win;
+          if (!hands.a.length && !hands.b.length) {
+            q.phase = 'over';
+            if (q.pts.a !== q.pts.b) N.score.bri[q.pts.a > q.pts.b ? 'a' : 'b'] += 1;
+          }
+        }
+        q.hands = { a: hide(JSON.stringify(hands.a)), b: hide(JSON.stringify(hands.b)) };
+        return N;
+      }
+      case 'bri.new': {
+        const q = N.bri;
+        if (q.phase === 'idle' || (q.phase !== 'over' && a.force !== true)) return null;
+        N.bri = briFresh(other(q.first), q.n + 1);
+        return N;
+      }
+      case 'mem.flip': {
+        const q = N.mem, i = a.i;
+        if (memOver(q) || s !== q.turn) return null;
+        if (!q.lay) {
+          if (!layoutOk(a.deal)) return null;
+          q.lay = hide(a.deal);
+        }
+        const lay = layOf(q);
+        if (!lay || !Number.isInteger(i) || i < 0 || i >= MEM_N || q.found[i] !== '0' || q.open.includes(i)) return null;
+        q.miss = [];
+        q.open.push(i);
+        if (q.open.length === 2) {
+          const [x, y] = q.open;
+          q.open = [];
+          if (lay[x] === lay[y]) {
+            q.found = q.found.slice(0, x) + s + q.found.slice(x + 1);
+            q.found = q.found.slice(0, y) + s + q.found.slice(y + 1);
+            q.pts[s] += 1;
+            if (memOver(q) && q.pts.a !== q.pts.b) N.score.mem[q.pts.a > q.pts.b ? 'a' : 'b'] += 1;
+          } else {
+            q.miss = [x, y];
+            q.turn = other(s);
+          }
+        }
+        return N;
+      }
+      case 'mem.new': {
+        const q = N.mem;
+        if (!q.lay || (!memOver(q) && a.force !== true)) return null;
+        N.mem = memFresh(other(q.first), q.n + 1);
+        return N;
+      }
+      case 'dis.word': {
+        const q = N.dis;
+        if (q.phase !== 'choose' || s !== q.drawer) return null;
+        const w = cleanText(a.word, 24).toLocaleLowerCase('it');
+        if (!wordOk(w)) return null;
+        q.phase = 'draw';
+        q.word = hide(w);
+        return N;
+      }
+      case 'dis.stroke': {
+        const q = N.dis, x = [a.c, a.w, a.p];
+        if (q.phase !== 'draw' || s !== q.drawer || !strokeOk(x) || q.strokes.length >= MAX_STROKES || inkUsed(q.strokes) + a.p.length > MAX_INK) return null;
+        q.strokes.push(x);
+        return N;
+      }
+      case 'dis.undo': {
+        const q = N.dis;
+        if (q.phase !== 'draw' || s !== q.drawer || !q.strokes.length) return null;
+        q.strokes.pop();
+        return N;
+      }
+      case 'dis.clear': {
+        const q = N.dis;
+        if (q.phase !== 'draw' || s !== q.drawer || !q.strokes.length) return null;
+        q.strokes = [];
+        return N;
+      }
+      case 'dis.guess': {
+        const q = N.dis;
+        if (q.phase !== 'draw' || s !== other(q.drawer) || q.guesses.length >= MAX_GUESSES) return null;
+        const g = cleanText(a.text, 40);
+        if (!guessKey(g)) return null;
+        const hit = guessKey(g) === guessKey(show(q.word));
+        q.guesses.push([g, hit ? 1 : 0]);
+        if (hit) { q.phase = 'done'; q.win = 'y'; N.score.dis[s] += 1; }
+        return N;
+      }
+      case 'dis.give': {
+        const q = N.dis;
+        if (q.phase !== 'draw' || s !== other(q.drawer)) return null;
+        q.phase = 'done';
+        q.win = 'n';
+        return N;
+      }
+      case 'dis.next': {
+        const q = N.dis;
+        if (q.phase !== 'done') return null;
+        N.dis = disFresh(other(q.drawer), q.n + 1);
+        return N;
+      }
+      case 'dis.new': {
+        const q = N.dis;
+        if (q.phase === 'choose' || a.force !== true) return null;
+        N.dis = disFresh(q.drawer, q.n + 1);
+        return N;
+      }
+      case 'ncc.start': {
+        const q = N.ncc;
+        if (q.phase !== 'idle' || typeof a.letter !== 'string' || a.letter.length !== 1 || !LETTERS.includes(a.letter)) return null;
+        N.ncc = { phase: 'play', letter: a.letter, ans: { a: '', b: '' }, stop: '', veto: '0'.repeat(CATS.length * 2), used: (a.letter + q.used).slice(0, 8), hist: q.hist, n: q.n + 1 };
+        return N;
+      }
+      case 'ncc.send': {
+        const q = N.ncc;
+        if (q.phase !== 'play' || q.ans[s] || !Array.isArray(a.words) || a.words.length !== CATS.length) return null;
+        const words = a.words.map(w => cleanText(w, 30));
+        q.ans[s] = hide(JSON.stringify(words));
+        if (!q.stop) q.stop = s;
+        if (q.ans.a && q.ans.b) q.phase = 'score';
+        return N;
+      }
+      case 'ncc.veto': {
+        const q = N.ncc, k = a.k;
+        if (q.phase !== 'score' || !isSeat(a.who) || !Number.isInteger(k) || k < 0 || k >= CATS.length) return null;
+        const at = (a.who === 'a' ? 0 : CATS.length) + k;
+        q.veto = q.veto.slice(0, at) + (q.veto[at] === '1' ? '0' : '1') + q.veto.slice(at + 1);
+        return N;
+      }
+      case 'ncc.done': {
+        const q = N.ncc;
+        if (q.phase !== 'score') return null;
+        const p = nccPoints(q.letter, nccWords(q, 'a'), nccWords(q, 'b'), q.veto);
+        if (p.ta !== p.tb) N.score.ncc[p.ta > p.tb ? 'a' : 'b'] += 1;
+        N.ncc = { phase: 'idle', letter: '', ans: { a: '', b: '' }, stop: '', veto: '0'.repeat(CATS.length * 2), used: q.used, hist: [[q.letter, p.ta, p.tb]].concat(q.hist).slice(0, 10), n: q.n + 1 };
+        return N;
+      }
+      case 'ncc.new': {
+        const q = N.ncc;
+        if (q.phase === 'idle' || a.force !== true) return null;
+        N.ncc = { phase: 'idle', letter: '', ans: { a: '', b: '' }, stop: '', veto: '0'.repeat(CATS.length * 2), used: q.used, hist: q.hist, n: q.n + 1 };
+        return N;
+      }
+      case 'chi.answer': {
+        const q = N.chi;
+        if (q.phase !== 'play' || q.ans[s] || (a.me !== 0 && a.me !== 1) || (a.you !== 0 && a.you !== 1)) return null;
+        q.ans[s] = hide(`${a.me}${a.you}`);
+        if (q.ans.a && q.ans.b) {
+          const A = show(q.ans.a), B = show(q.ans.b);
+          if (A[1] === B[0]) q.pts.a += 1;
+          if (B[1] === A[0]) q.pts.b += 1;
+          q.hist.push([q.q, A, B]);
+          if (q.k >= ROUNDS) {
+            q.phase = 'over';
+            if (q.pts.a !== q.pts.b) N.score.chi[q.pts.a > q.pts.b ? 'a' : 'b'] += 1;
+          }
+        }
+        return N;
+      }
+      case 'chi.next': {
+        const q = N.chi;
+        if (q.phase !== 'play' || !q.ans.a || !q.ans.b) return null;
+        q.q = nextPair(q.q, a.q);
+        q.k += 1;
+        q.ans = { a: '', b: '' };
+        return N;
+      }
+      case 'chi.new': {
+        const q = N.chi;
+        if (q.phase !== 'over' && (a.force !== true || (q.k === 1 && !q.ans.a && !q.ans.b))) return null;
+        N.chi = chiFresh(nextPair(q.q, a.q), q.n + 1);
+        return N;
+      }
+      default:
+        return null;
+    }
+  }
+
+  function sanitize(raw, cleanText) {
+    const out = fresh();
+    const R = raw && typeof raw === 'object' ? raw : {};
+    const SC = R.score && typeof R.score === 'object' ? R.score : {};
+    for (const g of EXTRA) for (const s of ['a', 'b']) out.score[g][s] = intIn(SC[g] && SC[g][s], 0, 99999, 0);
+
+    const B = R.bri;
+    if (B && typeof B === 'object') {
+      const H = B.hands && typeof B.hands === 'object' ? B.hands : {};
+      const P = B.pts && typeof B.pts === 'object' ? B.pts : {};
+      const q = {
+        phase: ['idle', 'play', 'over'].includes(B.phase) ? B.phase : 'idle',
+        first: seatOr(B.first, 'a'), turn: seatOr(B.turn, 'a'),
+        deck: str(B.deck, 800), hands: { a: str(H.a, 200), b: str(H.b, 200) },
+        brisc: intIn(B.brisc, -1, 39, -1), left: intIn(B.left, 0, 40, 0),
+        table: (Array.isArray(B.table) ? B.table : []).filter(x => Array.isArray(x) && isSeat(x[0]) && cardOk(x[1])).slice(0, 1).map(x => [x[0], x[1]]),
+        last: B.last && Array.isArray(B.last.t) && B.last.t.length === 2 && B.last.t.every(x => Array.isArray(x) && isSeat(x[0]) && cardOk(x[1])) && isSeat(B.last.w)
+          ? { t: B.last.t.map(x => [x[0], x[1]]), w: B.last.w } : null,
+        pts: { a: intIn(P.a, 0, 120, 0), b: intIn(P.b, 0, 120, 0) }, n: intIn(B.n, 1, 1e9, 1),
+      };
+      if (q.phase === 'play' && !(cardOk(q.brisc) && unpack(q.deck, cardsOk) && unpack(q.hands.a, cardsOk) && unpack(q.hands.b, cardsOk))) q.phase = 'idle';
+      if (q.phase === 'idle') Object.assign(q, { turn: q.first, deck: '', hands: { a: '', b: '' }, brisc: -1, left: 0, table: [], last: null, pts: { a: 0, b: 0 } });
+      out.bri = q;
+    }
+
+    const M = R.mem;
+    if (M && typeof M === 'object') {
+      const P = M.pts && typeof M.pts === 'object' ? M.pts : {};
+      const idx = v => (Array.isArray(v) ? v : []).filter((x, k, arr) => Number.isInteger(x) && x >= 0 && x < MEM_N && arr.indexOf(x) === k).slice(0, 2);
+      const q = {
+        lay: str(M.lay, 64), found: typeof M.found === 'string' && M.found.length === MEM_N && /^[0ab]+$/.test(M.found) ? M.found : '0'.repeat(MEM_N),
+        open: idx(M.open).slice(0, 1), miss: idx(M.miss), turn: seatOr(M.turn, 'a'), first: seatOr(M.first, 'a'),
+        pts: { a: intIn(P.a, 0, MEM_K, 0), b: intIn(P.b, 0, MEM_K, 0) }, n: intIn(M.n, 1, 1e9, 1),
+      };
+      if (q.lay && !layoutOk(show(q.lay))) q.lay = '';
+      if (!q.lay) Object.assign(q, { found: '0'.repeat(MEM_N), open: [], miss: [], pts: { a: 0, b: 0 }, turn: q.first });
+      out.mem = q;
+    }
+
+    const D = R.dis;
+    if (D && typeof D === 'object') {
+      const strokes = [];
+      let ink = 0;
+      for (const x of Array.isArray(D.strokes) ? D.strokes : []) {
+        if (!strokeOk(x) || strokes.length >= MAX_STROKES || ink + x[2].length > MAX_INK) break;
+        strokes.push([x[0], x[1], x[2]]);
+        ink += x[2].length;
+      }
+      const q = {
+        phase: ['choose', 'draw', 'done'].includes(D.phase) ? D.phase : 'choose', drawer: seatOr(D.drawer, 'a'),
+        word: str(D.word, 200), strokes,
+        guesses: (Array.isArray(D.guesses) ? D.guesses : []).filter(g => Array.isArray(g) && typeof g[0] === 'string' && (g[1] === 0 || g[1] === 1)).slice(0, MAX_GUESSES).map(g => [cleanText(g[0], 40), g[1]]),
+        win: D.win === 'y' || D.win === 'n' ? D.win : '', n: intIn(D.n, 1, 1e9, 1),
+      };
+      if (q.phase !== 'choose' && !wordOk(show(q.word))) q.phase = 'choose';
+      if (q.phase === 'done' && !q.win) q.phase = 'draw';
+      if (q.phase === 'choose') Object.assign(q, { word: '', strokes: [], guesses: [], win: '' });
+      out.dis = q;
+    }
+
+    const C = R.ncc;
+    if (C && typeof C === 'object') {
+      const A = C.ans && typeof C.ans === 'object' ? C.ans : {};
+      const q = {
+        phase: ['idle', 'play', 'score'].includes(C.phase) ? C.phase : 'idle',
+        letter: typeof C.letter === 'string' && C.letter.length === 1 && LETTERS.includes(C.letter) ? C.letter : '',
+        ans: { a: str(A.a, 1200), b: str(A.b, 1200) }, stop: isSeat(C.stop) ? C.stop : '',
+        veto: typeof C.veto === 'string' && C.veto.length === CATS.length * 2 && /^[01]+$/.test(C.veto) ? C.veto : '0'.repeat(CATS.length * 2),
+        used: typeof C.used === 'string' ? Array.from(C.used).filter(ch => LETTERS.includes(ch)).slice(0, 8).join('') : '',
+        hist: (Array.isArray(C.hist) ? C.hist : []).filter(h => Array.isArray(h) && typeof h[0] === 'string' && LETTERS.includes(h[0]) && h[0].length === 1).slice(0, 10).map(h => [h[0], intIn(h[1], 0, 999, 0), intIn(h[2], 0, 999, 0)]),
+        n: intIn(C.n, 1, 1e9, 1),
+      };
+      if (q.phase !== 'idle' && !q.letter) q.phase = 'idle';
+      for (const s of ['a', 'b']) if (q.ans[s] && !unpack(q.ans[s], wordsOk)) q.ans[s] = '';
+      if (q.phase === 'score' && !(q.ans.a && q.ans.b)) q.phase = 'play';
+      if (q.phase === 'idle') Object.assign(q, { letter: '', ans: { a: '', b: '' }, stop: '', veto: '0'.repeat(CATS.length * 2) });
+      out.ncc = q;
+    }
+
+    const W = R.chi;
+    if (W && typeof W === 'object') {
+      const A = W.ans && typeof W.ans === 'object' ? W.ans : {};
+      const P = W.pts && typeof W.pts === 'object' ? W.pts : {};
+      const q = {
+        phase: W.phase === 'over' ? 'over' : 'play', q: intIn(W.q, 0, PAIRS.length - 1, 0), k: intIn(W.k, 1, ROUNDS, 1),
+        ans: { a: chiAnsOk(show(A.a)) ? str(A.a, 16) : '', b: chiAnsOk(show(A.b)) ? str(A.b, 16) : '' },
+        pts: { a: intIn(P.a, 0, ROUNDS, 0), b: intIn(P.b, 0, ROUNDS, 0) },
+        hist: (Array.isArray(W.hist) ? W.hist : []).filter(h => Array.isArray(h) && Number.isInteger(h[0]) && h[0] >= 0 && h[0] < PAIRS.length && chiAnsOk(h[1]) && chiAnsOk(h[2])).slice(0, ROUNDS).map(h => [h[0], h[1], h[2]]),
+        n: intIn(W.n, 1, 1e9, 1),
+      };
+      if (q.phase === 'over' && !(q.ans.a && q.ans.b)) q.phase = 'play';
+      out.chi = q;
+    }
+    return out;
+  }
+
+  // Whether it's this seat's move (true), the other's (false), or nobody's (null).
+  function yourMove(S, g, seat) {
+    switch (g) {
+      case 'bri': return S.bri.phase === 'play' ? S.bri.turn === seat : null;
+      case 'mem': return memOver(S.mem) ? null : S.mem.turn === seat;
+      case 'dis': {
+        const q = S.dis;
+        if (q.phase === 'choose') return q.drawer === seat;
+        if (q.phase === 'draw') return true;
+        return null;
+      }
+      case 'ncc': {
+        const q = S.ncc;
+        if (q.phase === 'play') return q.ans[seat] ? false : true;
+        return null;
+      }
+      case 'chi': {
+        const q = S.chi;
+        if (q.phase === 'over') return null;
+        if (!q.ans[seat]) return true;
+        return q.ans[other(seat)] ? null : false;
+      }
+      default: return null;
+    }
+  }
+
+  return {
+    EXTRA, SUITS, RANKS, POINTS, POWER, MEM_N, MEM_K, WORDS, INKS, SIZES, MAX_INK, CATS, LETTERS, PAIRS, ROUNDS,
+    handles, apply, sanitize, fresh, yourMove,
+    suitOf, rankOf, beats, bdeckOk, handOf, deckOf, layoutOk, layOf, memOver, inkUsed, guessKey, nccWords, nccPoints, nccValid,
   };
 })();
 </script>
@@ -1324,10 +2150,16 @@ const Game2 = (() => {
   const G = Game;
   const NAMES = { a: 'Gabri', b: 'Ivi' };
   const GAMES = Game2.GAMES;
-  const TITLES = { imp: 'Impiccato', qua: 'Quadratini', tris: 'Tris', c4: 'Quattro in fila', sos: 'SOS', num: 'Indovina il numero', navi: 'Battaglia navale', dom: 'Domanda della buonanotte' };
-  const WHERE = { imp: "sull'impiccato", qua: 'sui quadratini', tris: 'sul tris', c4: 'su quattro in fila', sos: 'su SOS', num: 'su indovina il numero', navi: 'sulla battaglia navale', dom: 'sulla domanda della buonanotte' };
+  const TITLES = { bri: 'Briscola', mem: 'Memory', dis: 'Disegna e indovina', ncc: 'Nomi, cose, città', chi: 'Chi mi conosce meglio', taro: 'Tarocchi', imp: 'Impiccato', qua: 'Quadratini', tris: 'Tris', c4: 'Quattro in fila', sos: 'SOS', num: 'Indovina il numero', navi: 'Battaglia navale', dom: 'Domanda della buonanotte' };
+  const WHERE = { bri: 'sulla briscola', mem: 'su memory', dis: 'su disegna e indovina', ncc: 'su nomi, cose, città', chi: 'su chi mi conosce meglio', taro: 'sui tarocchi', imp: "sull'impiccato", qua: 'sui quadratini', tris: 'sul tris', c4: 'su quattro in fila', sos: 'su SOS', num: 'su indovina il numero', navi: 'sulla battaglia navale', dom: 'sulla domanda della buonanotte' };
   const SYM_NAMES = { x: 'Croce', o: 'Cerchio', s: 'Stella', h: 'Cuore', n: 'Nuvola', f: 'Fiore', l: 'Luna', u: 'Sole' };
   const RULES = {
+    bri: 'Briscola a due con le carte napoletane. Si danno tre carte a testa e la settima, scoperta sotto il mazzo, decide il seme di briscola. A turno giocate una carta: prende chi tira la più alta del seme uscito per primo, a meno che l’altro non giochi una briscola. Dopo ogni presa si pesca, prima chi ha preso. Valgono l’asso (11), il tre (10), il re (4), il cavallo (3) e il fante (2): in tutto 120 punti, vince chi ne fa più di 60.',
+    mem: 'Ci sono 20 carte coperte e ogni disegno c’è due volte. Al tuo turno ne giri due: se sono uguali le tieni e giochi ancora, se no tornano coperte e tocca all’altro. Le carte girate le vedete tutti e due, quindi tenete a mente dove stanno. Vince chi trova più coppie.',
+    dis: 'Uno sceglie una parola e la disegna col dito, l’altro prova a indovinarla scrivendo. Niente lettere o numeri nel disegno, per il resto vale tutto. Il disegno arriva tratto per tratto. Se indovini prendi un punto, poi vi scambiate. Se proprio non ci arrivi puoi arrenderti e vedere cos’era.',
+    ncc: 'Si estrae una lettera e ognuno scrive un nome, una cosa, una città, un animale, un frutto o una verdura e un mestiere che cominciano con quella lettera. Chi finisce prima dice stop e l’altro manda quello che ha. Una parola tua vale 10, se l’avete scritta uguale 5, se l’altro non ha niente 20. Se una parola non vi convince toccate «non vale». Vince la lettera chi fa più punti.',
+    chi: 'Dieci domande «questo o quello». Ognuno sceglie cosa preferisce e prova a indovinare cosa sceglie l’altro. Quando avete risposto tutti e due si vede chi ci ha preso: ogni risposta indovinata vale un punto. Alla fine si scopre chi conosce meglio l’altro.',
+    taro: 'Chi pesca sceglie la stesa: una carta, tre (passato, presente, futuro) o cinque a croce, e se vuole scrive la domanda. Poi mescola: le 22 carte coperte finiscono sul tavolo e si scelgono toccandole. Quando le girate, alcune possono uscire capovolte. Chi legge scrive la sua interpretazione e alla fine la lettura si salva nel quaderno.',
     imp: 'Uno pensa una parola e la scrive di nascosto, l’altro la indovina una lettera alla volta. Ogni lettera sbagliata aggiunge un pezzo all’omino: al sesto errore è impiccato e il punto va a chi ha scelto la parola. Se la indovini prima, il punto è tuo. A ogni giro ci si scambia.',
     qua: 'A turno tracciate una linea tra due puntini vicini. Chi chiude il quarto lato di un quadratino ci scrive la sua iniziale e gioca ancora. Quando la griglia è piena vince chi ha più quadratini. Il trucco è non lasciare mai il terzo lato all’altro.',
     tris: 'A turno mettete il vostro segno in una casella. Vince chi ne mette tre in fila: in orizzontale, in verticale o in diagonale. Ogni pagina ha sei partite e quando è piena si volta pagina. Il segno lo scegli tu, qui sotto.',
@@ -1345,24 +2177,30 @@ const Game2 = (() => {
     const g = String(t).split('.')[0];
     return GAMES.includes(g) ? [g] : [];
   }
-  // One facade over the first three games (Game) and the newer ones (Game2).
-  const EXTRA_KEYS = ['c4', 'sos', 'num', 'navi', 'dom', 'pick'];
+  // One facade over the first three games (Game), the second batch (Game2) and the third (Game3).
+  const EXTRA_KEYS = Game2.EXTRA.concat(['pick']);
   const GX = {
     fresh() {
-      const st = G.fresh(), ex = Game2.freshExtra();
+      const st = G.fresh(), ex = Game2.freshExtra(), e3 = Game3.fresh();
       for (const k of EXTRA_KEYS) st[k] = ex[k];
-      Object.assign(st.score, ex.score);
+      for (const k of Game3.EXTRA) st[k] = e3[k];
+      Object.assign(st.score, ex.score, e3.score);
       return st;
     },
     sanitize(raw) {
       const st = G.sanitize(raw);
       if (!st) return null;
-      const ex = Game2.sanitizeExtra(raw);
+      const ex = Game2.sanitizeExtra(raw), e3 = Game3.sanitize(raw, G.cleanText);
       for (const k of EXTRA_KEYS) st[k] = ex[k];
-      Object.assign(st.score, ex.score);
+      for (const k of Game3.EXTRA) st[k] = e3[k];
+      Object.assign(st.score, ex.score, e3.score);
       return st;
     },
-    apply(S0, a) { return Game2.handles(a && a.t) ? Game2.apply(S0, a, G.cleanText) : G.apply(S0, a); },
+    apply(S0, a) {
+      const t = a && a.t;
+      if (Game3.handles(t)) return Game3.apply(S0, a, G.cleanText);
+      return Game2.handles(t) ? Game2.apply(S0, a, G.cleanText) : G.apply(S0, a);
+    },
   };
   const PEER_PREFIX = 'blocchetto-buonanotte-';
 
@@ -2043,7 +2881,7 @@ const Game2 = (() => {
   }
 
   /* ---------- views ---------- */
-  const ui = { sheet: false, confirm: '', sosCh: 'S', numDraft: '', naviDraft: null, spinning: false };
+  const ui = { sheet: false, confirm: '', sosCh: 'S', numDraft: '', naviDraft: null, spinning: false, taroSpread: 3, disInk: 0, disSize: 1, disLive: false, chiMe: -1, chiYou: -1 };
   const seen = {};
   let animSig = '', animUntil = 0;
 
@@ -2302,15 +3140,191 @@ const Game2 = (() => {
         return `<path class="wave" d="M5 47 q4 -4 8 0 t8 0 t8 0 t8 0 t8 0 t8 0"/><g transform="translate(5 14) scale(0.42)">${shipSVG([0, 1, 2, 3], 40, 'b', false, 'mini-ship')}</g>`;
       case 'dom':
         return `<path class="mi" ${pb} d="M13 11 H47 Q52 11 52 16 V35 Q52 40 47 40 H27 L18 49 L20 40 H13 Q8 40 8 35 V16 Q8 11 13 11 Z"/><text class="mt big" x="30" y="26" ${pa}>?</text>`;
+      case 'bri':
+        return `<g transform="rotate(-11 20 31)"><rect class="mp mcard" x="7" y="11" width="25" height="40" rx="3"/>${suitGlyph(1, 19.5, 31, 7)}</g><g transform="rotate(9 40 30)"><rect class="mp mcard" x="28" y="9" width="25" height="40" rx="3"/>${suitGlyph(0, 40.5, 29, 7.5)}</g>`;
+      case 'mem':
+        return `<rect class="mback" x="8" y="8" width="20" height="21" rx="3"/><rect class="mp mcard" x="32" y="8" width="20" height="21" rx="3"/><rect class="mp mcard" x="8" y="33" width="20" height="21" rx="3"/><rect class="mback" x="32" y="33" width="20" height="21" rx="3"/><path class="mi" ${pa} transform="translate(33.5 9.5) scale(.17)" d="${HEART}"/><path class="mi" ${pa} transform="translate(9.5 34.5) scale(.17)" d="${HEART}"/>`;
+      case 'dis':
+        return `<path class="mi" ${pb} d="M9 47 L9 29 L21 18 L33 29 L33 47 Z M17 47 L17 37 L25 37 L25 47"/><path class="mp" d="M37 49 L50 20 L56 23 L43 52 L36 54 Z"/>`;
+      case 'ncc':
+        return `<text class="mt big" x="17" y="27" ${pa}>M</text><path class="mp" d="M32 19 H54 M32 31 H54 M32 43 H48 M8 43 H24"/>`;
+      case 'chi':
+        return `<text class="mt big" x="15" y="29" ${pa}>A</text><text class="mt" x="30" y="31">o</text><text class="mt big" x="45" y="29" ${pb}>B</text><path class="mi" ${pa} d="${penLine(8, 44, 52, 44, 'chi1')}"/>`;
+      case 'taro':
+        return `<rect class="mback" x="11" y="11" width="24" height="38" rx="3" transform="rotate(-12 23 30)"/><rect class="mp mcard" x="25" y="8" width="26" height="42" rx="3"/><path class="mi" style="--c:var(--pen-b)" d="${starPath(38, 29, 9, 4, 8)}"/>`;
       default:
         return '';
     }
   }
   const artSVG = g => `<svg viewBox="0 0 60 60" aria-hidden="true" focusable="false">${miniArt(g)}</svg>`;
 
+  /* ---------- tarocchi: 22 felt-tip cards ---------- */
+  function starPath(cx, cy, R, r, n) {
+    let d = '';
+    for (let k = 0; k < n * 2; k++) {
+      const a = -Math.PI / 2 + k * Math.PI / n, rr = k % 2 ? r : R;
+      d += `${k ? 'L' : 'M'}${f1(cx + Math.cos(a) * rr)} ${f1(cy + Math.sin(a) * rr)} `;
+    }
+    return d + 'Z';
+  }
+  const EMBLEMS = [
+    // 0 Il Matto: a bundle on a stick, on the road
+    () => '<path class="ti" d="M30 130 L68 52"/><circle class="ty" cx="71" cy="47" r="11"/><path class="ti" d="M64 41 Q71 34 79 43"/><path class="ti" d="M20 134 q7 -5 14 0 t14 0 t14 0 t14 0 t14 0"/>',
+    // I Il Bagatto: the table and the wand
+    () => '<rect class="tr" x="22" y="100" width="56" height="8" rx="2"/><path class="ti" d="M28 108 V132 M72 108 V132 M52 92 L64 46"/><path class="tb" d="M30 100 L32 88 H42 L44 100 Z"/><circle class="ty" cx="62" cy="96" r="4"/><circle class="ty" cx="65" cy="43" r="4"/>',
+    // II La Papessa: the open book
+    () => '<path class="ty" d="M50 66 Q36 58 21 62 V112 Q36 108 50 116 Z"/><path class="ty" d="M50 66 Q64 58 79 62 V112 Q64 108 50 116 Z"/><path class="ti" d="M50 66 V116 M27 76 Q35 74 44 78 M27 86 Q35 84 44 88 M27 96 Q35 94 44 98 M56 78 Q65 74 73 76 M56 88 Q65 84 73 86 M56 98 Q65 94 73 96"/>',
+    // III L'Imperatrice: the crown
+    () => '<path class="ty" d="M25 106 L29 70 L41 88 L50 62 L59 88 L71 70 L75 106 Z"/><rect class="tr" x="25" y="106" width="50" height="11" rx="2"/><circle class="tb" cx="50" cy="56" r="4.5"/><circle class="tb" cx="29" cy="66" r="3"/><circle class="tb" cx="71" cy="66" r="3"/>',
+    // IV L'Imperatore: the orb with the cross
+    () => '<circle class="ty" cx="50" cy="100" r="22"/><path class="ti" d="M28 100 H72 M50 78 V56 M42 64 H58 M50 78 Q63 100 50 122"/>',
+    // V Il Papa: the triple cross
+    () => '<path class="ti" d="M50 134 V54 M40 66 H60 M36 78 H64 M32 90 H68"/><circle class="tr" cx="50" cy="48" r="6"/><path class="ti" d="M38 134 H62"/>',
+    // VI L'Innamorato: the heart and the arrow
+    () => '<path class="tr" d="M50 114 C34 102 24 92 26 80 C28 70 38 66 46 72 C48 74 50 77 50 80 C50 77 52 74 54 72 C62 66 72 70 74 80 C76 92 66 102 50 114 Z"/><path class="ti" d="M20 66 L80 108 M73 106 l7 2 l-2 -7 M27 71 l-7 -4 l1 7"/>',
+    // VII Il Carro: the chariot
+    () => '<path class="tr" d="M30 70 L34 56 H66 L70 70 Z"/><rect class="tb" x="28" y="74" width="44" height="24" rx="3"/><circle class="ty" cx="36" cy="108" r="10"/><circle class="ty" cx="64" cy="108" r="10"/><path class="ti" d="M26 72 H74 M36 98 V118 M26 108 H46 M64 98 V118 M54 108 H74"/>',
+    // VIII La Giustizia: the scales
+    () => '<path class="ti" d="M50 132 V56 M26 66 H74 M38 132 H62 M26 66 L18 92 M26 66 L34 92 M74 66 L66 92 M74 66 L82 92"/><path class="ty" d="M16 92 Q26 104 36 92 Z"/><path class="ty" d="M64 92 Q74 104 84 92 Z"/><circle class="tr" cx="50" cy="51" r="5"/>',
+    // IX L'Eremita: the lantern
+    () => '<path class="ti" d="M50 44 V58 M44 112 H56 M50 108 V112"/><path class="ty" d="M38 60 H62 L66 70 V100 L62 108 H38 L34 100 V70 Z"/><path class="ti" d="M34 70 H66 M34 100 H66"/><path class="tr" d="M50 76 Q57 85 50 95 Q43 85 50 76 Z"/>',
+    // X La Ruota di Fortuna: the wheel
+    () => '<circle class="ty" cx="50" cy="88" r="27"/><path class="ti" d="M50 61 V115 M23 88 H77 M31 69 L69 107 M69 69 L31 107 M50 115 V128 M32 128 H68"/><circle class="tp" cx="50" cy="88" r="6"/>',
+    // XI La Forza: the lion
+    () => `<path class="ty" d="${starPath(50, 90, 33, 25, 12)}"/><circle class="tp" cx="50" cy="90" r="18"/><circle class="tk" cx="44" cy="86" r="2.2"/><circle class="tk" cx="56" cy="86" r="2.2"/><path class="ti" d="M50 90 V95 M43 98 Q50 104 57 98"/><path class="tr" d="M47 92 H53 L50 96 Z"/>`,
+    // XII L'Appeso: hanging by one foot
+    () => '<path class="ti" d="M20 44 H80 M25 44 V128 M75 44 V128 M17 128 H33 M67 128 H83 M25 72 l-6 -7 M75 92 l6 -7 M50 44 V56"/><path class="tb" d="M46 56 H54 L53 84 H47 Z"/><path class="ti" d="M50 84 L62 75 L52 69"/><path class="tr" d="M45 84 H55 L54 104 H46 Z"/><path class="ti" d="M46 100 L40 93 L47 89 M54 100 L60 93 L53 89"/><circle class="ty" cx="50" cy="113" r="8"/>',
+    // XIII L'Arcano senza nome: the scythe
+    () => '<path class="ti" d="M36 134 L62 56 M24 134 H76"/><path class="tb" d="M62 56 Q38 50 22 66 Q44 62 60 66 Z"/>',
+    // XIV La Temperanza: water between two cups
+    () => '<path class="tb" d="M24 62 H44 L41 82 H27 Z"/><path class="tr" d="M56 98 H76 L73 118 H59 Z"/><path class="ti" d="M40 70 Q62 72 64 98 M36 74 Q58 78 60 98"/>',
+    // XV Il Diavolo: horns and the trident
+    () => '<path class="tr" d="M30 74 Q25 52 36 44 Q34 60 41 70 Z"/><path class="tr" d="M70 74 Q75 52 64 44 Q66 60 59 70 Z"/><path class="ti" d="M50 134 V72 M37 66 V80 Q37 89 50 89 Q63 89 63 80 V66 M50 60 V89"/>',
+    // XVI La Torre: the tower struck by lightning
+    () => '<path class="ty" d="M36 130 V72 H64 V130 Z"/><path class="ti" d="M36 72 V63 H42 V72 M47 72 V63 H53 V72 M58 72 V63 H64 V72 M46 130 V114 Q50 108 54 114 V130"/><path class="tr" d="M76 38 L59 62 H67 L52 84 L74 56 H66 Z"/><rect class="tb" x="24" y="80" width="6" height="5" rx="1" transform="rotate(-20 27 82)"/><rect class="tb" x="70" y="96" width="6" height="5" rx="1" transform="rotate(25 73 98)"/>',
+    // XVII La Stella: the great star
+    () => `<path class="ty" d="${starPath(50, 80, 28, 11, 8)}"/><path class="tb" d="${starPath(24, 52, 7, 3, 4)}"/><path class="tb" d="${starPath(78, 56, 6, 2.5, 4)}"/><path class="tb" d="${starPath(30, 110, 5, 2, 4)}"/><path class="ti" d="M20 126 q8 -5 15 0 t15 0 t15 0 t15 0"/>`,
+    // XVIII La Luna: the moon and its drops
+    () => '<path class="ty" d="M58 50 C40 52 30 68 31 84 C32 100 45 110 61 109 C52 103 46 93 46 81 C46 69 51 58 58 50 Z"/><path class="tb" d="M26 116 Q30 123 26 128 Q22 123 26 116 Z M50 120 Q54 127 50 132 Q46 127 50 120 Z M74 116 Q78 123 74 128 Q70 123 74 116 Z"/>',
+    // XIX Il Sole: the sun
+    () => {
+      let rays = '';
+      for (let k = 0; k < 12; k++) {
+        const a = k * Math.PI / 6;
+        rays += `M${f1(50 + Math.cos(a) * 23)} ${f1(88 + Math.sin(a) * 23)} L${f1(50 + Math.cos(a) * 35)} ${f1(88 + Math.sin(a) * 35)} `;
+      }
+      return `<path class="ti" d="${rays}"/><circle class="ty" cx="50" cy="88" r="18"/><circle class="tk" cx="44" cy="85" r="1.8"/><circle class="tk" cx="56" cy="85" r="1.8"/><path class="ti" d="M44 94 Q50 99 56 94"/>`;
+    },
+    // XX Il Giudizio: the trumpet and the banner
+    () => '<path class="ty" d="M20 70 H27 L57 77 L78 60 V100 L57 84 L27 78 H20 Z"/><path class="tr" d="M34 92 H58 V116 L46 109 L34 116 Z"/><path class="ti" d="M46 96 V108 M41 101 H51"/>',
+    // XXI Il Mondo: the wreath
+    () => {
+      let leaves = '';
+      for (let k = 0; k < 16; k++) {
+        const a = k * Math.PI / 8, x = 50 + Math.cos(a) * 24, y = 88 + Math.sin(a) * 36;
+        const deg = f1(Math.atan2(Math.cos(a) * 36, -Math.sin(a) * 24) * 180 / Math.PI);
+        leaves += `<ellipse class="tb" cx="${f1(x)}" cy="${f1(y)}" rx="5.5" ry="2.6" transform="rotate(${deg} ${f1(x)} ${f1(y)})"/>`;
+      }
+      return `<ellipse class="ti" cx="50" cy="88" rx="24" ry="36"/>${leaves}<path class="tr" d="${starPath(50, 88, 9, 4, 5)}"/>`;
+    },
+  ];
+  function tarotFront(v) {
+    const k = v >> 1, [num, name] = Game2.TAROT[k];
+    return `<svg viewBox="0 0 100 160" aria-hidden="true" focusable="false"><rect class="tframe" x="2.5" y="2.5" width="95" height="155" rx="9"/><rect class="tinner" x="8" y="8" width="84" height="144" rx="5"/><text class="tnum" x="50" y="25">${num}</text>${EMBLEMS[k]()}<text class="tname" x="50" y="146">${esc(name.toUpperCase())}</text></svg>`;
+  }
+  function tcardHTML(v, opts) {
+    return `<div class="tcard${opts.down ? ' down' : ''}${opts.flip ? ' flip' : ''}${v & 1 ? ' rev' : ''}" style="--k:${opts.k || 0}"><div class="inner"><div class="face front">${opts.down ? '' : tarotFront(v)}</div><div class="face back"></div></div></div>`;
+  }
+  const SPREAD_NAMES = { 1: 'Una carta', 3: 'Tre carte', 5: 'La croce' };
+  const SPREAD_HINT = { 1: 'La carta della sera', 3: 'Passato, presente, futuro', 5: 'Cinque carte a croce' };
+  const CROSS_AREAS = ['left', 'right', 'top', 'bottom', 'center'];
+  const slotStyle = (t, k) => (t.spread === 5 ? ` style="grid-area:${CROSS_AREAS[k]}"` : '');
+  function spreadHTML(t, down, flip) {
+    const labels = Game2.SPREADS[t.spread];
+    let h = `<div class="spread s${t.spread}">`;
+    t.picked.forEach((pos, k) => {
+      const v = t.deck[pos], name = Game2.TAROT[v >> 1][1];
+      h += `<div class="tpos"${slotStyle(t, k)}>${tcardHTML(v, { down, flip, k })}<p class="tpos-l">${labels[k]}</p>${down ? '' : `<p class="tpos-n">${esc(name)}${v & 1 ? ' <span>capovolta</span>' : ''}</p>`}</div>`;
+    });
+    return h + '</div>';
+  }
+  function slotsHTML(t) {
+    const labels = Game2.SPREADS[t.spread];
+    let h = `<div class="spread mini s${t.spread}">`;
+    labels.forEach((l, k) => {
+      h += `<div class="tpos"${slotStyle(t, k)}>${k < t.picked.length ? '<span class="tback mini"></span>' : '<span class="tslot"></span>'}<p class="tpos-l">${l}</p></div>`;
+    });
+    return h + '</div>';
+  }
+  function tableHTML(t, canPick, deal) {
+    let h = '<div class="ttable">';
+    t.deck.forEach((v, pos) => {
+      const r = mulberry32(hash('tt' + t.n + ':' + pos)), st = `--r:${f1((r() - 0.5) * 14)}deg;--y:${f1((r() - 0.5) * 8)}px;--k:${pos}`;
+      const gone = t.picked.includes(pos), cls = `tback${gone ? ' gone' : ''}${deal ? ' deal' : ''}`;
+      h += canPick && !gone
+        ? `<button class="${cls}" type="button" data-act="taro-pick" data-pos="${pos}" aria-label="Carta coperta ${pos + 1}" style="${st}"></button>`
+        : `<span class="${cls}" style="${st}"></span>`;
+    });
+    return h + '</div>';
+  }
+  function taroHistory(t) {
+    if (!t.hist.length) return '';
+    let h = '<details class="taro-hist"><summary>Il quaderno delle letture</summary>';
+    for (const e of t.hist) {
+      const when = e.at ? new Date(e.at).toLocaleDateString('it-IT', { day: 'numeric', month: 'long' }) : '';
+      const cards = e.c.map(v => Game2.TAROT[v >> 1][1] + (v & 1 ? ' (capovolta)' : '')).join(' · ');
+      h += `<div class="hentry"><p class="hq">${esc(when)} · ${SPREAD_NAMES[e.sp]} · pescate da ${esc(nameOf(e.d))}</p>` +
+        (e.q ? `<p class="hquest">«${esc(e.q)}»</p>` : '') + `<p class="hcards">${esc(cards)}</p>` +
+        (e.r ? `<p class="ha" style="--c:var(--pen-${G.other(e.d)})">${esc(e.r)}</p>` : '') + '</div>';
+    }
+    return h + '</details>';
+  }
+  function shuffledDeck() {
+    const rnd = new Uint32Array(44);
+    crypto.getRandomValues(rnd);
+    const d = Array.from({ length: Game2.TAROT.length }, (_, i) => i);
+    for (let i = d.length - 1; i > 0; i--) {
+      const j = rnd[i] % (i + 1);
+      [d[i], d[j]] = [d[j], d[i]];
+    }
+    return d.map((k, i) => k * 2 + (rnd[22 + i] % 100 < 30 ? 1 : 0));
+  }
+  function viewTaro(anim) {
+    const t = S.taro, drawer = t.drawer, reader = G.other(drawer);
+    const q = t.question ? `<p class="taro-q">«${esc(t.question)}»</p>` : '';
+    let board = '', status = '', controls = '';
+    if (t.phase === 'idle') {
+      board = '<div class="card"><div class="spreads" role="group" aria-label="Stesa">' + [1, 3, 5].map(n =>
+        `<button class="sp-btn" type="button" data-act="taro-spread" data-n="${n}" aria-pressed="${ui.taroSpread === n}"><span class="sp-mini m${n}" aria-hidden="true">${'<i></i>'.repeat(n)}</span><span class="sp-txt"><b>${SPREAD_NAMES[n]}</b><small>${SPREAD_HINT[n]}</small></span></button>`).join('') + '</div></div>';
+      status = `Scegli la stesa e mescola: tu peschi, ${inkName(other())} legge.`;
+      if (canManage()) controls = '<form id="taro-qform" class="form dom-form" autocomplete="off" novalidate><label class="lbl" for="taro-q">La domanda <span class="opt">(se vuoi)</span></label><input class="line-input" id="taro-q" name="q" type="text" maxlength="140" enterkeyhint="go"><div class="row"><button class="btn" type="submit">Mescola</button></div></form>';
+    } else if (t.phase === 'pick') {
+      board = `<div class="card taro-pick">${q}${slotsHTML(t)}${tableHTML(t, canAct(drawer), anim && t.picked.length === 0)}</div>`;
+      const left = t.spread - t.picked.length;
+      status = canAct(drawer)
+        ? (t.picked.length ? `Ancora ${left === 1 ? 'una carta' : left + ' carte'}.` : `Scegli ${t.spread === 1 ? 'una carta' : t.spread + ' carte'} dal tavolo.`)
+        : `${inkName(drawer)} sta scegliendo le carte…`;
+      if (canManage()) controls = '<button class="btn ghost small" type="button" data-act="taro-cancel">Rimetti le carte nel mazzo</button>';
+    } else if (t.phase === 'spread') {
+      board = `<div class="card">${q}${spreadHTML(t, true, false)}</div>`;
+      status = 'Le carte sono sul tavolo, coperte.';
+      if (canManage()) controls = '<button class="btn" type="button" data-act="taro-flip">Gira le carte</button>';
+    } else {
+      board = `<div class="card">${q}${spreadHTML(t, false, anim && !t.reading)}` +
+        (t.reading ? `<div class="reading" style="--c:var(--pen-${reader})"><span class="who">La lettura di ${esc(nameOf(reader))}</span><p>${esc(t.reading)}</p></div>` : '') + '</div>';
+      status = t.reading ? 'Ecco la lettura.' : canAct(reader) ? 'Tocca a te: scrivi la tua lettura.' : `Aspettiamo la lettura di ${inkName(reader)}…`;
+      if (canAct(reader)) {
+        controls = `<form id="taro-form" class="form dom-form" autocomplete="off" novalidate><label class="lbl" for="taro-text">${t.reading ? 'Vuoi cambiare qualcosa?' : 'La tua lettura'}</label><textarea class="line-input" id="taro-text" name="text" rows="4" maxlength="800">${esc(t.reading)}</textarea><p id="taro-err" class="err" role="alert"></p><div class="row"><button class="btn${t.reading ? ' ghost' : ''}" type="submit">${t.reading ? 'Aggiorna' : 'Invia'}</button></div></form>`;
+      }
+      if (t.reading && canManage()) controls += '<div class="row"><button class="btn" type="button" data-act="taro-done">Salva nel quaderno</button><button class="btn ghost small" type="button" data-act="taro-cancel">Non salvare</button></div>';
+    }
+    return { board: board + taroHistory(t), status, controls };
+  }
+
   /* ---------- new games ---------- */
   function yourMove(g, s) {
     if (Game2.EXTRA.includes(g)) return Game2.yourMove(S, g, s);
+    if (Game3.EXTRA.includes(g)) return Game3.yourMove(S, g, s);
     const t = G.turnOf(S, g);
     return t ? t === s : null;
   }
@@ -2543,10 +3557,453 @@ const Game2 = (() => {
     return { board, status, controls };
   }
 
+  /* ---------- third batch: shared bits ---------- */
+  function cryptoShuffle(arr) {
+    const a = arr.slice(), r = new Uint32Array(a.length);
+    crypto.getRandomValues(r);
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = r[i] % (i + 1);
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+  const pickSome = (arr, k) => cryptoShuffle(arr).slice(0, k);
+  const pointsLine = (pa, pb) => `<div class="pts2"><span style="--c:var(--pen-a)">${esc(nameOf('a'))} <b>${pa}</b></span><span style="--c:var(--pen-b)">${esc(nameOf('b'))} <b>${pb}</b></span></div>`;
+
+  /* ---------- briscola: Neapolitan cards in felt-tip ---------- */
+  const SUIT_CLS = ['tr', 'ty', 'tb', 'tg'];
+  const RLAB = ['A', '2', '3', '4', '5', '6', '7', 'F', 'C', 'R'];
+  function suitGlyph(su, x, y, s) {
+    const P = (dx, dy) => `${f1(x + dx * s)} ${f1(y + dy * s)}`;
+    switch (su) {
+      case 0: // coppe: a goblet
+        return `<path class="tr" d="M${P(-1, -0.75)} L${P(1, -0.75)} Q${P(0.95, 0.2)} ${P(0, 0.3)} Q${P(-0.95, 0.2)} ${P(-1, -0.75)} Z"/><path class="ti" d="M${P(0, 0.3)} L${P(0, 0.85)} M${P(-0.5, 0.9)} L${P(0.5, 0.9)}"/>`;
+      case 1: // denari: a coin
+        return `<circle class="ty" cx="${f1(x)}" cy="${f1(y)}" r="${f1(s)}"/><circle class="ti" cx="${f1(x)}" cy="${f1(y)}" r="${f1(s * 0.48)}"/>`;
+      case 2: // spade: a sword
+        return `<path class="tb" d="M${P(0, -1.05)} L${P(0.24, -0.72)} L${P(0.24, 0.4)} L${P(-0.24, 0.4)} L${P(-0.24, -0.72)} Z"/><path class="ti" d="M${P(-0.62, 0.45)} L${P(0.62, 0.45)} M${P(0, 0.45)} L${P(0, 1)}"/>`;
+      default: // bastoni: a knobbly wooden club, a little tilted
+        return `<g transform="rotate(16 ${f1(x)} ${f1(y)})"><path class="tg" d="M${P(-0.2, 1.02)} L${P(0.2, 1.02)} L${P(0.42, -0.62)} Q${P(0.44, -1.06)} ${P(0, -1.06)} Q${P(-0.44, -1.06)} ${P(-0.42, -0.62)} Z"/><path class="ti" d="M${P(0.32, -0.25)} L${P(0.52, -0.33)} M${P(-0.27, 0.15)} L${P(-0.47, 0.08)} M${P(0.24, 0.5)} L${P(0.42, 0.46)} M${P(-0.05, -0.62)} Q${P(0.05, -0.45)} ${P(-0.02, -0.3)}"/></g>`;
+    }
+  }
+  const PIPS = [
+    [[30, 49, 14]],
+    [[30, 31, 9], [30, 67, 9]],
+    [[30, 27, 8], [30, 49, 8], [30, 71, 8]],
+    [[19, 33, 7.5], [41, 33, 7.5], [19, 65, 7.5], [41, 65, 7.5]],
+    [[19, 30, 7], [41, 30, 7], [30, 49, 7], [19, 68, 7], [41, 68, 7]],
+    [[19, 29, 6.5], [41, 29, 6.5], [19, 49, 6.5], [41, 49, 6.5], [19, 69, 6.5], [41, 69, 6.5]],
+    [[19, 27, 6], [41, 27, 6], [30, 38, 6], [19, 51, 6], [41, 51, 6], [19, 71, 6], [41, 71, 6]],
+  ];
+  function briFigure(r, su) {
+    if (r === 7) { // fante: a page boy with a cap
+      return `<path class="${SUIT_CLS[su]}" d="M21 76 L24 49 Q30 44 36 49 L39 76 Z"/><circle class="tp" cx="30" cy="38" r="7"/><path class="ti" d="M22.5 35 Q30 25 37.5 35 Z M26 76 L26 83 M34 76 L34 83"/>${suitGlyph(su, 45, 60, 5)}`;
+    }
+    if (r === 8) { // cavallo: a horse head
+      return `<path class="tp" d="M20 80 L23 58 Q20 45 29 35 L31 25 L37 32 Q48 35 50 49 L45 54 L38 49 L36 62 L41 80 Z"/><circle class="tk" cx="36" cy="40" r="1.7"/><path class="ti" d="M29 35 Q24 46 26 57"/>${suitGlyph(su, 15, 70, 5)}`;
+    }
+    // re: crown, face, robe
+    return `<path class="ty" d="M21 33 L21 22 L25.5 27.5 L30 20 L34.5 27.5 L39 22 L39 33 Z"/><circle class="tp" cx="30" cy="41" r="7.5"/><path class="tp" d="M18 82 L22 56 Q30 50 38 56 L42 82 Z"/>${suitGlyph(su, 30, 68, 6.5)}`;
+  }
+  function briFace(c) {
+    const su = Game3.suitOf(c), r = Game3.rankOf(c);
+    const mid = r >= 7 ? briFigure(r, su) : PIPS[r].map(([x, y, s]) => suitGlyph(su, x, y, s)).join('');
+    return `<svg viewBox="0 0 60 96" aria-hidden="true" focusable="false"><rect class="tframe" x="1.5" y="1.5" width="57" height="93" rx="6"/><text class="blab s${su}" x="8.5" y="11">${RLAB[r]}</text><text class="blab s${su}" x="51.5" y="85" transform="rotate(180 51.5 85)">${RLAB[r]}</text>${mid}</svg>`;
+  }
+  const briName = c => `${Game3.RANKS[Game3.rankOf(c)]} di ${Game3.SUITS[Game3.suitOf(c)]}`;
+  const sortHand = h => h.slice().sort((x, y) => Game3.suitOf(x) - Game3.suitOf(y) || Game3.POWER[Game3.rankOf(y)] - Game3.POWER[Game3.rankOf(x)]);
+
+  function viewBri(anim) {
+    const q = S.bri, o = other();
+    if (q.phase === 'idle') {
+      const board = `<div class="card bri-idle"><div class="bri-fan">${[0, 1, 2].map(k => `<span class="bback" style="--k:${k}"></span>`).join('')}</div><p class="bri-note">Comincia ${q.first === seat ? 'tu' : inkName(q.first)}.</p></div>`;
+      return { board, status: 'Si mescola e si danno tre carte a testa.', controls: canManage() ? '<button class="btn" type="button" data-act="bri-deal">Dai le carte</button>' : '' };
+    }
+    const bs = Game3.suitOf(q.brisc);
+    const mine = sortHand(Game3.handOf(q, seat)), theirs = Game3.handOf(q, o).length;
+    const myTurn = q.phase === 'play' && canAct(q.turn);
+    const inCls = s => (anim ? (s === seat ? ' in-me' : ' in-op') : '');
+    let h = '<div class="card bri">';
+    h += `<div class="bri-opp"><span class="bri-who" style="--c:var(--pen-${o})">${esc(nameOf(o))}</span><span class="bri-ohand" aria-label="${theirs} carte">${Array.from({ length: theirs }, (_, k) => `<span class="bback sm" style="--k:${k}"></span>`).join('')}</span></div>`;
+    h += '<div class="bri-mid"><div class="bri-stock">';
+    if (q.left > 0) {
+      h += `<span class="bcard brisc" aria-label="Briscola: ${briName(q.brisc)}">${briFace(q.brisc)}</span>`;
+      if (q.left > 1) h += `<span class="bback stack"><b>${q.left - 1}</b></span>`;
+    }
+    h += `<span class="bri-bs s${bs}">Briscola<b>${Game3.SUITS[bs]}</b></span></div><div class="bri-trick">`;
+    if (q.table.length) {
+      const [ts, tc] = q.table[0];
+      h += `<span class="bslot"><span class="bcard on${inCls(ts)}" style="--c:var(--pen-${ts})" aria-label="${esc(nameOf(ts))}: ${briName(tc)}">${briFace(tc)}</span></span><span class="bslot empty"></span>`;
+    } else if (q.last) {
+      const [[s1, c1], [s2, c2]] = q.last.t;
+      const gain = Game3.POINTS[Game3.rankOf(c1)] + Game3.POINTS[Game3.rankOf(c2)];
+      h += `<span class="bslot"><span class="bcard on done" style="--c:var(--pen-${s1})" aria-label="${esc(nameOf(s1))}: ${briName(c1)}">${briFace(c1)}</span></span>`;
+      h += `<span class="bslot"><span class="bcard on done${inCls(s2)}" style="--c:var(--pen-${s2})" aria-label="${esc(nameOf(s2))}: ${briName(c2)}">${briFace(c2)}</span></span>`;
+      h += `<p class="bri-took" style="--c:var(--pen-${q.last.w})">${q.last.w === seat ? 'Prendi tu' : 'Prende ' + esc(nameOf(q.last.w))}${gain ? ` · ${gain} punt${gain === 1 ? 'o' : 'i'}` : ''}</p>`;
+    } else {
+      h += '<span class="bslot empty"></span><span class="bslot empty"></span>';
+    }
+    h += '</div></div>';
+    if (q.phase === 'over') h += pointsLine(q.pts.a, q.pts.b);
+    h += `<div class="bri-hand${myTurn ? ' live' : ''}">${mine.map(c => `<button class="bcard hand" type="button" data-act="bri" data-c="${c}"${myTurn ? '' : ' disabled'} aria-label="${briName(c)}">${briFace(c)}</button>`).join('')}</div>`;
+    h += '</div>';
+    let status, controls = '';
+    if (q.phase === 'over') {
+      const w = q.pts.a === q.pts.b ? '' : q.pts.a > q.pts.b ? 'a' : 'b';
+      status = !w ? 'Pari: sessanta a testa.' : w === seat ? `Hai vinto ${q.pts[w]} a ${q.pts[other()]}!` : `Ha vinto ${inkName(w)}, ${q.pts[w]} a ${q.pts[G.other(w)]}.`;
+      if (canManage()) controls = '<button class="btn" type="button" data-act="bri-deal">Un’altra partita</button>';
+    } else {
+      if (myTurn) status = q.table.length ? 'Tocca a te: rispondi.' : 'Tocca a te: gioca una carta.';
+      else status = turnLine(q.turn);
+      if (!q.left && q.phase === 'play') status += ' Il mazzo è finito.';
+      if (canManage()) controls = restartCtl('bri');
+    }
+    return { board: h, status, controls };
+  }
+
+  /* ---------- memory ---------- */
+  const MEM_ART = [
+    () => `<path class="tr" d="${HEART}"/>`,
+    () => `<path class="ty" d="${STAR}"/>`,
+    () => `<path class="tb" d="${MOON}"/>`,
+    () => `<path class="ty" d="${SUN}"/>`,
+    () => `<path class="tr" d="${FLOWER}"/><circle class="ty" cx="50" cy="50" r="7"/>`,
+    () => `<path class="tb" d="${CLOUD}"/>`,
+    () => '<path class="tb" d="M16 50 Q40 24 66 50 Q40 76 16 50 Z"/><path class="tb" d="M64 50 L86 33 L81 50 L86 67 Z"/><circle class="tk" cx="31" cy="46" r="3.4"/><path class="ti" d="M46 39 Q53 50 46 61"/>',
+    () => '<path class="ty" d="M25 45 L27 19 L42 32 Q50 30 58 32 L73 19 L75 45 Q80 73 50 78 Q20 73 25 45 Z"/><circle class="tk" cx="40" cy="50" r="3.2"/><circle class="tk" cx="60" cy="50" r="3.2"/><path class="ti" d="M46 59 L54 59 L50 64 Z M50 64 L50 68 M20 58 L37 61 M20 67 L37 65 M80 58 L63 61 M80 67 L63 65"/>',
+    () => '<path class="tp" d="M27 48 L27 81 L73 81 L73 48"/><path class="tr" d="M17 51 L50 21 L83 51 Z"/><path class="tb" d="M43 81 L43 62 L57 62 L57 81"/><rect class="ty" x="61" y="56" width="8" height="8" rx="1"/>',
+    () => '<path class="tp" d="M40 53 L37 81 L63 81 L60 53 Z"/><path class="tr" d="M15 56 Q17 20 50 20 Q83 20 85 56 Z"/><circle class="tp" cx="35" cy="39" r="5.5"/><circle class="tp" cx="58" cy="31" r="4.5"/><circle class="tp" cx="68" cy="46" r="4.5"/>',
+  ];
+  const MEM_NAMES = ['cuore', 'stella', 'luna', 'sole', 'fiore', 'nuvola', 'pesce', 'gatto', 'casetta', 'fungo'];
+  const memLayout = () => cryptoShuffle('00112233445566778899'.split('')).join('');
+  function memUp(q) {
+    const up = new Set(q.open.concat(q.miss));
+    for (let i = 0; i < Game3.MEM_N; i++) if (q.found[i] !== '0') up.add(i);
+    return up;
+  }
+  function viewMem(anim) {
+    const q = S.mem, o = other(), lay = Game3.layOf(q), over = Game3.memOver(q);
+    const sig = JSON.stringify([q.n, q.open, q.miss, q.found]);
+    if (!ui.mem || ui.mem.sig !== sig) {
+      const same = ui.mem && ui.mem.n === q.n;
+      ui.mem = { sig, n: q.n, prev: same ? ui.mem.cur : new Set(), cur: memUp(q), prevFound: same ? ui.mem.found : q.found, found: q.found };
+    }
+    const { prev, cur, prevFound } = ui.mem;
+    const playable = !over && canAct(q.turn);
+    let h = `<div class="card memc"><div class="mem-top">${pointsLine(q.pts.a, q.pts.b)}</div><div class="mgrid">`;
+    for (let i = 0; i < Game3.MEM_N; i++) {
+      const up = cur.has(i), was = prev.has(i), by = q.found[i];
+      const sym = lay ? Number(lay[i]) : -1;
+      let cls = up ? ' up' : '';
+      if (anim && up && !was) cls += ' flip';
+      if (anim && !up && was) cls += ' unflip';
+      if (by !== '0') cls += ' got';
+      if (anim && q.miss.includes(i)) cls += ' nope';
+      if (anim && by !== '0' && prevFound[i] === '0') cls += ' yay';
+      const showFace = sym >= 0 && (up || (anim && was));
+      const face = showFace ? `<svg viewBox="9 9 82 82" aria-hidden="true" focusable="false">${MEM_ART[sym]()}</svg>` : '';
+      const can = playable && !up;
+      const label = up && sym >= 0 ? MEM_NAMES[sym] : 'carta coperta';
+      h += `<button class="mcard${cls}" type="button" data-act="mem" data-i="${i}"${by !== '0' ? ` style="--c:var(--pen-${by})"` : ''}${can ? '' : ' disabled'} aria-label="${label}"><span class="inner"><span class="face front">${face}</span><span class="face back"></span></span></button>`;
+    }
+    h += '</div></div>';
+    let status, controls = '';
+    if (over) {
+      const w = q.pts.a === q.pts.b ? '' : q.pts.a > q.pts.b ? 'a' : 'b';
+      status = !w ? `Pari, ${q.pts.a} coppie a testa.` : w === seat ? `Hai trovato più coppie tu: ${q.pts[w]} a ${q.pts[o]}!` : `Ha trovato più coppie ${inkName(w)}: ${q.pts[w]} a ${q.pts[G.other(w)]}.`;
+      if (canManage()) controls = '<button class="btn" type="button" data-act="new" data-g="mem">Nuova partita</button>';
+    } else {
+      if (!lay) status = q.turn === seat ? 'Comincia tu: gira due carte.' : `Comincia ${inkName(q.turn)}.`;
+      else if (q.open.length === 1) status = q.turn === seat ? 'Ora girane un’altra.' : `${inkName(q.turn)} ha girato una carta…`;
+      else if (q.miss.length) status = q.turn === seat ? `${esc(nameOf(o))} non ha trovato la coppia. Tocca a te.` : `Niente coppia. Tocca a ${inkName(q.turn)}.`;
+      else if (prevFound.replace(/0/g, '').length < q.found.replace(/0/g, '').length) status = q.turn === seat ? 'Coppia! Tocca ancora a te.' : `Coppia per ${inkName(q.turn)}, che gioca ancora.`;
+      else status = turnLine(q.turn);
+      if (canManage() && lay) controls = restartCtl('mem');
+    }
+    return { board: h, status, controls };
+  }
+
+  /* ---------- disegna e indovina ---------- */
+  const DIS_W = [7, 14, 30];
+  const DIS_INK_NAMES = ['Nero', 'Rosso', 'Blu', 'Verde', 'Giallo', 'Gomma'];
+  const enc2 = n => Math.max(0, Math.min(999, Math.round(n))).toString(36).padStart(2, '0');
+  function decodePts(p) {
+    const out = [];
+    for (let k = 0; k + 3 < p.length; k += 4) out.push([parseInt(p.slice(k, k + 2), 36), parseInt(p.slice(k + 2, k + 4), 36)]);
+    return out;
+  }
+  function smoothPath(pts) {
+    if (!pts.length) return '';
+    const [x0, y0] = pts[0];
+    if (pts.length === 1) return `M${x0} ${y0} L${x0 + 0.1} ${y0}`;
+    let d = `M${x0} ${y0}`;
+    for (let k = 1; k < pts.length - 1; k++) {
+      const [x1, y1] = pts[k], [x2, y2] = pts[k + 1];
+      d += ` Q${x1} ${y1} ${f1((x1 + x2) / 2)} ${f1((y1 + y2) / 2)}`;
+    }
+    const [xl, yl] = pts[pts.length - 1];
+    return d + ` L${xl} ${yl}`;
+  }
+  const strokeSVG = ([c, w, p]) => `<path class="dstroke ink${c}" stroke-width="${DIS_W[w]}" d="${smoothPath(decodePts(p))}"/>`;
+  const sheetHTML = (q, can) => `<div class="dsheet-wrap"><svg class="dsheet${can ? ' can' : ''}" id="dis-sheet" viewBox="0 0 1000 1000" role="img" aria-label="Il disegno"><rect class="dpaper" width="1000" height="1000"/><g id="dis-strokes">${q.strokes.map(strokeSVG).join('')}</g><path id="dis-live" class="dstroke"/></svg></div>`;
+  function disOptions() {
+    const q = S.dis;
+    if (!ui.disOpts || ui.disOptsN !== q.n) { ui.disOptsN = q.n; ui.disOpts = pickSome(Game3.WORDS, 3); }
+    return ui.disOpts;
+  }
+  function guessList(q) {
+    if (!q.guesses.length) return '';
+    return `<ul class="dis-guesses">${q.guesses.slice().reverse().map(([t, ok]) => `<li class="${ok ? 'ok' : ''}">${esc(t)}</li>`).join('')}</ul>`;
+  }
+  function viewDis() {
+    const q = S.dis, o = other(), drawer = q.drawer, guesser = G.other(drawer), word = q.word ? Game2.show(q.word) : '';
+    let board, status, controls = '';
+    if (q.phase === 'choose') {
+      if (drawer === seat) {
+        board = `<div class="card dis-choose"><p class="dis-lead">Cosa disegni?</p><div class="dis-opts">${disOptions().map(w => `<button class="dis-opt" type="button" data-act="dis-word" data-w="${esc(w)}">${esc(w)}</button>`).join('')}</div>` +
+          '<button class="btn ghost small" type="button" data-act="dis-reroll">Altre parole</button>' +
+          '<form id="dis-own" class="form dis-own" autocomplete="off" novalidate><label class="lbl" for="dis-own-w">Oppure scrivila tu</label><input class="line-input" id="dis-own-w" name="w" type="text" maxlength="24" enterkeyhint="go" autocapitalize="off"><p id="dis-own-err" class="err" role="alert"></p><div class="row"><button class="btn small" type="submit">Disegno questa</button></div></form></div>';
+        status = `Scegli una parola: ${inkName(o)} dovrà indovinarla.`;
+      } else {
+        board = `<div class="card dis-wait"><svg viewBox="0 0 120 70" aria-hidden="true"><path class="ti" d="M12 54 Q30 30 48 50 T84 46"/><path class="tp" d="M84 46 L104 14 L111 18 L91 50 L82 53 Z"/><path class="ty" d="M104 14 L111 18 L114 13 L107 9 Z"/></svg></div>`;
+        status = `${inkName(drawer)} sta scegliendo cosa disegnare…`;
+      }
+      return { board, status, controls };
+    }
+    if (q.phase === 'draw') {
+      if (drawer === seat) {
+        const tools = `<div class="dtools"><div class="inks" role="group" aria-label="Colore">${DIS_INK_NAMES.map((n, k) => `<button class="inkbtn ink${k}" type="button" data-act="dis-ink" data-k="${k}" aria-pressed="${ui.disInk === k}" aria-label="${n}"></button>`).join('')}</div>` +
+          `<div class="sizes" role="group" aria-label="Spessore">${DIS_W.map((w, k) => `<button class="sizebtn" type="button" data-act="dis-size" data-k="${k}" aria-pressed="${ui.disSize === k}" aria-label="Tratto ${['sottile', 'medio', 'grosso'][k]}"><i style="--w:${4 + k * 5}px"></i></button>`).join('')}</div>` +
+          `<div class="row"><button class="btn small ghost" type="button" data-act="dis-undo"${q.strokes.length ? '' : ' disabled'}>Annulla</button><button class="btn small ghost" type="button" data-act="dis-clear"${q.strokes.length ? '' : ' disabled'}>Cancella tutto</button></div></div>`;
+        board = `<div class="card disc"><p class="dis-word">Disegna: <b>${esc(word)}</b></p>${sheetHTML(q, canAct(drawer))}${tools}${q.guesses.length ? `<p class="dis-gl">Ha provato con:</p>${guessList(q)}` : ''}</div>`;
+        status = q.guesses.length ? `${inkName(o)} ci sta provando, continua!` : `Disegna col dito. ${inkName(o)} prova a indovinare.`;
+        if (canManage()) controls = ui.confirm === 'restart-dis' ? restartCtl('dis') : '<button class="btn ghost small" type="button" data-act="ask-restart" data-g="dis">Cambia parola</button>';
+      } else {
+        board = `<div class="card disc">${sheetHTML(q, false)}${guessList(q)}</div>`;
+        status = q.strokes.length ? `Cosa sta disegnando ${inkName(drawer)}?` : `${inkName(drawer)} sta per disegnare…`;
+        if (canManage()) {
+          controls = '<form id="dis-form" class="form dis-form" autocomplete="off" novalidate><label class="lbl" for="dis-g">Secondo te cos’è?</label><input class="line-input" id="dis-g" name="g" type="text" maxlength="40" enterkeyhint="send" autocapitalize="off"><p id="dis-err" class="err" role="alert"></p>' +
+            '<div class="row"><button class="btn" type="submit">Prova</button><button class="btn ghost" type="button" data-act="dis-give">Mi arrendo</button></div></form>';
+        }
+      }
+      return { board, status, controls };
+    }
+    const tries = q.guesses.length;
+    board = `<div class="card disc"><p class="dis-word">Era: <b>${esc(word)}</b></p>${sheetHTML(q, false)}${guessList(q)}</div>`;
+    if (q.win === 'y') status = guesser === seat ? `Indovinato${tries === 1 ? ' al primo colpo' : ''}! Un punto per te.` : `${inkName(guesser)} ha indovinato${tries === 1 ? ' al primo colpo' : ''}!`;
+    else status = guesser === seat ? `Niente da fare: era «${esc(word)}».` : `${inkName(guesser)} non l’ha indovinata: era «${esc(word)}».`;
+    if (canManage()) controls = `<button class="btn" type="button" data-act="dis-next">${guesser === seat ? 'Adesso disegno io' : `Adesso disegna ${esc(nameOf(guesser))}`}</button>`;
+    return { board, status, controls };
+  }
+
+  // Finger drawing: the stroke is drawn live on this phone and sent as one move when the finger lifts.
+  let dLive = null;
+  function disPoint(e, svg) {
+    const r = svg.getBoundingClientRect();
+    return [Math.round(Math.max(0, Math.min(999, (e.clientX - r.left) / r.width * 1000))), Math.round(Math.max(0, Math.min(999, (e.clientY - r.top) / r.height * 1000)))];
+  }
+  function sendStroke(pts) {
+    if (!pts.length) return true;
+    const p = pts.map(([x, y]) => enc2(x) + enc2(y)).join('');
+    const okk = act({ t: 'dis.stroke', seat, c: ui.disInk, w: ui.disSize, p });
+    if (!okk) toast('Il foglio è pieno: annulla qualcosa o cancella tutto.');
+    return okk;
+  }
+  function addPt(p) {
+    const L = dLive.pts[dLive.pts.length - 1];
+    if (L && Math.hypot(p[0] - L[0], p[1] - L[1]) < 7) return;
+    dLive.pts.push(p);
+    if (dLive.pts.length >= 600) {
+      const done = dLive.pts;
+      if (sendStroke(done)) dLive.g.insertAdjacentHTML('beforeend', strokeSVG([ui.disInk, ui.disSize, done.map(([x, y]) => enc2(x) + enc2(y)).join('')]));
+      dLive.pts = [done[done.length - 1]];
+    }
+    dLive.path.setAttribute('d', smoothPath(dLive.pts));
+  }
+  document.addEventListener('pointerdown', e => {
+    const svg = e.target.closest && e.target.closest('#dis-sheet.can');
+    if (!svg || dLive || (e.pointerType === 'mouse' && e.button !== 0)) return;
+    e.preventDefault();
+    try { svg.setPointerCapture(e.pointerId); } catch (err) { /* older Safari */ }
+    ui.disLive = true;
+    dLive = { id: e.pointerId, svg, pts: [], path: svg.querySelector('#dis-live'), g: svg.querySelector('#dis-strokes') };
+    dLive.path.setAttribute('class', `dstroke ink${ui.disInk}`);
+    dLive.path.setAttribute('stroke-width', DIS_W[ui.disSize]);
+    addPt(disPoint(e, svg));
+  });
+  document.addEventListener('pointermove', e => {
+    if (!dLive || e.pointerId !== dLive.id) return;
+    e.preventDefault();
+    const evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [];
+    for (const ev of evs.length ? evs : [e]) addPt(disPoint(ev, dLive.svg));
+  }, { passive: false });
+  function endStroke(e) {
+    if (!dLive || (e && e.pointerId !== dLive.id)) return;
+    const pts = dLive.pts;
+    dLive = null;
+    ui.disLive = false;
+    if (!sendStroke(pts)) render();
+  }
+  document.addEventListener('pointerup', endStroke);
+  document.addEventListener('pointercancel', endStroke);
+  document.addEventListener('touchmove', e => { if (dLive) e.preventDefault(); }, { passive: false });
+
+  /* ---------- nomi cose città ---------- */
+  const nccDraftKey = () => `blocchetto.ncc.${code}.${seat}.${S.ncc.n}`;
+  function nccDraft() {
+    try { const v = JSON.parse(store.get(nccDraftKey()) || 'null'); return Array.isArray(v) ? v : []; } catch (e) { return []; }
+  }
+  function nccLetter() {
+    const q = S.ncc, all = Game3.LETTERS.split('');
+    const free = all.filter(ch => !q.used.includes(ch));
+    return pickSome(free.length ? free : all, 1)[0];
+  }
+  function nccHistory(q) {
+    if (!q.hist.length) return '';
+    return `<details class="ncc-hist"><summary>Le lettere di prima</summary>${q.hist.map(([l, pa, pb]) => `<p><b class="hl">${l}</b><span style="--c:var(--pen-a)">${esc(nameOf('a'))} ${pa}</span><span style="--c:var(--pen-b)">${esc(nameOf('b'))} ${pb}</span></p>`).join('')}</details>`;
+  }
+  function viewNcc(anim) {
+    const q = S.ncc, o = other();
+    let board, status, controls = '';
+    if (q.phase === 'idle') {
+      board = `<div class="card ncc"><div class="ncc-letter idle">?</div><p class="ncc-cats">${Game3.CATS.join(' · ')}</p>${nccHistory(q)}</div>`;
+      status = 'Estraete una lettera e via!';
+      if (canManage()) controls = '<button class="btn" type="button" data-act="ncc-start">Estrai la lettera</button>';
+      return { board, status, controls };
+    }
+    const letter = `<div class="ncc-letter${anim && q.phase === 'play' && !q.ans.a && !q.ans.b ? ' pop' : ''}">${q.letter}</div>`;
+    if (q.phase === 'play') {
+      if (!q.ans[seat]) {
+        board = `<div class="card ncc">${letter}${q.stop === o ? `<p class="ncc-stop" style="--c:var(--pen-${o})">${esc(nameOf(o))} ha detto stop!</p>` : ''}` +
+          '<form id="ncc-form" class="ncc-form" autocomplete="off" novalidate>' +
+          Game3.CATS.map((c, k) => `<label class="ncc-row"><span>${c}</span><input class="line-input" id="ncc-w${k}" name="w${k}" type="text" maxlength="30" autocapitalize="words" enterkeyhint="${k < Game3.CATS.length - 1 ? 'next' : 'done'}"></label>`).join('') +
+          `<button class="btn stop" type="submit">${q.stop ? 'Manda' : 'Stop!'}</button></form></div>`;
+        status = q.stop === o ? 'Scrivi quello che hai e manda.' : `Tutte parole con la ${q.letter}. Chi finisce prima dice stop.`;
+      } else {
+        const mine = Game3.nccWords(q, seat);
+        board = `<div class="card ncc">${letter}<div class="ncc-mine" style="--c:var(--pen-${seat})">${Game3.CATS.map((c, k) => `<p><span>${c}</span><b>${esc(mine[k]) || '—'}</b></p>`).join('')}</div></div>`;
+        status = `Hai detto stop! Aspettiamo le parole di ${inkName(o)}.`;
+        if (q.stop !== seat) status = `Parole mandate. Aspettiamo ${inkName(o)}.`;
+      }
+      if (canManage()) controls = restartCtl('ncc');
+      return { board, status, controls };
+    }
+    const W = { a: Game3.nccWords(q, 'a'), b: Game3.nccWords(q, 'b') };
+    const P = Game3.nccPoints(q.letter, W.a, W.b, q.veto);
+    const cols = [seat, o];
+    let t = `<div class="ncc-table"><div class="nrow head"><span></span>${cols.map(s => `<span style="--c:var(--pen-${s})">${s === seat ? 'Tu' : esc(nameOf(s))}</span>`).join('')}</div>`;
+    Game3.CATS.forEach((c, k) => {
+      t += `<div class="nrow"><span class="ncat">${c}</span>`;
+      for (const s of cols) {
+        const w = W[s][k], vetoed = q.veto[(s === 'a' ? 0 : Game3.CATS.length) + k] === '1', valid = Game3.nccValid(q.letter, w);
+        const pts = P[s][k];
+        t += `<span class="nw${!valid || vetoed ? ' no' : ''}" style="--c:var(--pen-${s})"><b>${esc(w) || '—'}</b><i class="np">${pts}</i>`;
+        if (valid && canManage()) t += `<button class="veto" type="button" data-act="ncc-veto" data-who="${s}" data-k="${k}" aria-pressed="${vetoed}">${vetoed ? 'vale' : 'non vale'}</button>`;
+        t += '</span>';
+      }
+      t += '</div>';
+    });
+    t += `<div class="nrow tot"><span class="ncat">Totale</span>${cols.map(s => `<span style="--c:var(--pen-${s})">${s === 'a' ? P.ta : P.tb}</span>`).join('')}</div></div>`;
+    board = `<div class="card ncc">${letter}${t}</div>`;
+    status = 'Controllate le parole: se una non va bene toccate «non vale».';
+    if (canManage()) controls = '<button class="btn" type="button" data-act="ncc-done">Segna i punti</button>';
+    return { board, status, controls };
+  }
+
+  /* ---------- chi mi conosce meglio ---------- */
+  function pickPair() {
+    const q = S.chi, used = new Set([q.q].concat(q.hist.map(h => h[0])));
+    const all = Game3.PAIRS.map((_, i) => i);
+    const free = all.filter(i => !used.has(i));
+    return pickSome(free.length ? free : all.filter(i => i !== q.q), 1)[0];
+  }
+  function chiOpt(k, who) {
+    const pair = Game3.PAIRS[S.chi.q], cur = who === 'me' ? ui.chiMe : ui.chiYou;
+    return `<button class="chi-opt" type="button" data-act="chi-pick" data-who="${who}" data-k="${k}" aria-pressed="${cur === k}" style="--c:var(--pen-${seat})">${esc(pair[k])}</button>`;
+  }
+  function viewChi() {
+    const q = S.chi, o = other(), pair = Game3.PAIRS[q.q];
+    if (ui.chiN !== `${q.n}.${q.k}`) { ui.chiN = `${q.n}.${q.k}`; ui.chiMe = -1; ui.chiYou = -1; }
+    const both = !!(q.ans.a && q.ans.b);
+    let h = `<div class="card chi"><div class="chi-top"><span class="chi-k">Domanda ${q.k} di ${Game3.ROUNDS}</span>${pointsLine(q.pts.a, q.pts.b)}</div><p class="chi-q">${esc(pair[0])} <span>o</span> ${esc(pair[1])}?</p>`;
+    let status, controls = '';
+    if (!q.ans[seat] && q.phase === 'play') {
+      h += `<p class="chi-lbl">Tu cosa preferisci?</p><div class="chi-opts">${chiOpt(0, 'me')}${chiOpt(1, 'me')}</div>`;
+      h += `<p class="chi-lbl">E secondo te ${esc(nameOf(o))}?</p><div class="chi-opts">${chiOpt(0, 'you')}${chiOpt(1, 'you')}</div>`;
+      status = q.ans[o] ? `${inkName(o)} ha già risposto. Tocca a te.` : `Rispondi per te e prova a indovinare cosa sceglie ${inkName(o)}.`;
+      if (canManage()) controls = `<button class="btn" type="button" data-act="chi-send"${ui.chiMe >= 0 && ui.chiYou >= 0 ? '' : ' disabled'}>Invia</button>`;
+    } else if (!both) {
+      const A = Game2.show(q.ans[seat]);
+      h += `<div class="chi-mine" style="--c:var(--pen-${seat})"><p>Tu: <b>${esc(pair[Number(A[0])])}</b></p><p>Per ${esc(nameOf(o))} hai detto: <b>${esc(pair[Number(A[1])])}</b></p></div>`;
+      status = `Aspettiamo ${inkName(o)}.`;
+    } else {
+      const A = { a: Game2.show(q.ans.a), b: Game2.show(q.ans.b) };
+      h += '<div class="chi-rev">';
+      for (const s of [seat, o]) {
+        const g = G.other(s), right = A[g][1] === A[s][0];
+        h += `<div class="chi-p" style="--c:var(--pen-${s})"><p><b class="ink-name">${s === seat ? 'Tu' : esc(nameOf(s))}</b> ${s === seat ? 'preferisci' : 'preferisce'} <span class="chi-a">${esc(pair[Number(A[s][0])])}</span></p>` +
+          `<p class="chi-g${right ? ' ok' : ''}" style="--c:var(--pen-${g})">${g === seat ? 'Tu avevi detto' : `${esc(nameOf(g))} aveva detto`} «${esc(pair[Number(A[g][1])])}»: ${right ? '<i>giusto!</i>' : '<i>sbagliato</i>'}</p></div>`;
+      }
+      h += '</div>';
+      if (q.phase === 'over') {
+        const w = q.pts.a === q.pts.b ? '' : q.pts.a > q.pts.b ? 'a' : 'b';
+        status = !w ? `Pari, ${q.pts.a} a ${q.pts.b}: vi conoscete uguale.` : w === seat ? `Hai indovinato di più tu: ${q.pts[w]} a ${q.pts[o]}!` : `Ha indovinato di più ${inkName(w)}: ${q.pts[w]} a ${q.pts[G.other(w)]}.`;
+        if (canManage()) controls = '<button class="btn" type="button" data-act="chi-new">Nuova partita</button>';
+      } else {
+        status = 'Ecco com’è andata.';
+        if (canManage()) controls = '<button class="btn" type="button" data-act="chi-next">Prossima domanda</button>';
+      }
+    }
+    h += '</div>';
+    if (q.phase === 'play' && canManage() && (q.k > 1 || q.ans.a || q.ans.b)) controls += restartCtl('chi');
+    return { board: h, status, controls };
+  }
+
+  // After each render: fill the Nomi cose città fields with what was typed before a reload.
+  function postRender() {
+    if (tab !== 'ncc' || S.ncc.phase !== 'play' || S.ncc.ans[seat]) return;
+    const d = nccDraft();
+    Game3.CATS.forEach((_, k) => {
+      const i = document.getElementById('ncc-w' + k);
+      if (i && i.dataset.init !== '1') { i.value = typeof d[k] === 'string' ? d[k] : ''; i.dataset.init = '1'; }
+    });
+  }
+  document.addEventListener('input', e => {
+    if (!e.target.id || !/^ncc-w\d$/.test(e.target.id)) return;
+    const vals = Game3.CATS.map((_, k) => { const i = document.getElementById('ncc-w' + k); return i ? i.value : ''; });
+    store.set(nccDraftKey(), JSON.stringify(vals));
+  });
+
   /* ---------- index of games and the random wheel ---------- */
-  const TILTS = [-1.4, 1.1, 0.8, -1, 1.3, -0.7, -1.2, 0.9];
+  const TILTS = [-0.6, -1.4, 1.1, 0.8, -1, 1.3, -0.7, -1.2, 0.9, 1.2, -0.9, 0.7, -1.3, 1];
   const DICE = '<svg viewBox="0 0 32 32" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="24" height="24" rx="6"/><circle cx="11" cy="11" r="1.7" fill="currentColor"/><circle cx="21" cy="11" r="1.7" fill="currentColor"/><circle cx="16" cy="16" r="1.7" fill="currentColor"/><circle cx="11" cy="21" r="1.7" fill="currentColor"/><circle cx="21" cy="21" r="1.7" fill="currentColor"/></svg>';
   function cardState(g) {
+    if (synced && g === 'bri' && S.bri.phase === 'idle') return { text: 'Dai le carte', mine: false };
+    if (synced && g === 'dis') {
+      const q = S.dis, me = q.drawer === seat;
+      if (q.phase === 'choose') return me ? { text: 'Scegli la parola', mine: true } : { text: `${nameOf(q.drawer)} sceglie`, mine: false };
+      if (q.phase === 'draw') return { text: me ? 'Disegna' : 'Indovina', mine: true };
+      return { text: 'Vedi com’è andata', mine: false };
+    }
+    if (synced && g === 'ncc') {
+      const q = S.ncc;
+      if (q.phase === 'idle') return { text: 'Estrai la lettera', mine: false };
+      if (q.phase === 'play') return q.ans[seat] ? { text: `Aspetta ${nameOf(other())}`, mine: false } : { text: q.stop ? 'Stop! Manda' : 'Scrivi le parole', mine: true };
+      return { text: 'Conta i punti', mine: true };
+    }
+    if (synced && g === 'chi') {
+      const m = yourMove('chi', seat);
+      if (m === true) return { text: 'Rispondi', mine: true };
+      if (m === false) return { text: 'Hai risposto', mine: false };
+      return { text: S.chi.phase === 'over' ? 'Partita finita' : 'Vedi le risposte', mine: false };
+    }
+    if (g === 'taro' && synced) {
+      const t = S.taro, mine = t.drawer === seat;
+      if (t.phase === 'pick') return mine ? { text: 'Scegli le carte', mine: true } : { text: `${nameOf(t.drawer)} pesca`, mine: false };
+      if (t.phase === 'spread') return { text: 'Carte coperte', mine: true };
+      if (t.phase === 'reveal') return t.reading ? { text: 'Lettura pronta', mine: false } : !mine ? { text: 'Leggi le carte', mine: true } : { text: `${nameOf(G.other(t.drawer))} legge`, mine: false };
+      return { text: 'Mescola le carte', mine: false };
+    }
     const m = synced ? yourMove(g, seat) : undefined;
     if (m === true) return { text: g === 'dom' ? 'Rispondi' : 'Tocca a te', mine: true };
     if (m === false) return { text: g === 'dom' ? 'Hai risposto' : `Tocca a ${nameOf(other())}`, mine: false };
@@ -2672,7 +4129,7 @@ const Game2 = (() => {
     const pool = free.length ? free : all.filter(i => i !== S.dom.q);
     return pool[Math.floor(Math.random() * pool.length)];
   }
-  const VIEWS = { imp: viewImp, qua: viewQua, tris: viewTris, c4: viewC4, sos: viewSos, num: viewNum, navi: viewNavi, dom: viewDom };
+  const VIEWS = { bri: viewBri, mem: viewMem, dis: viewDis, ncc: viewNcc, chi: viewChi, taro: viewTaro, imp: viewImp, qua: viewQua, tris: viewTris, c4: viewC4, sos: viewSos, num: viewNum, navi: viewNavi, dom: viewDom };
 
   function whoHTML() {
     const o = other(), name = esc(nameOf(o)), t = partnerTabNow();
@@ -2693,10 +4150,10 @@ const Game2 = (() => {
   function setHTML(el, html) {
     if (el._html === html) return;
     const focused = document.activeElement;
-    const keep = focused && el.contains(focused) && focused.id && focused.tagName === 'INPUT'
+    const keep = focused && el.contains(focused) && focused.id && (focused.tagName === 'INPUT' || focused.tagName === 'TEXTAREA')
       ? { id: focused.id, s: focused.selectionStart, e: focused.selectionEnd } : null;
     const vals = {};
-    el.querySelectorAll('input[id]').forEach(i => { vals[i.id] = i.value; });
+    el.querySelectorAll('input[id], textarea[id]').forEach(i => { vals[i.id] = i.value; });
     el.innerHTML = html;
     el._html = html;
     for (const id in vals) {
@@ -2762,9 +4219,9 @@ const Game2 = (() => {
       $('#page-title').textContent = TITLES[tab];
       $('#rules-text').textContent = RULES[tab];
       const v = VIEWS[tab](anim);
-      $('#page-score').hidden = tab === 'dom';
+      $('#page-score').hidden = tab === 'dom' || tab === 'taro';
       setHTML($('#page-score'), scoreHTML(tab));
-      setHTML($('#board'), v.board);
+      if (!(tab === 'dis' && ui.disLive)) setHTML($('#board'), v.board);
       setHTML($('#status'), v.status);
       setHTML($('#controls'), v.controls);
       $('#controls').hidden = !v.controls;
@@ -2774,6 +4231,7 @@ const Game2 = (() => {
     $('#note').hidden = !note;
     renderSheet();
     renderCall();
+    postRender();
   }
 
   /* ---------- input ---------- */
@@ -2897,6 +4355,42 @@ const Game2 = (() => {
       case 'navi-shot': act({ t: 'navi.shot', seat, i: Number(el.getAttribute('data-i')) }); break;
       case 'dom-next': act({ t: 'dom.next', seat, q: pickQuestion() }); break;
       case 'dom-skip': act({ t: 'dom.skip', seat, q: pickQuestion() }); break;
+      case 'bri-deal': act({ t: 'bri.deal', seat, deck: cryptoShuffle(Array.from({ length: 40 }, (_, i) => i)) }); break;
+      case 'bri': act({ t: 'bri.play', seat, card: Number(el.getAttribute('data-c')) }); break;
+      case 'mem': {
+        const a = { t: 'mem.flip', seat, i: Number(el.getAttribute('data-i')) };
+        if (!S.mem.lay) a.deal = memLayout();
+        act(a);
+        break;
+      }
+      case 'dis-word': act({ t: 'dis.word', seat, word: el.getAttribute('data-w') }); break;
+      case 'dis-reroll': ui.disOpts = pickSome(Game3.WORDS.filter(w => !ui.disOpts || !ui.disOpts.includes(w)), 3); render(); break;
+      case 'dis-ink': ui.disInk = Number(el.getAttribute('data-k')) || 0; if (ui.disInk === 5 && ui.disSize < 2) ui.disSize = 2; render(); break;
+      case 'dis-size': ui.disSize = Number(el.getAttribute('data-k')) || 0; render(); break;
+      case 'dis-undo': act({ t: 'dis.undo', seat }); break;
+      case 'dis-clear':
+        if (ui.confirm !== 'dis-clear') { ui.confirm = 'dis-clear'; el.textContent = 'Sicuro? Tocca ancora'; setTimeout(() => { if (ui.confirm === 'dis-clear') { ui.confirm = ''; render(); } }, 2500); break; }
+        ui.confirm = '';
+        act({ t: 'dis.clear', seat });
+        break;
+      case 'dis-give': act({ t: 'dis.give', seat }); break;
+      case 'dis-next': act({ t: 'dis.next', seat }); break;
+      case 'ncc-start': act({ t: 'ncc.start', seat, letter: nccLetter() }); break;
+      case 'ncc-veto': act({ t: 'ncc.veto', seat, who: el.getAttribute('data-who'), k: Number(el.getAttribute('data-k')) }); break;
+      case 'ncc-done': act({ t: 'ncc.done', seat }); break;
+      case 'chi-pick':
+        if (el.getAttribute('data-who') === 'me') ui.chiMe = Number(el.getAttribute('data-k'));
+        else ui.chiYou = Number(el.getAttribute('data-k'));
+        render();
+        break;
+      case 'chi-send': if (ui.chiMe >= 0 && ui.chiYou >= 0) act({ t: 'chi.answer', seat, me: ui.chiMe, you: ui.chiYou }); break;
+      case 'chi-next': act({ t: 'chi.next', seat, q: pickPair() }); break;
+      case 'chi-new': act({ t: 'chi.new', seat, q: pickPair() }); break;
+      case 'taro-spread': ui.taroSpread = Number(el.getAttribute('data-n')) || 3; render(); break;
+      case 'taro-pick': act({ t: 'taro.pick', seat, pos: Number(el.getAttribute('data-pos')) }); break;
+      case 'taro-flip': act({ t: 'taro.flip', seat }); break;
+      case 'taro-done': act({ t: 'taro.done', seat }); break;
+      case 'taro-cancel': act({ t: 'taro.cancel', seat }); break;
       case 'guess': act({ t: 'imp.guess', seat, ch: el.getAttribute('data-ch') }); break;
       case 'imp-swap': act({ t: 'imp.swap', seat }); break;
       case 'imp-next': act({ t: 'imp.next', seat }); break;
@@ -2922,6 +4416,46 @@ const Game2 = (() => {
   });
 
   document.addEventListener('submit', e => {
+    if (e.target.id === 'dis-own') {
+      e.preventDefault();
+      const w = G.cleanText(e.target.elements.w.value, 24);
+      if (Game.normWord(w).replace(/[^A-Z]/g, '').length < 2) { $('#dis-own-err').textContent = 'Almeno due lettere.'; return; }
+      if (document.activeElement) document.activeElement.blur();
+      act({ t: 'dis.word', seat, word: w });
+      return;
+    }
+    if (e.target.id === 'dis-form') {
+      e.preventDefault();
+      const input = e.target.elements.g, txt = G.cleanText(input.value, 40);
+      if (!Game3.guessKey(txt)) { $('#dis-err').textContent = 'Scrivi cosa ti sembra.'; return; }
+      if (act({ t: 'dis.guess', seat, text: txt })) {
+        const fresh = $('#dis-g');
+        if (fresh && S.dis.phase === 'draw') { fresh.value = ''; fresh.focus({ preventScroll: true }); }
+        else if (document.activeElement) document.activeElement.blur();
+      }
+      return;
+    }
+    if (e.target.id === 'ncc-form') {
+      e.preventDefault();
+      const words = Game3.CATS.map((_, k) => e.target.elements['w' + k].value);
+      if (document.activeElement) document.activeElement.blur();
+      act({ t: 'ncc.send', seat, words });
+      return;
+    }
+    if (e.target.id === 'taro-qform') {
+      e.preventDefault();
+      if (document.activeElement) document.activeElement.blur();
+      act({ t: 'taro.shuffle', seat, spread: ui.taroSpread, deck: shuffledDeck(), question: e.target.elements.q.value });
+      return;
+    }
+    if (e.target.id === 'taro-form') {
+      e.preventDefault();
+      const txt = G.cleanText(e.target.elements.text.value, 800);
+      if (!txt) { $('#taro-err').textContent = 'Scrivi qualcosa prima di inviare.'; return; }
+      if (document.activeElement) document.activeElement.blur();
+      if (!act({ t: 'taro.read', seat, text: txt })) $('#taro-err').textContent = 'La lettura è già questa.';
+      return;
+    }
     if (e.target.id === 'dom-form') {
       e.preventDefault();
       const txt = G.cleanText(e.target.elements.text.value, 280);
