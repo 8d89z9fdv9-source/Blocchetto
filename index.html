@@ -60,7 +60,7 @@
   color-scheme: dark;
 }
 
-*, *::before, *::after { box-sizing: border-box; }
+*, *::before, *::after { box-sizing: border-box; touch-action: manipulation; }
 html, body { margin: 0; }
 [hidden] { display: none !important; }
 body {
@@ -95,7 +95,7 @@ button { font-family: inherit; color: inherit; }
 .chip.here .inkdot { box-shadow: 0 0 0 2px var(--paper), 0 0 0 4px var(--live); }
 
 /* tabs tucked under the page */
-.book { display: grid; }
+.book { display: grid; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
 .tabs { position: relative; z-index: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; align-items: end; margin-bottom: -18px; padding-inline: 4px; }
 .tab {
   position: relative; border: 0; border-radius: 14px 14px 8px 8px; padding: 13px 6px 30px;
@@ -274,6 +274,150 @@ body { min-height: 100dvh; padding-top: env(safe-area-inset-top, 0px); padding-b
 .who-btn { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 20px; border: 0; border-radius: 18px; background: var(--paper); color: var(--c); font: 800 22px/1 var(--f-ui); box-shadow: var(--shadow); cursor: pointer; }
 .who-btn .inkdot { width: 16px; height: 16px; }
 .link-box { width: 100%; padding: 11px 12px; border: 2px solid var(--paper-2); border-radius: 12px; background: var(--bg); color: var(--ink); font: 600 16px/1.3 var(--f-ui); }
+
+/* five more pages of the pad, each with its own colour */
+:root {
+  --c4: #17907A; --c4-print: #17907A;
+  --sos: #C9467A; --sos-print: #C9467A;
+  --num: #B07614; --num-print: #B07614;
+  --navi: #22789C; --navi-print: #22789C;
+  --dom: #3E3A8E; --dom-print: #5A55B8;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --c4: #127462; --c4-print: #5FD0B6;
+    --sos: #A3385F; --sos-print: #F08DB2;
+    --num: #8C5F0E; --num-print: #F0BE5A;
+    --navi: #1B5F7C; --navi-print: #7FC4E2;
+    --dom: #302C72; --dom-print: #A9A5F2;
+  }
+}
+:root[data-theme="dark"] {
+  --c4: #127462; --c4-print: #5FD0B6;
+  --sos: #A3385F; --sos-print: #F08DB2;
+  --num: #8C5F0E; --num-print: #F0BE5A;
+  --navi: #1B5F7C; --navi-print: #7FC4E2;
+  --dom: #302C72; --dom-print: #A9A5F2;
+}
+[data-game="imp"] { --frame: var(--imp); --print: var(--imp-print); }
+[data-game="qua"] { --frame: var(--qua); --print: var(--qua-print); }
+[data-game="tris"] { --frame: var(--tris); --print: var(--tris-print); }
+.page[data-game="c4"], [data-game="c4"] { --frame: var(--c4); --print: var(--c4-print); }
+.page[data-game="sos"], [data-game="sos"] { --frame: var(--sos); --print: var(--sos-print); }
+.page[data-game="num"], [data-game="num"] { --frame: var(--num); --print: var(--num-print); }
+.page[data-game="navi"], [data-game="navi"] { --frame: var(--navi); --print: var(--navi-print); }
+.page[data-game="dom"], [data-game="dom"] { --frame: var(--dom); --print: var(--dom-print); }
+
+/* index */
+.home { display: grid; gap: 16px; }
+.spin-btn { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; padding: 18px 20px; border: 0; border-radius: 20px; background: var(--ink); color: var(--bg); font: 800 20px/1 var(--f-ui); cursor: pointer; box-shadow: var(--shadow); transition: transform .12s ease; }
+.spin-btn svg { width: 28px; height: 28px; flex: none; }
+.spin-btn:active { transform: scale(.98); }
+.spin-btn:disabled { opacity: .55; cursor: default; }
+.cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 12px; }
+.gcard { display: grid; align-content: space-between; justify-items: start; gap: 18px; min-height: 108px; min-width: 0; padding: 14px 14px 12px; border: 0; border-radius: 18px; background: var(--frame); color: var(--on-frame); text-align: left; cursor: pointer; box-shadow: var(--shadow); transform: rotate(var(--tilt, 0deg)); transition: transform .16s ease; }
+.gcard:active { transform: rotate(0deg) scale(.97); }
+@media (hover: hover) { .gcard:hover { transform: rotate(0deg) translateY(-2px); } }
+.gname { font: 800 18px/1.15 var(--f-ui); text-wrap: balance; }
+.gstate { max-width: 100%; padding: 5px 10px; border-radius: 999px; background: var(--paper); color: var(--ink-soft); font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gstate.mine { color: var(--c); box-shadow: inset 0 0 0 2px var(--c); }
+.crumbs { display: flex; margin-bottom: -4px; }
+.pill.back { background: var(--paper); border-color: transparent; box-shadow: var(--shadow); }
+.page.enter { animation: enter .26s cubic-bezier(.2, .8, .3, 1) both; }
+@keyframes enter { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+/* quattro in fila */
+.c4 { display: block; width: 100%; height: auto; }
+.hole { fill: var(--paper-2); stroke: var(--print); stroke-width: 2; pointer-events: none; }
+.disc { pointer-events: none; }
+.disc circle { fill: var(--c); fill-opacity: .9; }
+.disc.drop { animation: c4drop .44s cubic-bezier(.4, 0, .6, 1.35) both; }
+@keyframes c4drop { from { transform: translateY(var(--dy)); } to { transform: none; } }
+.col-hit { fill: transparent; cursor: pointer; }
+@media (hover: hover) { .col-hit:hover { fill: var(--print); fill-opacity: .1; } }
+.pen.win { stroke-width: 6; }
+
+/* sos */
+.sosg { display: block; width: 100%; height: auto; }
+.sosg .print { stroke-width: 2; }
+.sos-ch { font-family: var(--f-hand); font-size: 34px; fill: var(--c); text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+.cell-hit { fill: transparent; cursor: pointer; }
+@media (hover: hover) { .cell-hit:hover { fill: var(--print); fill-opacity: .1; } }
+.sos-line { stroke-width: 4; opacity: .85; }
+.letter-btn { width: 54px; height: 48px; border-radius: 12px; border: 2px solid var(--paper-2); background: transparent; color: var(--c); font: 400 30px/1 var(--f-hand); cursor: pointer; }
+.letter-btn[aria-pressed="true"] { border-color: var(--c); background: var(--paper-2); }
+
+/* indovina il numero */
+.numg { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.ncol { min-width: 0; }
+.ncol-h { margin-bottom: 6px; font-size: 13px; font-weight: 800; color: var(--c); }
+.nrow { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 5px 0; border-bottom: 1.5px dashed var(--paper-2); }
+.ndig { font: 400 24px/1 var(--f-hand); letter-spacing: .12em; color: var(--c); }
+.nfb { display: inline-flex; gap: 3px; flex: none; }
+.nfb i, .nlegend i { display: inline-block; width: 11px; height: 11px; border-radius: 50%; }
+.nfb .b, .nlegend .dotb { background: var(--ink); }
+.nfb .c, .nlegend .dotc { box-shadow: inset 0 0 0 2px var(--ink); }
+.nfb .z { background: var(--paper-2); }
+.nempty { margin: 0; color: var(--muted); font-size: 14px; }
+.nlegend { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 2px 0 0; font-size: 13px; color: var(--ink-soft); }
+.nlegend span { display: inline-flex; align-items: center; gap: 6px; }
+.controls > .numpad, .controls > .dom-form { flex: 1 1 100%; }
+.numpad { display: grid; gap: 12px; }
+.slots4 { display: flex; justify-content: center; gap: 10px; }
+.slots4 span { width: 46px; height: 56px; display: grid; place-items: end center; padding-bottom: 4px; border-bottom: 3px solid var(--print); font: 400 38px/1 var(--f-hand); color: var(--c); }
+.keypad { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+.key2 { height: 50px; border: 2px solid var(--paper-2); border-radius: 12px; background: transparent; color: var(--ink); font: 800 20px/1 var(--f-ui); cursor: pointer; font-variant-numeric: tabular-nums; }
+.key2:disabled { opacity: .3; cursor: default; }
+.btn:disabled { opacity: .4; cursor: default; }
+
+/* battaglia navale */
+.navig { display: grid; justify-items: center; gap: 8px; }
+.sea-h { justify-self: stretch; margin: 6px 0 0; font-size: 13px; font-weight: 800; color: var(--ink-soft); }
+.sea { display: block; width: 100%; max-width: 380px; height: auto; }
+.sea.mine { max-width: 230px; }
+.sea .lab { font: 700 12px/1 var(--f-ui); fill: var(--muted); text-anchor: middle; dominant-baseline: central; }
+.sea .print { stroke-width: 1.5; }
+.ship { fill: var(--c); fill-opacity: .16; stroke: var(--c); stroke-width: 3; }
+.ship.sunk { fill-opacity: .34; }
+.miss { fill: var(--print); opacity: .6; transform-box: fill-box; transform-origin: center; }
+.shot-hit { stroke-width: 4.5; }
+.sea-hit { fill: transparent; cursor: pointer; }
+@media (hover: hover) { .sea-hit:hover { fill: var(--print); fill-opacity: .14; } }
+
+/* domanda della buonanotte */
+.domc { display: grid; gap: 14px; }
+.dom-q { margin: 0; font: 400 27px/1.25 var(--f-hand); color: var(--ink); text-wrap: balance; }
+.dom-ans { display: grid; gap: 10px; }
+.ans { padding: 10px 12px; border-radius: 12px; background: var(--paper-2); }
+.ans .who { font-size: 12px; font-weight: 800; color: var(--c, var(--ink-soft)); }
+.ans p { margin: 4px 0 0; font: 400 21px/1.3 var(--f-hand); color: var(--c, var(--ink)); white-space: pre-wrap; overflow-wrap: anywhere; }
+textarea.line-input { resize: none; min-height: 3.6em; font-size: 22px; }
+.dom-hist { font-size: 14px; color: var(--ink-soft); }
+.dom-hist summary { cursor: pointer; font-weight: 700; }
+.hq { margin: 12px 0 2px; font-weight: 700; color: var(--ink); }
+.ha { margin: 0; font: 400 18px/1.35 var(--f-hand); color: var(--c); overflow-wrap: anywhere; }
+
+/* the wheel */
+.spin { position: fixed; inset: 0; z-index: 80; display: grid; place-items: center; padding: 24px 16px; background: var(--scrim); }
+.spin-box { width: min(100%, 360px); display: grid; justify-items: center; gap: 14px; }
+.spin-title { margin: 0; color: #FFFFFF; font: 800 22px/1.2 var(--f-ui); text-align: center; text-shadow: 0 1px 3px rgba(0, 0, 0, .35); }
+.reel-window { position: relative; width: 100%; height: 252px; overflow: hidden; border-radius: 22px; background: var(--paper); box-shadow: var(--shadow); -webkit-mask-image: linear-gradient(transparent, #000 24%, #000 76%, transparent); mask-image: linear-gradient(transparent, #000 24%, #000 76%, transparent); }
+.reel { will-change: transform; }
+.rcard { height: 84px; padding: 7px 14px; }
+.rcard span { display: grid; place-items: center; height: 100%; border-radius: 16px; background: var(--frame); color: var(--on-frame); font: 800 22px/1 var(--f-ui); }
+.reel-window::after { content: ""; position: absolute; left: 8px; right: 8px; top: 84px; height: 84px; border-radius: 20px; box-shadow: inset 0 0 0 3px var(--ink); pointer-events: none; }
+.spin.done .rcard.win span { animation: winpop .7s cubic-bezier(.2, 1.6, .4, 1) both; }
+@keyframes winpop { 0% { transform: scale(1); } 45% { transform: scale(1.12); } 100% { transform: scale(1.05); } }
+@media (prefers-reduced-motion: reduce) {
+  .disc.drop, .page.enter, .spin.done .rcard.win span { animation: none; }
+}
+
+/* bigger call window for a sharp picture */
+.call.big { width: min(calc(100vw - 16px), 560px); }
+.call.big .call-video { max-height: 72dvh; }
+/* long game names wrap instead of squeezing the score */
+.page-head h2 { flex: 1 1 auto; min-width: 0; line-height: 1.1; text-wrap: balance; }
+.page-head .score { flex: none; }
 </style>
 </head>
 <body>
@@ -289,21 +433,17 @@ body { min-height: 100dvh; padding-top: env(safe-area-inset-top, 0px); padding-b
     <div class="who" id="who"></div>
   </header>
 
-  <div class="book">
-    <nav class="tabs" id="tabs" role="tablist" aria-label="Giochi">
-      <button class="tab tab-imp" id="tab-imp" type="button" role="tab" aria-controls="page" data-act="tab" data-tab="imp">Impiccato<span class="badge" hidden><span class="sr">tocca a te</span></span></button>
-      <button class="tab tab-qua" id="tab-qua" type="button" role="tab" aria-controls="page" data-act="tab" data-tab="qua">Quadratini<span class="badge" hidden><span class="sr">tocca a te</span></span></button>
-      <button class="tab tab-tris" id="tab-tris" type="button" role="tab" aria-controls="page" data-act="tab" data-tab="tris">Tris<span class="badge" hidden><span class="sr">tocca a te</span></span></button>
-    </nav>
-    <section class="page" id="page" role="tabpanel" data-game="imp" aria-labelledby="tab-imp">
-      <div class="page-head"><h2 id="page-title">Impiccato</h2><div class="score" id="page-score"></div></div>
-      <div id="board"></div>
-      <div class="panel">
-        <p class="status" id="status" aria-live="polite"></p>
-        <div class="controls" id="controls" hidden></div>
-      </div>
-    </section>
-  </div>
+  <section class="home" id="home" aria-label="Giochi" hidden></section>
+
+  <div class="crumbs" id="crumbs" hidden><button class="pill back" type="button" data-act="home">‹ Tutti i giochi</button></div>
+  <section class="page" id="page" data-game="imp" hidden>
+    <div class="page-head"><h2 id="page-title">Impiccato</h2><div class="score" id="page-score"></div></div>
+    <div id="board"></div>
+    <div class="panel">
+      <p class="status" id="status" aria-live="polite"></p>
+      <div class="controls" id="controls" hidden></div>
+    </div>
+  </section>
 
   <div class="note" id="note" hidden></div>
 </div>
@@ -328,6 +468,13 @@ body { min-height: 100dvh; padding-top: env(safe-area-inset-top, 0px); padding-b
 <div class="ring" id="ring" role="alertdialog" aria-labelledby="ring-text" hidden>
   <p id="ring-text"></p>
   <div class="row"><button class="btn ok" type="button" data-act="answer">Rispondi</button><button class="btn ghost" type="button" data-act="decline">Rifiuta</button></div>
+</div>
+
+<div class="spin" id="spin" hidden>
+  <div class="spin-box">
+    <p class="spin-title" id="spin-title">Si gioca a…</p>
+    <div class="reel-window"><div class="reel" id="reel"></div></div>
+  </div>
 </div>
 
 <div class="toast" id="toast" role="status" hidden></div>
@@ -673,19 +820,481 @@ const Game = (() => {
   };
 })();
 </script>
+<script id="logic2">
+// Rules for the games added after the first three. Same contract as Game: apply() returns the next state or null.
+const Game2 = (() => {
+  const GAMES = ['imp', 'qua', 'tris', 'c4', 'sos', 'num', 'navi', 'dom'];
+  const EXTRA = ['c4', 'sos', 'num', 'navi', 'dom'];
+  const other = s => (s === 'a' ? 'b' : 'a');
+  const isSeat = s => s === 'a' || s === 'b';
+  const seatOr = (s, d) => (isSeat(s) ? s : d);
+  const clone = o => JSON.parse(JSON.stringify(o));
+  const setAt = (str, i, ch) => str.slice(0, i) + ch + str.slice(i + 1);
+  const int = (v, d) => (typeof v === 'number' && Number.isFinite(v) ? Math.trunc(v) : d);
+  const intIn = (v, lo, hi, d) => { const n = int(v, d); return n >= lo && n <= hi ? n : d; };
+  const str = (v, max) => (typeof v === 'string' ? v.slice(0, max) : '');
+
+  // Hidden things (secret numbers, fleets, answers) are stored scrambled, not encrypted.
+  function hide(s) {
+    try { return btoa(unescape(encodeURIComponent(String(s)))).split('').reverse().join(''); } catch (e) { return ''; }
+  }
+  function show(s) {
+    try { return decodeURIComponent(escape(atob(String(s || '').split('').reverse().join('')))); } catch (e) { return ''; }
+  }
+
+  /* ----- Quattro in fila ----- */
+  const C4R = 6, C4C = 7;
+  const c4Fresh = (first, n) => ({ cells: '0'.repeat(C4R * C4C), turn: first, first, last: -1, n });
+  function c4Result(cells) {
+    const at = (r, c) => (r >= 0 && r < C4R && c >= 0 && c < C4C ? cells[r * C4C + c] : '0');
+    for (let r = 0; r < C4R; r++) {
+      for (let c = 0; c < C4C; c++) {
+        const s = at(r, c);
+        if (s === '0') continue;
+        for (const [dr, dc] of [[0, 1], [1, 0], [1, 1], [1, -1]]) {
+          if (at(r + dr, c + dc) === s && at(r + 2 * dr, c + 2 * dc) === s && at(r + 3 * dr, c + 3 * dc) === s) {
+            return { win: s, line: [0, 1, 2, 3].map(k => (r + k * dr) * C4C + c + k * dc) };
+          }
+        }
+      }
+    }
+    return cells.includes('0') ? null : { draw: true };
+  }
+
+  /* ----- SOS ----- */
+  const SN = 6;
+  const sosFresh = (first, n) => ({ cells: '.'.repeat(SN * SN), by: '0'.repeat(SN * SN), lines: [], pts: { a: 0, b: 0 }, turn: first, first, last: -1, mk: 0, n });
+  const sosOver = q => !q.cells.includes('.');
+  function sosFind(cells, i) {
+    const r = Math.floor(i / SN), c = i % SN, ch = cells[i], out = [];
+    const at = (rr, cc) => (rr >= 0 && rr < SN && cc >= 0 && cc < SN ? cells[rr * SN + cc] : '');
+    const id = (rr, cc) => rr * SN + cc;
+    for (const [dr, dc] of [[0, 1], [1, 0], [1, 1], [1, -1]]) {
+      if (ch === 'O') {
+        if (at(r - dr, c - dc) === 'S' && at(r + dr, c + dc) === 'S') out.push([id(r - dr, c - dc), i, id(r + dr, c + dc)]);
+      } else if (ch === 'S') {
+        if (at(r + dr, c + dc) === 'O' && at(r + 2 * dr, c + 2 * dc) === 'S') out.push([i, id(r + dr, c + dc), id(r + 2 * dr, c + 2 * dc)]);
+        if (at(r - dr, c - dc) === 'O' && at(r - 2 * dr, c - 2 * dc) === 'S') out.push([id(r - 2 * dr, c - 2 * dc), id(r - dr, c - dc), i]);
+      }
+    }
+    return out;
+  }
+
+  /* ----- Indovina il numero ----- */
+  const numOk = v => typeof v === 'string' && /^\d{4}$/.test(v) && new Set(v).size === 4;
+  function numScore(secret, guess) {
+    let b = 0, c = 0;
+    for (let k = 0; k < 4; k++) {
+      if (guess[k] === secret[k]) b++;
+      else if (secret.includes(guess[k])) c++;
+    }
+    return [b, c];
+  }
+  const numFresh = (first, n) => ({ phase: 'setup', sec: { a: '', b: '' }, guesses: [], turn: first, first, win: '', n });
+
+  /* ----- Battaglia navale ----- */
+  const NV = 8, FLEET = [4, 3, 3, 2];
+  const naviFresh = (first, n) => ({ phase: 'setup', fleet: { a: '', b: '' }, shots: { a: '0'.repeat(NV * NV), b: '0'.repeat(NV * NV) }, turn: first, first, win: '', last: null, n });
+  function fleetOk(ships) {
+    if (!Array.isArray(ships) || ships.length !== FLEET.length) return false;
+    const lens = ships.map(x => (Array.isArray(x) ? x.length : 0)).sort((p, q) => q - p);
+    if (lens.join() !== FLEET.slice().sort((p, q) => q - p).join()) return false;
+    const used = new Set();
+    for (const sh of ships) {
+      if (!sh.every(i => Number.isInteger(i) && i >= 0 && i < NV * NV)) return false;
+      const sorted = sh.slice().sort((p, q) => p - q);
+      const rows = sorted.map(i => Math.floor(i / NV)), cols = sorted.map(i => i % NV);
+      const horiz = rows.every(r => r === rows[0]) && sorted.every((v, k) => k === 0 || v === sorted[k - 1] + 1);
+      const vert = cols.every(c => c === cols[0]) && sorted.every((v, k) => k === 0 || v === sorted[k - 1] + NV);
+      if (!horiz && !vert) return false;
+      for (const i of sh) {
+        if (used.has(i)) return false;
+        used.add(i);
+      }
+    }
+    return true;
+  }
+  function fleetOf(q, s) {
+    try {
+      const f = JSON.parse(show(q.fleet[s]));
+      return fleetOk(f) ? f : null;
+    } catch (e) {
+      return null;
+    }
+  }
+  const sunkList = (ships, shots) => ships.map(sh => sh.every(i => shots[i] === 'h'));
+  // Ships never touch, not even at the corners, so the sea stays readable.
+  function randomFleet(rand) {
+    for (let attempt = 0; attempt < 200; attempt++) {
+      const taken = new Set(), ships = [];
+      let ok = true;
+      for (const len of FLEET) {
+        let placed = false;
+        for (let t = 0; t < 300 && !placed; t++) {
+          const horiz = rand() < 0.5;
+          const r = Math.floor(rand() * (horiz ? NV : NV - len + 1));
+          const c = Math.floor(rand() * (horiz ? NV - len + 1 : NV));
+          const cells = Array.from({ length: len }, (_, k) => (horiz ? r * NV + c + k : (r + k) * NV + c));
+          const clash = cells.some(i => {
+            const ri = Math.floor(i / NV), ci = i % NV;
+            for (let dr = -1; dr <= 1; dr++) for (let dc = -1; dc <= 1; dc++) {
+              const rr = ri + dr, cc = ci + dc;
+              if (rr >= 0 && rr < NV && cc >= 0 && cc < NV && taken.has(rr * NV + cc)) return true;
+            }
+            return false;
+          });
+          if (!clash) {
+            cells.forEach(i => taken.add(i));
+            ships.push(cells);
+            placed = true;
+          }
+        }
+        if (!placed) { ok = false; break; }
+      }
+      if (ok) return ships;
+    }
+    return null;
+  }
+
+  /* ----- Domanda della buonanotte ----- */
+  const QUESTIONS = [
+    'Qual è stato il momento più bello di oggi?',
+    'Cosa ti ha fatto ridere oggi?',
+    'Se domani fosse tutto libero, cosa faremmo?',
+    'Un posto dove vorresti andare con me?',
+    'Qual è il primo ricordo che hai di noi due?',
+    'Cosa ti manca di più quando siamo lontani?',
+    'Una canzone che ti fa pensare a me?',
+    'Cosa vorresti sognare stanotte?',
+    'Qual è una cosa piccola che ti rende felice?',
+    'Un viaggio che vorresti fare insieme?',
+    'Cosa mangeresti adesso, se potessi scegliere qualsiasi cosa?',
+    'Una cosa che hai imparato di recente?',
+    'Se fossimo in un film, quale sarebbe?',
+    'Cosa hai pensato di me la prima volta?',
+    'Il tuo posto preferito dove stare insieme?',
+    'Una mia abitudine che ti fa sorridere?',
+    'Come sarebbe la nostra domenica perfetta?',
+    'Una cosa che vorresti rifare con me?',
+    'Che superpotere vorresti, solo per un giorno?',
+    'Qual è stata la parte più difficile di oggi?',
+    'Cosa non vedi l’ora di fare questa settimana?',
+    'Se potessimo vivere ovunque, dove andremmo?',
+    'Un piccolo regalo che ti farebbe piacere?',
+    'Una cosa che vuoi dirmi e non mi hai ancora detto?',
+    'Il tuo ricordo preferito di quando eri piccolo o piccola?',
+    'Se rifacessimo il primo appuntamento, cosa cambieresti?',
+    'Mare o montagna, il prossimo weekend?',
+    'Che animale saremmo, tu e io?',
+    'Il complimento più bello che hai ricevuto?',
+    'Cosa ti rilassa di più prima di dormire?',
+    'Un film o una serie da vedere insieme?',
+    'Cosa ti piace di più della tua vita adesso?',
+    'Se potessi rivivere un giorno con me, quale sceglieresti?',
+    'Cosa cucineremmo insieme stasera?',
+    'Una cosa che ti è venuta bene oggi?',
+    'Un posto che ti piacerebbe rivedere?',
+    'Cosa ti fa sentire a casa?',
+    'La tua parola preferita?',
+    'Se domani ci svegliassimo in un’altra città, quale vorresti?',
+    'Cosa ti auguri per domani?',
+  ];
+  const domFresh = (q, n) => ({ q, ans: { a: '', b: '' }, hist: [], n });
+  function nextQuestion(cur, wanted) {
+    return Number.isInteger(wanted) && wanted >= 0 && wanted < QUESTIONS.length && wanted !== cur ? wanted : (cur + 1) % QUESTIONS.length;
+  }
+
+  /* ----- shared ----- */
+  function freshExtra() {
+    return {
+      c4: c4Fresh('a', 1), sos: sosFresh('a', 1), num: numFresh('a', 1), navi: naviFresh('a', 1), dom: domFresh(0, 1),
+      pick: { g: '', n: 0, by: '', at: 0 },
+      score: { c4: { a: 0, b: 0 }, sos: { a: 0, b: 0 }, num: { a: 0, b: 0 }, navi: { a: 0, b: 0 }, dom: { a: 0, b: 0 } },
+    };
+  }
+  const zeroScores = () => Object.fromEntries(GAMES.map(g => [g, { a: 0, b: 0 }]));
+
+  const handles = t => typeof t === 'string' && (t === 'scores0' || t === 'pick' || /^(c4|sos|num|navi|dom)\./.test(t));
+
+  function apply(S, a, cleanText) {
+    if (!S || !a || typeof a !== 'object') return null;
+    const N = clone(S);
+    const s = a.seat;
+    switch (a.t) {
+      case 'scores0': {
+        if (!isSeat(s)) return null;
+        N.score = zeroScores();
+        return N;
+      }
+      case 'pick': {
+        if (!isSeat(s) || !GAMES.includes(a.g)) return null;
+        N.pick = { g: a.g, n: (N.pick && N.pick.n ? N.pick.n : 0) + 1, by: s, at: Date.now() };
+        return N;
+      }
+      case 'c4.drop': {
+        const q = N.c4;
+        if (c4Result(q.cells) || s !== q.turn) return null;
+        const col = a.col;
+        if (!Number.isInteger(col) || col < 0 || col >= C4C) return null;
+        let r = C4R - 1;
+        while (r >= 0 && q.cells[r * C4C + col] !== '0') r--;
+        if (r < 0) return null;
+        const i = r * C4C + col;
+        q.cells = setAt(q.cells, i, s);
+        q.last = i;
+        const res = c4Result(q.cells);
+        if (res && res.win) N.score.c4[res.win] += 1;
+        if (!res) q.turn = other(s);
+        return N;
+      }
+      case 'c4.new': {
+        const q = N.c4;
+        if (!isSeat(s) || !/[ab]/.test(q.cells)) return null;
+        if (!c4Result(q.cells) && a.force !== true) return null;
+        N.c4 = c4Fresh(other(q.first), q.n + 1);
+        return N;
+      }
+      case 'sos.play': {
+        const q = N.sos, i = a.i, ch = a.ch;
+        if (sosOver(q) || s !== q.turn) return null;
+        if (!Number.isInteger(i) || i < 0 || i >= SN * SN || q.cells[i] !== '.' || (ch !== 'S' && ch !== 'O')) return null;
+        q.cells = setAt(q.cells, i, ch);
+        q.by = setAt(q.by, i, s);
+        const found = sosFind(q.cells, i);
+        for (const f of found) q.lines.push([f[0], f[1], f[2], s]);
+        q.pts[s] += found.length;
+        q.last = i;
+        q.mk = found.length;
+        if (!found.length) q.turn = other(s);
+        if (sosOver(q) && q.pts.a !== q.pts.b) N.score.sos[q.pts.a > q.pts.b ? 'a' : 'b'] += 1;
+        return N;
+      }
+      case 'sos.new': {
+        const q = N.sos;
+        if (!isSeat(s) || !/[SO]/.test(q.cells)) return null;
+        if (!sosOver(q) && a.force !== true) return null;
+        N.sos = sosFresh(other(q.first), q.n + 1);
+        return N;
+      }
+      case 'num.secret': {
+        const q = N.num;
+        if (q.phase !== 'setup' || !isSeat(s) || !numOk(a.code)) return null;
+        q.sec[s] = hide(a.code);
+        if (q.sec.a && q.sec.b) { q.phase = 'play'; q.turn = q.first; }
+        return N;
+      }
+      case 'num.guess': {
+        const q = N.num;
+        if (q.phase !== 'play' || s !== q.turn || !numOk(a.code) || q.guesses.length >= 60) return null;
+        const secret = show(q.sec[other(s)]);
+        if (!numOk(secret)) return null;
+        const [b, c] = numScore(secret, a.code);
+        q.guesses.push([s, a.code, b, c]);
+        if (b === 4) { q.phase = 'over'; q.win = s; N.score.num[s] += 1; }
+        else q.turn = other(s);
+        return N;
+      }
+      case 'num.new': {
+        const q = N.num;
+        if (!isSeat(s) || (q.phase === 'setup' && !q.sec.a && !q.sec.b)) return null;
+        if (q.phase !== 'over' && a.force !== true) return null;
+        N.num = numFresh(other(q.first), q.n + 1);
+        return N;
+      }
+      case 'navi.place': {
+        const q = N.navi;
+        if (q.phase !== 'setup' || !isSeat(s) || !fleetOk(a.ships)) return null;
+        q.fleet[s] = hide(JSON.stringify(a.ships));
+        if (q.fleet.a && q.fleet.b) { q.phase = 'play'; q.turn = q.first; }
+        return N;
+      }
+      case 'navi.shot': {
+        const q = N.navi, i = a.i;
+        if (q.phase !== 'play' || s !== q.turn) return null;
+        if (!Number.isInteger(i) || i < 0 || i >= NV * NV || q.shots[s][i] !== '0') return null;
+        const enemy = fleetOf(q, other(s));
+        if (!enemy) return null;
+        const hit = enemy.some(sh => sh.includes(i));
+        q.shots[s] = setAt(q.shots[s], i, hit ? 'h' : 'm');
+        q.last = { s, i };
+        if (sunkList(enemy, q.shots[s]).every(Boolean)) { q.phase = 'over'; q.win = s; N.score.navi[s] += 1; }
+        else q.turn = other(s);
+        return N;
+      }
+      case 'navi.new': {
+        const q = N.navi;
+        if (!isSeat(s) || (q.phase === 'setup' && !q.fleet.a && !q.fleet.b)) return null;
+        if (q.phase !== 'over' && a.force !== true) return null;
+        N.navi = naviFresh(other(q.first), q.n + 1);
+        return N;
+      }
+      case 'dom.answer': {
+        const d = N.dom;
+        if (!isSeat(s) || d.ans[s]) return null;
+        const t = cleanText(a.text, 280);
+        if (!t) return null;
+        d.ans[s] = hide(t);
+        return N;
+      }
+      case 'dom.next': {
+        const d = N.dom;
+        if (!isSeat(s) || !d.ans.a || !d.ans.b) return null;
+        const hist = [[d.q, d.ans.a, d.ans.b]].concat(d.hist).slice(0, 10);
+        N.dom = { q: nextQuestion(d.q, a.q), ans: { a: '', b: '' }, hist, n: d.n + 1 };
+        return N;
+      }
+      case 'dom.skip': {
+        const d = N.dom;
+        if (!isSeat(s) || d.ans.a || d.ans.b) return null;
+        d.q = nextQuestion(d.q, a.q);
+        return N;
+      }
+      default:
+        return null;
+    }
+  }
+
+  function sanitizeExtra(raw) {
+    const out = freshExtra();
+    const R = raw && typeof raw === 'object' ? raw : {};
+    const SC = R.score && typeof R.score === 'object' ? R.score : {};
+    for (const g of EXTRA) for (const s of ['a', 'b']) out.score[g][s] = intIn(SC[g] && SC[g][s], 0, 99999, 0);
+
+    const C = R.c4;
+    if (C && typeof C.cells === 'string' && C.cells.length === C4R * C4C && /^[0ab]+$/.test(C.cells)) {
+      out.c4 = { cells: C.cells, turn: seatOr(C.turn, 'a'), first: seatOr(C.first, 'a'), last: intIn(C.last, -1, C4R * C4C - 1, -1), n: intIn(C.n, 1, 1e9, 1) };
+    }
+
+    const Q = R.sos;
+    if (Q && typeof Q.cells === 'string' && Q.cells.length === SN * SN && /^[.SO]+$/.test(Q.cells) && typeof Q.by === 'string' && Q.by.length === SN * SN && /^[0ab]+$/.test(Q.by)) {
+      const lines = (Array.isArray(Q.lines) ? Q.lines : [])
+        .filter(l => Array.isArray(l) && l.length === 4 && [0, 1, 2].every(k => Number.isInteger(l[k]) && l[k] >= 0 && l[k] < SN * SN) && isSeat(l[3]))
+        .slice(0, 200);
+      const P = Q.pts && typeof Q.pts === 'object' ? Q.pts : {};
+      out.sos = {
+        cells: Q.cells, by: Q.by, lines, pts: { a: intIn(P.a, 0, 999, 0), b: intIn(P.b, 0, 999, 0) },
+        turn: seatOr(Q.turn, 'a'), first: seatOr(Q.first, 'a'), last: intIn(Q.last, -1, SN * SN - 1, -1), mk: intIn(Q.mk, 0, 8, 0), n: intIn(Q.n, 1, 1e9, 1),
+      };
+    }
+
+    const M = R.num;
+    if (M && typeof M === 'object') {
+      const sec = M.sec && typeof M.sec === 'object' ? M.sec : {};
+      const n = {
+        phase: ['setup', 'play', 'over'].includes(M.phase) ? M.phase : 'setup',
+        sec: { a: str(sec.a, 64), b: str(sec.b, 64) },
+        guesses: (Array.isArray(M.guesses) ? M.guesses : [])
+          .filter(x => Array.isArray(x) && isSeat(x[0]) && numOk(x[1]) && Number.isInteger(x[2]) && Number.isInteger(x[3]))
+          .slice(0, 60).map(x => [x[0], x[1], intIn(x[2], 0, 4, 0), intIn(x[3], 0, 4, 0)]),
+        turn: seatOr(M.turn, 'a'), first: seatOr(M.first, 'a'), win: isSeat(M.win) ? M.win : '', n: intIn(M.n, 1, 1e9, 1),
+      };
+      if (n.phase !== 'setup' && !(numOk(show(n.sec.a)) && numOk(show(n.sec.b)))) n.phase = 'setup';
+      if (n.phase === 'over' && !n.win) n.phase = 'play';
+      out.num = n;
+    }
+
+    const V = R.navi;
+    if (V && typeof V === 'object') {
+      const fl = V.fleet && typeof V.fleet === 'object' ? V.fleet : {};
+      const sh = V.shots && typeof V.shots === 'object' ? V.shots : {};
+      const okShots = x => (typeof x === 'string' && x.length === NV * NV && /^[0hm]+$/.test(x) ? x : '0'.repeat(NV * NV));
+      const v = {
+        phase: ['setup', 'play', 'over'].includes(V.phase) ? V.phase : 'setup',
+        fleet: { a: str(fl.a, 600), b: str(fl.b, 600) },
+        shots: { a: okShots(sh.a), b: okShots(sh.b) },
+        turn: seatOr(V.turn, 'a'), first: seatOr(V.first, 'a'), win: isSeat(V.win) ? V.win : '',
+        last: V.last && isSeat(V.last.s) && Number.isInteger(V.last.i) && V.last.i >= 0 && V.last.i < NV * NV ? { s: V.last.s, i: V.last.i } : null,
+        n: intIn(V.n, 1, 1e9, 1),
+      };
+      if (v.phase !== 'setup' && !(fleetOf(v, 'a') && fleetOf(v, 'b'))) v.phase = 'setup';
+      if (v.phase === 'over' && !v.win) v.phase = 'play';
+      out.navi = v;
+    }
+
+    const D = R.dom;
+    if (D && typeof D === 'object') {
+      const ans = D.ans && typeof D.ans === 'object' ? D.ans : {};
+      out.dom = {
+        q: intIn(D.q, 0, QUESTIONS.length - 1, 0),
+        ans: { a: str(ans.a, 1200), b: str(ans.b, 1200) },
+        hist: (Array.isArray(D.hist) ? D.hist : [])
+          .filter(h => Array.isArray(h) && Number.isInteger(h[0]) && h[0] >= 0 && h[0] < QUESTIONS.length && typeof h[1] === 'string' && typeof h[2] === 'string')
+          .slice(0, 10).map(h => [h[0], h[1].slice(0, 1200), h[2].slice(0, 1200)]),
+        n: intIn(D.n, 1, 1e9, 1),
+      };
+    }
+
+    const P = R.pick;
+    if (P && typeof P === 'object' && GAMES.includes(P.g)) {
+      out.pick = { g: P.g, n: intIn(P.n, 0, 1e9, 0), by: seatOr(P.by, 'a'), at: intIn(P.at, 0, 1e15, 0) };
+    }
+    return out;
+  }
+
+  // Whether it's this seat's move in a new game (true), the other's (false), or nobody's (null).
+  function yourMove(S, g, seat) {
+    switch (g) {
+      case 'c4': return c4Result(S.c4.cells) ? null : S.c4.turn === seat;
+      case 'sos': return sosOver(S.sos) ? null : S.sos.turn === seat;
+      case 'num': {
+        const q = S.num;
+        if (q.phase === 'over') return null;
+        if (q.phase === 'setup') return !q.sec[seat];
+        return q.turn === seat;
+      }
+      case 'navi': {
+        const q = S.navi;
+        if (q.phase === 'over') return null;
+        if (q.phase === 'setup') return !q.fleet[seat];
+        return q.turn === seat;
+      }
+      case 'dom': return S.dom.ans[seat] ? (S.dom.ans[other(seat)] ? null : false) : true;
+      default: return null;
+    }
+  }
+
+  return {
+    GAMES, EXTRA, QUESTIONS, C4R, C4C, SN, NV, FLEET,
+    hide, show, handles, apply, sanitizeExtra, freshExtra, yourMove,
+    c4Result, sosOver, sosFind, numOk, numScore, fleetOk, fleetOf, sunkList, randomFleet,
+  };
+})();
+</script>
 <script>
 (() => {
   'use strict';
   const G = Game;
   const NAMES = { a: 'Gabri', b: 'Ivi' };
-  const GAMES = ['imp', 'qua', 'tris'];
-  const TITLES = { imp: 'Impiccato', qua: 'Quadratini', tris: 'Tris' };
-  const WHERE = { imp: "sull'impiccato", qua: 'sui quadratini', tris: 'sul tris' };
+  const GAMES = Game2.GAMES;
+  const TITLES = { imp: 'Impiccato', qua: 'Quadratini', tris: 'Tris', c4: 'Quattro in fila', sos: 'SOS', num: 'Indovina il numero', navi: 'Battaglia navale', dom: 'Domanda della buonanotte' };
+  const WHERE = { imp: "sull'impiccato", qua: 'sui quadratini', tris: 'sul tris', c4: 'su quattro in fila', sos: 'su SOS', num: 'su indovina il numero', navi: 'sulla battaglia navale', dom: 'sulla domanda della buonanotte' };
   const SYM_NAMES = { x: 'Croce', o: 'Cerchio', s: 'Stella', h: 'Cuore', n: 'Nuvola', f: 'Fiore', l: 'Luna', u: 'Sole' };
-  const SECS = ['imp', 'qua', 'tris', 'players'];
-  const SEC_OF = {
-    'imp.set': 'imp', 'imp.swap': 'imp', 'imp.cancel': 'imp', 'imp.guess': 'imp', 'imp.next': 'imp',
-    'qua.line': 'qua', 'qua.new': 'qua', 'tris.play': 'tris', 'tris.page': 'tris', nick: 'players', sym: 'players',
+  const SECS = GAMES.concat(['players', 'pick']);
+  function secsOf(t) {
+    if (t === 'scores0') return GAMES.slice();
+    if (t === 'pick') return ['pick'];
+    if (t === 'nick' || t === 'sym') return ['players'];
+    const g = String(t).split('.')[0];
+    return GAMES.includes(g) ? [g] : [];
+  }
+  // One facade over the first three games (Game) and the newer ones (Game2).
+  const EXTRA_KEYS = ['c4', 'sos', 'num', 'navi', 'dom', 'pick'];
+  const GX = {
+    fresh() {
+      const st = G.fresh(), ex = Game2.freshExtra();
+      for (const k of EXTRA_KEYS) st[k] = ex[k];
+      Object.assign(st.score, ex.score);
+      return st;
+    },
+    sanitize(raw) {
+      const st = G.sanitize(raw);
+      if (!st) return null;
+      const ex = Game2.sanitizeExtra(raw);
+      for (const k of EXTRA_KEYS) st[k] = ex[k];
+      Object.assign(st.score, ex.score);
+      return st;
+    },
+    apply(S0, a) { return Game2.handles(a && a.t) ? Game2.apply(S0, a, G.cleanText) : G.apply(S0, a); },
   };
   const PEER_PREFIX = 'blocchetto-buonanotte-';
 
@@ -722,7 +1331,8 @@ const Game = (() => {
   const inviteLink = () => `${location.origin}${location.pathname}#k=${code}&p=${other()}`;
 
   /* ---------- state, saved on this phone ---------- */
-  let tab = GAMES.includes(store.get('blocchetto.tab')) ? store.get('blocchetto.tab') : 'imp';
+  const savedTab = store.get('blocchetto.tab');
+  let tab = GAMES.includes(savedTab) ? savedTab : 'home';
   const stateKey = () => `blocchetto.state.${code}.${seat}`;
   const intIn = (v, lo, hi) => (typeof v === 'number' && Number.isFinite(v) && v >= lo && v <= hi ? Math.trunc(v) : 0);
   function cleanMeta(m) {
@@ -734,12 +1344,12 @@ const Game = (() => {
     return out;
   }
   function withMeta(st, m) { st.meta = cleanMeta(m); return st; }
-  let S = withMeta(G.fresh(), null);
+  let S = withMeta(GX.fresh(), null);
   function load() {
     let raw = null;
     try { raw = JSON.parse(store.get(stateKey()) || 'null'); } catch (e) { raw = null; }
-    const st = raw && G.sanitize(raw);
-    S = withMeta(st || G.fresh(), st ? raw.meta : null);
+    const st = raw && GX.sanitize(raw);
+    S = withMeta(st || GX.fresh(), st ? raw.meta : null);
   }
   function save() { if (seat) store.set(stateKey(), JSON.stringify(S)); }
 
@@ -751,17 +1361,14 @@ const Game = (() => {
   }
   function act(a) {
     if (!seat) return false;
-    const N = G.apply(S, a);
+    const prev = S;
+    const N = GX.apply(S, a);
     if (!N) return false;
-    const secs = (a.t === 'scores0' ? ['imp', 'qua', 'tris'] : [SEC_OF[a.t]]).filter(Boolean);
-    const base = {};
-    for (const sec of secs) {
-      base[sec] = S.meta[sec].v;
-      N.meta[sec] = { v: S.meta[sec].v + 1, ts: Date.now(), by: seat };
-    }
+    const secs = secsOf(a.t);
+    for (const sec of secs) N.meta[sec] = { v: S.meta[sec].v + 1, ts: Date.now(), by: seat };
     S = N;
     save();
-    pushSections(secs, base);
+    pushAction(a, secs, prev);
     render();
     return true;
   }
@@ -802,7 +1409,7 @@ const Game = (() => {
     roomRef.child('sec').on('value', snap => {
       const val = snap.val() || {};
       applySections(val, []);
-      if (!synced) { synced = true; pushNewer(val); }
+      if (!synced) { synced = true; lastPickKey = pickKey(S.pick); pushNewer(val); }
       netError = '';
       render();
     }, () => {
@@ -841,7 +1448,7 @@ const Game = (() => {
     else if (type === 'call-decline' && callState === 'calling') { endCall(); toast(`${nameOf(other())} non può rispondere adesso.`); }
   }
 
-  const sectionPayload = sec => (sec === 'players' ? { players: S.players } : { g: S[sec], score: S.score[sec] });
+  const sectionPayload = sec => (sec === 'players' ? { players: S.players } : sec === 'pick' ? { pick: S.pick } : { g: S[sec], score: S.score[sec] });
   function applySections(val, forced) {
     const N = JSON.parse(JSON.stringify(S));
     let changed = false;
@@ -854,15 +1461,17 @@ const Game = (() => {
       try { data = JSON.parse(x.json); } catch (e) { continue; }
       const raw = JSON.parse(JSON.stringify(N));
       if (sec === 'players') raw.players = data && data.players;
+      else if (sec === 'pick') raw.pick = data && data.pick;
       else { raw[sec] = data && data.g; raw.score[sec] = data && data.score; }
-      const st = G.sanitize(raw);
+      const st = GX.sanitize(raw);
       if (!st) continue;
       if (sec === 'players') N.players = st.players;
+      else if (sec === 'pick') N.pick = st.pick;
       else { N[sec] = st[sec]; N.score[sec] = st.score[sec]; }
       N.meta[sec] = m;
       changed = true;
     }
-    if (changed) { S = N; save(); render(); }
+    if (changed) { S = N; save(); render(); checkPick(); }
   }
   // A move is written only if nobody changed that game in the meantime; otherwise the other move wins.
   function pushSections(secs, base) {
@@ -880,6 +1489,43 @@ const Game = (() => {
           applySections({ [sec]: snap.val() }, [sec]);
           toast(`Nel frattempo ha giocato ${nameOf(other())}.`);
         }
+      }, false);
+    }
+  }
+  // Each move is replayed on the shared copy inside a transaction: two moves made at the same moment
+  // (both placing ships, both answering) both land, and a move that is no longer valid is dropped.
+  function withSection(state, sec, x) {
+    if (!x || typeof x.json !== 'string') return null;
+    let data;
+    try { data = JSON.parse(x.json); } catch (e) { return null; }
+    const raw = JSON.parse(JSON.stringify(state));
+    if (sec === 'players') raw.players = data && data.players;
+    else if (sec === 'pick') raw.pick = data && data.pick;
+    else { raw[sec] = data && data.g; raw.score[sec] = data && data.score; }
+    const st = GX.sanitize(raw);
+    if (!st) return null;
+    const out = JSON.parse(JSON.stringify(state));
+    if (sec === 'players') out.players = st.players;
+    else if (sec === 'pick') out.pick = st.pick;
+    else { out[sec] = st[sec]; out.score[sec] = st.score[sec]; }
+    out.meta[sec] = cleanMeta({ [sec]: x })[sec];
+    return out;
+  }
+  function pushAction(a, secs, prev) {
+    if (!roomRef) return;
+    for (const sec of secs) {
+      roomRef.child('sec/' + sec).transaction(cur => {
+        const base = (cur && withSection(prev, sec, cur)) || prev;
+        const N = GX.apply(base, a);
+        if (!N) return undefined;
+        const v = (cur && typeof cur.v === 'number' ? cur.v : 0) + 1;
+        const payload = sec === 'players' ? { players: N.players } : sec === 'pick' ? { pick: N.pick } : { g: N[sec], score: N.score[sec] };
+        return { json: JSON.stringify(payload), v, ts: Date.now(), by: seat };
+      }, (err, committed, snap) => {
+        if (err) { toast('La mossa non è arrivata, controlla internet.'); return; }
+        const val = snap && snap.val();
+        if (val) applySections({ [sec]: val }, [sec]);
+        if (!committed && val && val.by !== seat) toast(`Nel frattempo ha giocato ${nameOf(other())}.`);
       }, false);
     }
   }
@@ -943,11 +1589,54 @@ const Game = (() => {
   let micOn = true, camOn = true, bigCall = false, needTap = false;
   const pos = { x: null, y: null };
 
+  const HQ = {
+    audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true, channelCount: { ideal: 1 }, sampleRate: { ideal: 48000 }, sampleSize: { ideal: 16 } },
+    video: { facingMode: 'user', width: { ideal: 1920 }, height: { ideal: 1080 }, frameRate: { ideal: 30, max: 30 } },
+  };
+  // The best the camera and microphone can give; 720p if the phone refuses Full HD.
   function getMedia() {
-    return navigator.mediaDevices.getUserMedia({
-      audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true },
-      video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 }, frameRate: { ideal: 24, max: 30 } },
+    return navigator.mediaDevices.getUserMedia(HQ).catch(e => {
+      if (e && (e.name === 'OverconstrainedError' || e.name === 'NotReadableError')) {
+        return navigator.mediaDevices.getUserMedia({ audio: true, video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } } });
+      }
+      throw e;
     });
+  }
+  // Let the call use the bandwidth it needs: Opus at full voice quality with loss protection, video up to about 4 Mbps.
+  function richSdp(sdp) {
+    const pt = (sdp.match(/a=rtpmap:(\d+) opus\/48000/i) || [])[1];
+    let video = false;
+    const out = [];
+    for (const l of sdp.split('\r\n')) {
+      if (l.startsWith('m=')) video = l.startsWith('m=video');
+      if (video && /^b=(AS|TIAS):/.test(l)) continue;
+      if (pt && l.startsWith(`a=fmtp:${pt} `)) {
+        const kept = l.slice(`a=fmtp:${pt} `.length).split(';').map(p => p.trim())
+          .filter(p => p && !/^(maxaveragebitrate|maxplaybackrate|useinbandfec|stereo)=/.test(p));
+        out.push(`a=fmtp:${pt} ` + kept.concat(['maxaveragebitrate=128000', 'maxplaybackrate=48000', 'useinbandfec=1', 'stereo=0']).join(';'));
+        continue;
+      }
+      out.push(l);
+      if (video && l.startsWith('c=')) out.push('b=AS:4000');
+    }
+    return out.join('\r\n');
+  }
+  function tuneSenders(m) {
+    const pc = m && m.peerConnection;
+    if (!pc || !pc.getSenders) return;
+    for (const snd of pc.getSenders()) {
+      if (!snd.track || !snd.getParameters || !snd.setParameters) continue;
+      const p = snd.getParameters();
+      if (!p.encodings || !p.encodings.length) continue;
+      if (snd.track.kind === 'video') {
+        p.encodings[0].maxBitrate = 4000000;
+        p.encodings[0].maxFramerate = 30;
+        p.degradationPreference = 'balanced';
+      } else {
+        p.encodings[0].maxBitrate = 128000;
+      }
+      snd.setParameters(p).catch(() => {});
+    }
   }
   function camError(e) {
     const n = e && e.name;
@@ -966,6 +1655,7 @@ const Game = (() => {
       if (media !== m) return;
       clearTimeout(ringTimer);
       callState = 'live';
+      tuneSenders(m);
       const v = $('#remote');
       v.srcObject = remote;
       v.play().then(() => { needTap = false; renderCall(); }).catch(() => { needTap = true; renderCall(); });
@@ -992,7 +1682,7 @@ const Game = (() => {
     }
     if (callState !== 'calling') { stopLocal(); return; }
     showLocal();
-    media = peer.call(peerId(other()), localStream);
+    media = peer.call(peerId(other()), localStream, { sdpTransform: richSdp });
     wireMedia(media);
     clearTimeout(ringTimer);
     ringTimer = setTimeout(() => {
@@ -1027,7 +1717,7 @@ const Game = (() => {
     pendingCall = null;
     media = c;
     wireMedia(c);
-    c.answer(localStream);
+    c.answer(localStream, { sdpTransform: richSdp });
     renderCall();
   }
   function declineCall() {
@@ -1285,7 +1975,7 @@ const Game = (() => {
   }
 
   /* ---------- views ---------- */
-  const ui = { sheet: false, confirm: '' };
+  const ui = { sheet: false, confirm: '', sosCh: 'S', numDraft: '', naviDraft: null, spinning: false };
   const seen = {};
   let animSig = '', animUntil = 0;
 
@@ -1481,6 +2171,368 @@ const Game = (() => {
     return { board, status, controls };
   }
 
+  /* ---------- new games ---------- */
+  function yourMove(g, s) {
+    if (Game2.EXTRA.includes(g)) return Game2.yourMove(S, g, s);
+    const t = G.turnOf(S, g);
+    return t ? t === s : null;
+  }
+  function restartCtl(g) {
+    return ui.confirm === 'restart-' + g
+      ? `<span class="ask">Ricominciamo?</span><button class="btn small" type="button" data-act="restart" data-g="${g}">Sì</button><button class="btn small ghost" type="button" data-act="cancel">No</button>`
+      : `<button class="btn ghost small" type="button" data-act="ask-restart" data-g="${g}">Ricomincia</button>`;
+  }
+  const tallyOf = (a, b) => `<span class="tally" aria-hidden="true"><span style="--c:var(--pen-a)">${esc(initialOf('a'))} ${a}</span><span style="--c:var(--pen-b)">${esc(initialOf('b'))} ${b}</span></span>`;
+  const coord = (i, n) => 'ABCDEFGH'[i % n] + (Math.floor(i / n) + 1);
+
+  function viewC4(anim) {
+    const q = S.c4, R = Game2.C4R, C = Game2.C4C, res = Game2.c4Result(q.cells);
+    const playable = !res && canAct(q.turn);
+    const s = 50, W = C * s, H = R * s;
+    let hits = '', holes = '', pieces = '';
+    if (playable) {
+      for (let c = 0; c < C; c++) if (q.cells[c] === '0') hits += `<rect class="col-hit" data-act="c4" data-col="${c}" x="${c * s}" y="-4" width="${s}" height="${H + 8}"/>`;
+    }
+    for (let r = 0; r < R; r++) {
+      for (let c = 0; c < C; c++) {
+        const i = r * C + c, o = q.cells[i], cx = c * s + s / 2, cy = r * s + s / 2;
+        holes += `<circle class="hole" cx="${cx}" cy="${cy}" r="19"/>`;
+        if (o !== '0') {
+          const fresh = anim && q.last === i;
+          pieces += `<g class="disc${fresh ? ' drop' : ''}" style="--c:var(--pen-${o});--dy:${-(cy + s)}px"><circle cx="${cx}" cy="${cy}" r="17"/><path class="pen thin" d="${penCircle(cx, cy, 17.5, 'c4' + q.n + i)}"/></g>`;
+        }
+      }
+    }
+    let line = '';
+    if (res && res.win) {
+      const p = i => [(i % C) * s + s / 2, Math.floor(i / C) * s + s / 2];
+      const [x1, y1] = p(res.line[0]), [x2, y2] = p(res.line[3]);
+      line = `<path class="pen win${anim ? ' fresh' : ''}" pathLength="1" style="--c:var(--ink)" d="${penLine(x1, y1, x2, y2, 'c4w' + q.n)}"/>`;
+    }
+    const board = `<div class="card"><svg class="c4" viewBox="-4 -4 ${W + 8} ${H + 8}" role="img" aria-label="Quattro in fila">${hits}${holes}${pieces}${line}</svg></div>`;
+    let status;
+    if (res && res.win) status = res.win === seat ? 'Quattro in fila! Hai vinto.' : `Quattro in fila di ${inkName(res.win)}.`;
+    else if (res) status = 'Pari, la griglia è piena.';
+    else status = turnLine(q.turn);
+    let controls = '';
+    if (res && canManage()) controls = '<button class="btn" type="button" data-act="new" data-g="c4">Nuova partita</button>';
+    else if (canManage() && /[ab]/.test(q.cells)) controls = restartCtl('c4');
+    return { board, status, controls };
+  }
+
+  function viewSos(anim) {
+    const q = S.sos, N = Game2.SN, over = Game2.sosOver(q), playable = !over && canAct(q.turn);
+    const s = 50, W = N * s;
+    let grid = '', hits = '', letters = '', lines = '';
+    for (let k = 1; k < N; k++) grid += `M${k * s} 4 V${W - 4} M4 ${k * s} H${W - 4} `;
+    for (let i = 0; i < N * N; i++) {
+      const ch = q.cells[i], r = Math.floor(i / N), c = i % N, cx = c * s + s / 2, cy = r * s + s / 2;
+      if (ch !== '.') letters += `<text class="sos-ch${anim && q.last === i ? ' pop' : ''}" x="${cx}" y="${cy + 2}" style="--c:var(--pen-${q.by[i]})">${ch}</text>`;
+      else if (playable) hits += `<rect class="cell-hit" data-act="sos" data-i="${i}" x="${c * s}" y="${r * s}" width="${s}" height="${s}"/>`;
+    }
+    const pt = i => [(i % N) * s + s / 2, Math.floor(i / N) * s + s / 2];
+    q.lines.forEach((l, k) => {
+      let [x1, y1] = pt(l[0]), [x2, y2] = pt(l[2]);
+      const len = Math.hypot(x2 - x1, y2 - y1) || 1, ex = (x2 - x1) / len * 14, ey = (y2 - y1) / len * 14;
+      x1 -= ex; y1 -= ey; x2 += ex; y2 += ey;
+      const fresh = anim && q.mk && k >= q.lines.length - q.mk;
+      lines += `<path class="pen sos-line${fresh ? ' fresh' : ''}" pathLength="1" style="--c:var(--pen-${l[3]})" d="${penLine(x1, y1, x2, y2, 'sl' + q.n + k)}"/>`;
+    });
+    const board = `<div class="card"><svg class="sosg" viewBox="0 0 ${W} ${W}" role="img" aria-label="SOS">${hits}<path class="print" d="${grid}"/>${lines}${letters}</svg></div>`;
+    let status;
+    if (over) status = q.pts.a === q.pts.b ? `Pari, ${q.pts.a} a ${q.pts.b}.` : `Ha vinto ${inkName(q.pts.a > q.pts.b ? 'a' : 'b')}, ${Math.max(q.pts.a, q.pts.b)} a ${Math.min(q.pts.a, q.pts.b)}.`;
+    else if (q.mk) status = seat === q.turn ? 'SOS! Ancora tu.' : `SOS! Gioca ancora ${inkName(q.turn)}.`;
+    else status = turnLine(q.turn);
+    status += ' ' + tallyOf(q.pts.a, q.pts.b);
+    let controls = '';
+    if (!over && canManage()) {
+      controls += `<div class="seg" role="group" aria-label="Lettera da scrivere"><span class="seg-label">Scrivi</span>` +
+        ['S', 'O'].map(ch => `<button class="letter-btn" type="button" data-act="sos-letter" data-ch="${ch}" aria-pressed="${ui.sosCh === ch}" style="--c:var(--pen-${seat})">${ch}</button>`).join('') + '</div>';
+      if (/[SO]/.test(q.cells)) controls += restartCtl('sos');
+    }
+    if (over && canManage()) controls = '<button class="btn" type="button" data-act="new" data-g="sos">Nuova partita</button>';
+    return { board, status, controls };
+  }
+
+  function numPad(label, okLabel) {
+    const d = ui.numDraft;
+    let h = `<div class="numpad"><div class="slots4" aria-label="${label}: ${d.split('').join(' ') || 'vuoto'}" style="--c:var(--pen-${seat})">`;
+    for (let k = 0; k < 4; k++) h += `<span>${d[k] || ''}</span>`;
+    h += '</div><div class="keypad">';
+    for (const k of ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']) h += `<button class="key2" type="button" data-act="num-key" data-d="${k}"${d.includes(k) || d.length >= 4 ? ' disabled' : ''}>${k}</button>`;
+    h += `</div><div class="row"><button class="btn" type="button" data-act="num-ok"${d.length === 4 ? '' : ' disabled'}>${okLabel}</button><button class="btn ghost" type="button" data-act="num-del"${d ? '' : ' disabled'}>Cancella</button></div></div>`;
+    return h;
+  }
+  function viewNum(anim) {
+    const q = S.num, o = other(), lastIdx = q.guesses.length - 1;
+    const col = s2 => {
+      let h = `<div class="ncol" style="--c:var(--pen-${s2})"><div class="ncol-h">${s2 === seat ? 'I tuoi tentativi' : 'Tentativi di ' + esc(nameOf(s2))}</div>`;
+      let any = false;
+      q.guesses.forEach((g, k) => {
+        if (g[0] !== s2) return;
+        any = true;
+        h += `<div class="nrow${anim && k === lastIdx ? ' pop' : ''}"><span class="ndig">${g[1]}</span><span class="nfb" role="img" aria-label="${g[2]} al posto giusto, ${g[3]} spostate">${'<i class="b"></i>'.repeat(g[2])}${'<i class="c"></i>'.repeat(g[3])}${'<i class="z"></i>'.repeat(4 - g[2] - g[3])}</span></div>`;
+      });
+      if (!any) h += '<p class="nempty">Ancora nessuno</p>';
+      return h + '</div>';
+    };
+    const board = `<div class="card numg">${col(seat)}${col(o)}<p class="nlegend"><span><i class="dotb"></i> cifra al posto giusto</span><span><i class="dotc"></i> cifra giusta ma spostata</span></p></div>`;
+    const mine = Game2.show(q.sec[seat]);
+    let status, controls = '';
+    if (q.phase === 'setup') {
+      if (!q.sec[seat]) {
+        status = 'Scegli il tuo numero segreto: 4 cifre, tutte diverse.';
+        if (canManage()) controls = numPad('Il tuo numero', 'Fatto');
+      } else {
+        status = `Il tuo numero è <span class="reveal">${esc(mine)}</span>. ${inkName(o)} sta scegliendo il suo…`;
+      }
+    } else if (q.phase === 'play') {
+      if (canAct(q.turn)) {
+        status = 'Tocca a te: prova un numero.';
+        controls = numPad('Il tuo tentativo', 'Prova');
+      } else {
+        status = turnLine(q.turn) + ` <span class="count">Il tuo numero: ${esc(mine)}</span>`;
+      }
+      if (canManage()) controls += restartCtl('num');
+    } else {
+      const theirs = Game2.show(q.sec[o]);
+      status = q.win === seat ? `Indovinato! Il numero di ${inkName(o)} era <span class="reveal">${esc(theirs)}</span>.` : `${inkName(q.win)} ha indovinato il tuo numero, <span class="reveal">${esc(mine)}</span>.`;
+      if (canManage()) controls = '<button class="btn" type="button" data-act="new" data-g="num">Nuova partita</button>';
+    }
+    return { board, status, controls };
+  }
+
+  function seaSVG(opts) {
+    const NV = Game2.NV, s = 40, m = 22, W = NV * s;
+    let h = `<svg class="sea${opts.mine ? ' mine' : ''}" viewBox="${-m} ${-m} ${W + m + 4} ${W + m + 4}" role="img" aria-label="${opts.label}">`;
+    for (let k = 0; k < NV; k++) h += `<text class="lab" x="${k * s + s / 2}" y="${-m / 2}">${'ABCDEFGH'[k]}</text><text class="lab" x="${-m / 2}" y="${k * s + s / 2}">${k + 1}</text>`;
+    let grid = '';
+    for (let k = 0; k <= NV; k++) grid += `M${k * s} 0 V${W} M0 ${k * s} H${W} `;
+    if (opts.tap) for (let i = 0; i < NV * NV; i++) if (opts.shots[i] === '0') h += `<rect class="sea-hit" data-act="navi-shot" data-i="${i}" x="${(i % NV) * s}" y="${Math.floor(i / NV) * s}" width="${s}" height="${s}"/>`;
+    h += `<path class="print" d="${grid}"/>`;
+    (opts.ships || []).forEach((sh, k) => {
+      const rows = sh.map(i => Math.floor(i / NV)), cols = sh.map(i => i % NV);
+      const x = Math.min(...cols) * s + 5, y = Math.min(...rows) * s + 5, w = (Math.max(...cols) - Math.min(...cols) + 1) * s - 10, hh = (Math.max(...rows) - Math.min(...rows) + 1) * s - 10;
+      h += `<rect class="ship${opts.sunk && opts.sunk[k] ? ' sunk' : ''}" x="${x}" y="${y}" width="${w}" height="${hh}" rx="14" style="--c:var(--pen-${opts.owner})"/>`;
+    });
+    for (let i = 0; i < NV * NV; i++) {
+      const v = opts.shots[i];
+      if (v === '0') continue;
+      const cx = (i % NV) * s + s / 2, cy = Math.floor(i / NV) * s + s / 2, fresh = opts.fresh === i;
+      if (v === 'm') h += `<circle class="miss${fresh ? ' pop' : ''}" cx="${cx}" cy="${cy}" r="5"/>`;
+      else h += `<path class="pen shot-hit${fresh ? ' fresh' : ''}" pathLength="1" style="--c:var(--pen-${opts.shooter})" d="${penLine(cx - 11, cy - 11, cx + 11, cy + 11, 'h' + i + opts.shooter)} ${penLine(cx + 11, cy - 11, cx - 11, cy + 11, 'k' + i + opts.shooter)}"/>`;
+    }
+    return h + '</svg>';
+  }
+  function viewNavi(anim) {
+    const q = S.navi, o = other(), NV = Game2.NV;
+    const placed = Game2.fleetOf(q, seat);
+    if (q.phase === 'setup' && !placed && !ui.naviDraft) ui.naviDraft = Game2.randomFleet(Math.random);
+    const myShips = placed || ui.naviDraft || [];
+    const enemy = q.phase !== 'setup' ? Game2.fleetOf(q, o) : null;
+    const enemySunk = enemy ? Game2.sunkList(enemy, q.shots[seat]) : [];
+    const mySunk = Game2.sunkList(myShips, q.shots[o]);
+    const freshMine = anim && q.last && q.last.s === seat ? q.last.i : -1;
+    const freshTheirs = anim && q.last && q.last.s === o ? q.last.i : -1;
+    let board = '<div class="card navig">';
+    if (q.phase === 'setup') {
+      board += `<p class="sea-h">Il tuo mare</p>${seaSVG({ label: 'Le tue navi', ships: myShips, owner: seat, shots: '0'.repeat(NV * NV), shooter: o })}`;
+    } else {
+      board += `<p class="sea-h">Il mare di ${esc(nameOf(o))}</p>`;
+      board += seaSVG({ label: 'Il mare dove spari', ships: enemy ? enemy.filter((_, k) => enemySunk[k] || q.phase === 'over') : [], sunk: enemy ? enemy.map(() => true) : [], owner: o, shots: q.shots[seat], shooter: seat, tap: q.phase === 'play' && canAct(q.turn), fresh: freshMine });
+      board += `<p class="sea-h">Il tuo mare</p>${seaSVG({ label: 'Le tue navi', mine: true, ships: myShips, sunk: mySunk, owner: seat, shots: q.shots[o], shooter: o, fresh: freshTheirs })}`;
+    }
+    board += '</div>';
+    const shotText = last => {
+      const fleet = last.s === seat ? enemy : myShips;
+      const shots = q.shots[last.s];
+      if (shots[last.i] !== 'h') return 'acqua';
+      const ship = fleet && fleet.find(sh => sh.includes(last.i));
+      return ship && ship.every(i => shots[i] === 'h') ? 'colpita e affondata' : 'colpita';
+    };
+    let status, controls = '';
+    if (q.phase === 'setup') {
+      if (!placed) {
+        status = 'Ecco le tue navi. Rimescola finché ti piacciono, poi premi «Pronto».';
+        if (canManage()) controls = '<button class="btn" type="button" data-act="navi-ready">Pronto</button><button class="btn ghost" type="button" data-act="navi-shuffle">Rimescola</button>';
+      } else {
+        status = `Navi pronte. ${inkName(o)} sta disponendo le sue…`;
+        if (canManage()) controls = '<button class="btn ghost small" type="button" data-act="navi-shuffle">Rimescola le mie navi</button>';
+      }
+    } else if (q.phase === 'play') {
+      const pre = q.last ? (q.last.s === seat ? `${coord(q.last.i, NV)}: ${shotText(q.last)}! ` : `${esc(nameOf(o))} ha sparato in ${coord(q.last.i, NV)}: ${shotText(q.last)}. `) : '';
+      status = pre + (canAct(q.turn) ? 'Tocca a te: spara nel mare di ' + inkName(o) + '.' : turnLine(q.turn));
+      if (canManage()) controls = restartCtl('navi');
+    } else {
+      status = q.win === seat ? `Hai affondato tutta la flotta di ${inkName(o)}!` : `${inkName(q.win)} ha affondato tutta la tua flotta.`;
+      if (canManage()) controls = '<button class="btn" type="button" data-act="new" data-g="navi">Nuova partita</button>';
+    }
+    return { board, status, controls };
+  }
+
+  function viewDom() {
+    const d = S.dom, o = other(), q = Game2.QUESTIONS[d.q];
+    const mine = Game2.show(d.ans[seat]), theirs = Game2.show(d.ans[o]);
+    const both = !!(d.ans.a && d.ans.b);
+    let board = `<div class="card domc"><p class="dom-q">${esc(q)}</p>`;
+    if (both) {
+      board += `<div class="dom-ans"><div class="ans" style="--c:var(--pen-${seat})"><span class="who">${esc(nameOf(seat))}</span><p>${esc(mine)}</p></div><div class="ans" style="--c:var(--pen-${o})"><span class="who">${esc(nameOf(o))}</span><p>${esc(theirs)}</p></div></div>`;
+    } else if (d.ans[seat]) {
+      board += `<div class="dom-ans"><div class="ans" style="--c:var(--pen-${seat})"><span class="who">La tua risposta</span><p>${esc(mine)}</p></div></div>`;
+    }
+    if (d.hist.length) {
+      board += '<details class="dom-hist"><summary>Le domande delle altre sere</summary>';
+      d.hist.slice(0, 5).forEach(h => {
+        const [ha, hb] = [Game2.show(h[1]), Game2.show(h[2])];
+        board += `<p class="hq">${esc(Game2.QUESTIONS[h[0]])}</p><p class="ha" style="--c:var(--pen-a)">${esc(nameOf('a'))}: ${esc(ha)}</p><p class="ha" style="--c:var(--pen-b)">${esc(nameOf('b'))}: ${esc(hb)}</p>`;
+      });
+      board += '</details>';
+    }
+    board += '</div>';
+    let status, controls = '';
+    if (both) {
+      status = 'Ecco le vostre risposte.';
+      if (canManage()) controls = '<button class="btn" type="button" data-act="dom-next">Un’altra domanda</button>';
+    } else if (d.ans[seat]) {
+      status = `Aspettiamo la risposta di ${inkName(o)}.`;
+    } else {
+      status = d.ans[o] ? `${inkName(o)} ha già risposto. Le risposte si vedono quando rispondi anche tu.` : 'Scrivi la tua risposta: la vedrete insieme quando avete risposto tutti e due.';
+      if (canManage()) {
+        controls = `<form id="dom-form" class="form dom-form" autocomplete="off" novalidate><label class="lbl" for="dom-text">La tua risposta</label><textarea class="line-input" id="dom-text" name="text" rows="3" maxlength="280" enterkeyhint="send"></textarea><p id="dom-err" class="err" role="alert"></p><div class="row"><button class="btn" type="submit">Invia</button>${d.ans[o] ? '' : '<button class="btn ghost" type="button" data-act="dom-skip">Cambia domanda</button>'}</div></form>`;
+      }
+    }
+    return { board, status, controls };
+  }
+
+  /* ---------- index of games and the random wheel ---------- */
+  const TILTS = [-1.4, 1.1, 0.8, -1, 1.3, -0.7, -1.2, 0.9];
+  const DICE = '<svg viewBox="0 0 32 32" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="24" height="24" rx="6"/><circle cx="11" cy="11" r="1.7" fill="currentColor"/><circle cx="21" cy="11" r="1.7" fill="currentColor"/><circle cx="16" cy="16" r="1.7" fill="currentColor"/><circle cx="11" cy="21" r="1.7" fill="currentColor"/><circle cx="21" cy="21" r="1.7" fill="currentColor"/></svg>';
+  function cardState(g) {
+    const m = synced ? yourMove(g, seat) : undefined;
+    if (m === true) return { text: g === 'dom' ? 'Rispondi' : 'Tocca a te', mine: true };
+    if (m === false) return { text: g === 'dom' ? 'Hai risposto' : `Tocca a ${nameOf(other())}`, mine: false };
+    if (m === null) return { text: g === 'dom' ? 'Risposte pronte' : 'Partita finita', mine: false };
+    return { text: '…', mine: false };
+  }
+  function homeHTML() {
+    let h = `<button class="spin-btn" type="button" data-act="spin"${ui.spinning || !synced ? ' disabled' : ''}>${DICE}Gira la ruota</button><div class="cards">`;
+    GAMES.forEach((g, k) => {
+      const st = cardState(g);
+      h += `<button class="gcard" type="button" data-act="open" data-g="${g}" data-game="${g}" style="--tilt:${TILTS[k]}deg"><span class="gname">${TITLES[g]}</span><span class="gstate${st.mine ? ' mine' : ''}" style="--c:var(--pen-${seat})">${esc(st.text)}</span></button>`;
+    });
+    return h + '</div>';
+  }
+
+  let actx = null;
+  function audio() {
+    try {
+      actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+      if (actx.state === 'suspended') actx.resume().catch(() => {});
+      return actx;
+    } catch (e) {
+      return null;
+    }
+  }
+  function blip(freq, dur, vol, type) {
+    const c = audio();
+    if (!c || c.state !== 'running') return;
+    const t = c.currentTime, o = c.createOscillator(), g = c.createGain();
+    o.type = type || 'sine';
+    o.frequency.value = freq;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(vol, t + 0.006);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g).connect(c.destination);
+    o.start(t);
+    o.stop(t + dur + 0.02);
+  }
+  const tick = () => blip(1500, 0.035, 0.07, 'triangle');
+  const chime = () => { blip(784, 0.3, 0.13); setTimeout(() => blip(1175, 0.45, 0.13), 130); };
+  document.addEventListener('pointerdown', () => { audio(); }, { passive: true });
+
+  const REEL_H = 84;
+  let lastPickKey = null, spinPending = null;
+  const pickKey = p => (p ? `${p.n}:${p.g}:${p.by}` : '');
+  // Both phones land on the same game: the pick travels through Firebase, the spin is only the show.
+  function checkPick() {
+    if (lastPickKey === null || !S.pick || !S.pick.n) return;
+    const key = pickKey(S.pick);
+    if (key === lastPickKey) return;
+    lastPickKey = key;
+    if (Math.abs(Date.now() - S.pick.at) > 20000 || !GAMES.includes(S.pick.g)) return;
+    spin(S.pick.g, S.pick.by);
+  }
+  function startSpin() {
+    if (ui.spinning || !synced) return;
+    audio();
+    const choices = GAMES.filter(g => g !== S.pick.g);
+    const g = choices[Math.floor(Math.random() * choices.length)];
+    if (act({ t: 'pick', seat, g })) {
+      lastPickKey = pickKey(S.pick);
+      spin(g, seat);
+    }
+  }
+  function spin(target, by) {
+    if (ui.spinning) { spinPending = { target, by }; return; }
+    ui.spinning = true;
+    const el = $('#spin'), reel = $('#reel');
+    $('#spin-title').textContent = by === seat ? 'Si gioca a…' : `${nameOf(by)} ha girato la ruota…`;
+    const len = GAMES.length, start = Math.floor(Math.random() * len), ti = GAMES.indexOf(target);
+    const F = 4 * len + ((ti - start + len) % len);
+    let h = '';
+    for (let k = -1; k <= F + 1; k++) {
+      const g = GAMES[(((start + k) % len) + len) % len];
+      h += `<div class="rcard" data-game="${g}"><span>${TITLES[g]}</span></div>`;
+    }
+    reel.innerHTML = h;
+    el.classList.remove('done');
+    el.hidden = false;
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const T = reduce ? 0 : 3600, t0 = performance.now();
+    let lastTick = 0;
+    const place = idx => { reel.style.transform = `translate3d(0, ${(-idx * REEL_H).toFixed(2)}px, 0)`; };
+    const land = () => {
+      place(F);
+      const win = reel.children[F + 1];
+      if (win) win.classList.add('win');
+      el.classList.add('done');
+      chime();
+      setTimeout(() => {
+        el.hidden = true;
+        reel.innerHTML = '';
+        ui.spinning = false;
+        if (spinPending) {
+          const p = spinPending;
+          spinPending = null;
+          spin(p.target, p.by);
+        } else {
+          setTab(target, true);
+        }
+      }, 1400);
+    };
+    const frame = now => {
+      const t = T ? Math.min(1, (now - t0) / T) : 1;
+      const idx = (1 - Math.pow(1 - t, 4)) * F;
+      place(idx);
+      const near = Math.round(idx);
+      if (near !== lastTick) { lastTick = near; if (t < 1) tick(); }
+      if (t < 1) requestAnimationFrame(frame);
+      else land();
+    };
+    place(0);
+    requestAnimationFrame(frame);
+    render();
+  }
+
+  function pickQuestion() {
+    const used = new Set([S.dom.q].concat(S.dom.hist.map(h => h[0])));
+    const all = Game2.QUESTIONS.map((_, i) => i);
+    const free = all.filter(i => !used.has(i));
+    const pool = free.length ? free : all.filter(i => i !== S.dom.q);
+    return pool[Math.floor(Math.random() * pool.length)];
+  }
+  const VIEWS = { imp: viewImp, qua: viewQua, tris: viewTris, c4: viewC4, sos: viewSos, num: viewNum, navi: viewNavi, dom: viewDom };
+
   function whoHTML() {
     const o = other(), name = esc(nameOf(o)), t = partnerTabNow();
     let text = `${name} non c’è`;
@@ -1513,18 +2565,6 @@ const Game = (() => {
     if (keep) {
       const i = document.getElementById(keep.id);
       if (i) { i.focus({ preventScroll: true }); try { i.setSelectionRange(keep.s, keep.e); } catch (e) { /* not a text field */ } }
-    }
-  }
-
-  function renderTabs() {
-    for (const g of GAMES) {
-      const b = $('#tab-' + g);
-      b.setAttribute('aria-selected', String(g === tab));
-      b.tabIndex = g === tab ? 0 : -1;
-      const badge = b.querySelector('.badge');
-      const yours = !!seat && G.turnOf(S, g) === seat;
-      badge.hidden = !yours;
-      if (yours) badge.style.setProperty('--c', `var(--pen-${seat})`);
     }
   }
 
@@ -1564,24 +2604,29 @@ const Game = (() => {
   function render() {
     renderGate();
     if (!seat) return;
-    const sig = JSON.stringify(S[tab]);
-    let anim = false;
-    if (seen.imp === undefined) { for (const g of GAMES) seen[g] = JSON.stringify(S[g]); }
-    else if (seen[tab] !== sig) { seen[tab] = sig; animSig = tab + sig; animUntil = Date.now() + 900; anim = true; }
-    else if (animSig === tab + sig && Date.now() < animUntil) anim = true;
-
     setHTML($('#who'), whoHTML());
-    renderTabs();
-    const page = $('#page');
-    page.dataset.game = tab;
-    page.setAttribute('aria-labelledby', 'tab-' + tab);
-    $('#page-title').textContent = TITLES[tab];
-    const v = tab === 'imp' ? viewImp(anim) : tab === 'qua' ? viewQua(anim) : viewTris(anim);
-    setHTML($('#page-score'), scoreHTML(tab));
-    setHTML($('#board'), v.board);
-    setHTML($('#status'), v.status);
-    setHTML($('#controls'), v.controls);
-    $('#controls').hidden = !v.controls;
+    const home = tab === 'home';
+    $('#home').hidden = !home;
+    $('#crumbs').hidden = home;
+    $('#page').hidden = home;
+    if (home) {
+      setHTML($('#home'), homeHTML());
+    } else {
+      const sig = JSON.stringify(S[tab]);
+      let anim = false;
+      if (seen.imp === undefined) { for (const g of GAMES) seen[g] = JSON.stringify(S[g]); }
+      else if (seen[tab] !== sig) { seen[tab] = sig; animSig = tab + sig; animUntil = Date.now() + 900; anim = true; }
+      else if (animSig === tab + sig && Date.now() < animUntil) anim = true;
+      $('#page').dataset.game = tab;
+      $('#page-title').textContent = TITLES[tab];
+      const v = VIEWS[tab](anim);
+      $('#page-score').hidden = tab === 'dom';
+      setHTML($('#page-score'), scoreHTML(tab));
+      setHTML($('#board'), v.board);
+      setHTML($('#status'), v.status);
+      setHTML($('#controls'), v.controls);
+      $('#controls').hidden = !v.controls;
+    }
     const note = noteHTML();
     setHTML($('#note'), note);
     $('#note').hidden = !note;
@@ -1591,12 +2636,19 @@ const Game = (() => {
 
   /* ---------- input ---------- */
   function setTab(t) {
-    if (!GAMES.includes(t) || t === tab) return;
+    if (!(t === 'home' || GAMES.includes(t)) || t === tab) return;
     tab = t;
     ui.confirm = '';
     store.set('blocchetto.tab', t);
     updatePresence();
     render();
+    window.scrollTo(0, 0);
+    if (t !== 'home') {
+      const p = $('#page');
+      p.classList.remove('enter');
+      void p.offsetWidth;
+      p.classList.add('enter');
+    }
   }
   function openSheet() {
     ui.sheet = true;
@@ -1656,6 +2708,47 @@ const Game = (() => {
       case 'tap-audio':
         $('#remote').play().then(() => { needTap = false; renderCall(); }).catch(() => {});
         break;
+      case 'home': setTab('home'); break;
+      case 'open': setTab(el.getAttribute('data-g')); break;
+      case 'spin': startSpin(); break;
+      case 'new': {
+        const g = el.getAttribute('data-g');
+        if (g === 'navi') ui.naviDraft = null;
+        act({ t: g + '.new', seat });
+        break;
+      }
+      case 'ask-restart': ui.confirm = 'restart-' + el.getAttribute('data-g'); render(); break;
+      case 'restart': {
+        const g = el.getAttribute('data-g');
+        ui.confirm = '';
+        if (g === 'navi') ui.naviDraft = null;
+        act({ t: g + '.new', seat, force: true });
+        render();
+        break;
+      }
+      case 'c4': act({ t: 'c4.drop', seat, col: Number(el.getAttribute('data-col')) }); break;
+      case 'sos-letter': ui.sosCh = el.getAttribute('data-ch') === 'O' ? 'O' : 'S'; render(); break;
+      case 'sos': act({ t: 'sos.play', seat, i: Number(el.getAttribute('data-i')), ch: ui.sosCh }); break;
+      case 'num-key': {
+        const d = el.getAttribute('data-d');
+        if (ui.numDraft.length < 4 && !ui.numDraft.includes(d)) { ui.numDraft += d; render(); }
+        break;
+      }
+      case 'num-del': ui.numDraft = ui.numDraft.slice(0, -1); render(); break;
+      case 'num-ok': {
+        const t = S.num.phase === 'setup' ? 'num.secret' : 'num.guess';
+        if (act({ t, seat, code: ui.numDraft })) { ui.numDraft = ''; render(); }
+        break;
+      }
+      case 'navi-shuffle':
+        ui.naviDraft = Game2.randomFleet(Math.random);
+        if (Game2.fleetOf(S.navi, seat)) act({ t: 'navi.place', seat, ships: ui.naviDraft });
+        else render();
+        break;
+      case 'navi-ready': if (ui.naviDraft) act({ t: 'navi.place', seat, ships: ui.naviDraft }); break;
+      case 'navi-shot': act({ t: 'navi.shot', seat, i: Number(el.getAttribute('data-i')) }); break;
+      case 'dom-next': act({ t: 'dom.next', seat, q: pickQuestion() }); break;
+      case 'dom-skip': act({ t: 'dom.skip', seat, q: pickQuestion() }); break;
       case 'guess': act({ t: 'imp.guess', seat, ch: el.getAttribute('data-ch') }); break;
       case 'imp-swap': act({ t: 'imp.swap', seat }); break;
       case 'imp-next': act({ t: 'imp.next', seat }); break;
@@ -1681,6 +2774,14 @@ const Game = (() => {
   });
 
   document.addEventListener('submit', e => {
+    if (e.target.id === 'dom-form') {
+      e.preventDefault();
+      const txt = G.cleanText(e.target.elements.text.value, 280);
+      if (!txt) { $('#dom-err').textContent = 'Scrivi qualcosa prima di inviare.'; return; }
+      if (document.activeElement) document.activeElement.blur();
+      act({ t: 'dom.answer', seat, text: txt });
+      return;
+    }
     if (e.target.id !== 'imp-form') return;
     e.preventDefault();
     const form = e.target;
@@ -1709,15 +2810,6 @@ const Game = (() => {
       const v = G.impView(S.imp);
       if (S.imp.phase === 'play' && !v.over && canAct(v.guesser)) act({ t: 'imp.guess', seat, ch: e.key.toUpperCase() });
     }
-  });
-
-  $('#tabs').addEventListener('keydown', e => {
-    const i = GAMES.indexOf(tab);
-    const n = e.key === 'ArrowRight' ? (i + 1) % 3 : e.key === 'ArrowLeft' ? (i + 2) % 3 : e.key === 'Home' ? 0 : e.key === 'End' ? 2 : -1;
-    if (n < 0) return;
-    e.preventDefault();
-    setTab(GAMES[n]);
-    $('#tab-' + GAMES[n]).focus();
   });
 
   if (seat) load();
