@@ -679,12 +679,12 @@ button.tback:active { transform: scale(.95); }
 @keyframes yay { 50% { scale: 1.1; } }
 
 /* disegna e indovina */
-.disc { display: grid; gap: 10px; }
+.dcard { display: grid; gap: 10px; }
 .dis-word { margin: 0; font-size: 15px; font-weight: 700; color: var(--ink-soft); }
 .dis-word b { font: 400 26px/1 var(--f-hand); color: var(--ink); }
 .dsheet-wrap { border-radius: 14px; overflow: hidden; box-shadow: inset 0 0 0 2px var(--paper-2), 0 0 0 2px var(--paper-2); }
 .dsheet { display: block; width: 100%; height: auto; aspect-ratio: 1; }
-.dsheet.can { touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; cursor: crosshair; }
+.dsheet-wrap.can, .dsheet.can { touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; cursor: crosshair; }
 .dpaper { fill: var(--paper); }
 .dstroke { fill: none; stroke-linecap: round; stroke-linejoin: round; }
 .dstroke.ink0 { stroke: var(--ink); } .dstroke.ink1 { stroke: var(--pen-a); } .dstroke.ink2 { stroke: var(--pen-b); }
@@ -729,17 +729,17 @@ button.tback:active { transform: scale(.95); }
 .ncc-mine span { font-size: 13px; font-weight: 800; color: var(--ink-soft); }
 .ncc-mine b { font: 400 22px/1.15 var(--f-hand); color: var(--c); overflow-wrap: anywhere; }
 .ncc-table { display: grid; }
-.nrow { display: grid; grid-template-columns: 70px minmax(0, 1fr) minmax(0, 1fr); align-items: start; gap: 8px; padding: 8px 0; border-bottom: 1.5px dashed var(--paper-2); }
-.nrow.head { padding-top: 0; }
-.nrow.head span { font-size: 14px; font-weight: 800; color: var(--c); }
+.ncrow { display: grid; grid-template-columns: 70px minmax(0, 1fr) minmax(0, 1fr); align-items: start; gap: 8px; padding: 8px 0; border-bottom: 1.5px dashed var(--paper-2); }
+.ncrow.head { padding-top: 0; }
+.ncrow.head span { font-size: 14px; font-weight: 800; color: var(--c); }
 .ncat { padding-top: 5px; font-size: 12px; font-weight: 800; color: var(--ink-soft); line-height: 1.15; }
 .nw { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 6px; min-width: 0; }
 .nw b { font: 400 21px/1.15 var(--f-hand); color: var(--c); overflow-wrap: anywhere; }
 .nw.no b { text-decoration: line-through; text-decoration-thickness: 2px; opacity: .55; }
 .np { font-style: normal; font-size: 12px; font-weight: 800; color: var(--ink-soft); }
 .veto { flex-basis: 100%; padding: 2px 0; border: 0; background: none; color: var(--ink-soft); font-size: 12px; font-weight: 700; text-align: left; text-decoration: underline; cursor: pointer; }
-.nrow.tot { border-bottom: 0; }
-.nrow.tot span:not(.ncat) { font: 400 28px/1 var(--f-hand); color: var(--c); }
+.ncrow.tot { border-bottom: 0; }
+.ncrow.tot span:not(.ncat) { font: 400 28px/1 var(--f-hand); color: var(--c); }
 .ncc-hist { padding: 10px 0 0; font-size: 14px; color: var(--ink-soft); }
 .ncc-hist summary { cursor: pointer; font-weight: 800; color: var(--ink); }
 .ncc-hist p { display: flex; gap: 14px; align-items: baseline; margin: 6px 0 0; }
@@ -772,6 +772,10 @@ button.tback:active { transform: scale(.95); }
 @media (prefers-reduced-motion: reduce) {
   .bcard.on.in-me, .bcard.on.in-op, .bri-hand.live .bcard.hand, .mcard.flip .inner, .mcard.unflip .inner, .mcard.nope .front, .mcard.yay .front, .ncc-letter.pop, .ncc-stop { animation: none; }
 }
+
+/* a long press never selects text or opens the callout; the fields you type in still work as usual */
+html { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+input, textarea { -webkit-user-select: text; user-select: text; -webkit-touch-callout: default; }
 </style>
 </head>
 <body>
@@ -3760,7 +3764,7 @@ const Game3 = (() => {
     return d + ` L${xl} ${yl}`;
   }
   const strokeSVG = ([c, w, p]) => `<path class="dstroke ink${c}" stroke-width="${DIS_W[w]}" d="${smoothPath(decodePts(p))}"/>`;
-  const sheetHTML = (q, can) => `<div class="dsheet-wrap"><svg class="dsheet${can ? ' can' : ''}" id="dis-sheet" viewBox="0 0 1000 1000" role="img" aria-label="Il disegno"><rect class="dpaper" width="1000" height="1000"/><g id="dis-strokes">${q.strokes.map(strokeSVG).join('')}</g><path id="dis-live" class="dstroke"/></svg></div>`;
+  const sheetHTML = (q, can) => `<div class="dsheet-wrap${can ? ' can' : ''}"><svg class="dsheet${can ? ' can' : ''}" id="dis-sheet" viewBox="0 0 1000 1000" role="img" aria-label="Il disegno"><rect class="dpaper" width="1000" height="1000"/><g id="dis-strokes">${q.strokes.map(strokeSVG).join('')}</g><path id="dis-live" class="dstroke"/></svg></div>`;
   function disOptions() {
     const q = S.dis;
     if (!ui.disOpts || ui.disOptsN !== q.n) { ui.disOptsN = q.n; ui.disOpts = pickSome(Game3.WORDS, 3); }
@@ -3791,11 +3795,11 @@ const Game3 = (() => {
         const tools = `<div class="dtools"><div class="inks" role="group" aria-label="Colore">${DIS_INK_NAMES.map((n, k) => `<button class="inkbtn ink${k}" type="button" data-act="dis-ink" data-k="${k}" aria-pressed="${ui.disInk === k}" aria-label="${n}"></button>`).join('')}</div>` +
           `<div class="sizes" role="group" aria-label="Spessore">${DIS_W.map((w, k) => `<button class="sizebtn" type="button" data-act="dis-size" data-k="${k}" aria-pressed="${ui.disSize === k}" aria-label="Tratto ${['sottile', 'medio', 'grosso'][k]}"><i style="--w:${4 + k * 5}px"></i></button>`).join('')}</div>` +
           `<div class="row"><button class="btn small ghost" type="button" data-act="dis-undo"${q.strokes.length ? '' : ' disabled'}>Annulla</button><button class="btn small ghost" type="button" data-act="dis-clear"${q.strokes.length ? '' : ' disabled'}>Cancella tutto</button></div></div>`;
-        board = `<div class="card disc"><p class="dis-word">Disegna: <b>${esc(word)}</b></p>${sheetHTML(q, canAct(drawer))}${tools}${q.guesses.length ? `<p class="dis-gl">Ha provato con:</p>${guessList(q)}` : ''}</div>`;
+        board = `<div class="card dcard"><p class="dis-word">Disegna: <b>${esc(word)}</b></p>${sheetHTML(q, canAct(drawer))}${tools}${q.guesses.length ? `<p class="dis-gl">Ha provato con:</p>${guessList(q)}` : ''}</div>`;
         status = q.guesses.length ? `${inkName(o)} ci sta provando, continua!` : `Disegna col dito. ${inkName(o)} prova a indovinare.`;
         if (canManage()) controls = ui.confirm === 'restart-dis' ? restartCtl('dis') : '<button class="btn ghost small" type="button" data-act="ask-restart" data-g="dis">Cambia parola</button>';
       } else {
-        board = `<div class="card disc">${sheetHTML(q, false)}${guessList(q)}</div>`;
+        board = `<div class="card dcard">${sheetHTML(q, false)}${guessList(q)}</div>`;
         status = q.strokes.length ? `Cosa sta disegnando ${inkName(drawer)}?` : `${inkName(drawer)} sta per disegnare…`;
         if (canManage()) {
           controls = '<form id="dis-form" class="form dis-form" autocomplete="off" novalidate><label class="lbl" for="dis-g">Secondo te cos’è?</label><input class="line-input" id="dis-g" name="g" type="text" maxlength="40" enterkeyhint="send" autocapitalize="off"><p id="dis-err" class="err" role="alert"></p>' +
@@ -3805,7 +3809,7 @@ const Game3 = (() => {
       return { board, status, controls };
     }
     const tries = q.guesses.length;
-    board = `<div class="card disc"><p class="dis-word">Era: <b>${esc(word)}</b></p>${sheetHTML(q, false)}${guessList(q)}</div>`;
+    board = `<div class="card dcard"><p class="dis-word">Era: <b>${esc(word)}</b></p>${sheetHTML(q, false)}${guessList(q)}</div>`;
     if (q.win === 'y') status = guesser === seat ? `Indovinato${tries === 1 ? ' al primo colpo' : ''}! Un punto per te.` : `${inkName(guesser)} ha indovinato${tries === 1 ? ' al primo colpo' : ''}!`;
     else status = guesser === seat ? `Niente da fare: era «${esc(word)}».` : `${inkName(guesser)} non l’ha indovinata: era «${esc(word)}».`;
     if (canManage()) controls = `<button class="btn" type="button" data-act="dis-next">${guesser === seat ? 'Adesso disegno io' : `Adesso disegna ${esc(nameOf(guesser))}`}</button>`;
@@ -3855,6 +3859,7 @@ const Game3 = (() => {
   }, { passive: false });
   function endStroke(e) {
     if (!dLive || (e && e.pointerId !== dLive.id)) return;
+    if (e && e.type === 'pointerup') addPt(disPoint(e, dLive.svg));
     const pts = dLive.pts;
     dLive = null;
     ui.disLive = false;
@@ -3907,9 +3912,9 @@ const Game3 = (() => {
     const W = { a: Game3.nccWords(q, 'a'), b: Game3.nccWords(q, 'b') };
     const P = Game3.nccPoints(q.letter, W.a, W.b, q.veto);
     const cols = [seat, o];
-    let t = `<div class="ncc-table"><div class="nrow head"><span></span>${cols.map(s => `<span style="--c:var(--pen-${s})">${s === seat ? 'Tu' : esc(nameOf(s))}</span>`).join('')}</div>`;
+    let t = `<div class="ncc-table"><div class="ncrow head"><span></span>${cols.map(s => `<span style="--c:var(--pen-${s})">${s === seat ? 'Tu' : esc(nameOf(s))}</span>`).join('')}</div>`;
     Game3.CATS.forEach((c, k) => {
-      t += `<div class="nrow"><span class="ncat">${c}</span>`;
+      t += `<div class="ncrow"><span class="ncat">${c}</span>`;
       for (const s of cols) {
         const w = W[s][k], vetoed = q.veto[(s === 'a' ? 0 : Game3.CATS.length) + k] === '1', valid = Game3.nccValid(q.letter, w);
         const pts = P[s][k];
@@ -3919,7 +3924,7 @@ const Game3 = (() => {
       }
       t += '</div>';
     });
-    t += `<div class="nrow tot"><span class="ncat">Totale</span>${cols.map(s => `<span style="--c:var(--pen-${s})">${s === 'a' ? P.ta : P.tb}</span>`).join('')}</div></div>`;
+    t += `<div class="ncrow tot"><span class="ncat">Totale</span>${cols.map(s => `<span style="--c:var(--pen-${s})">${s === 'a' ? P.ta : P.tb}</span>`).join('')}</div></div>`;
     board = `<div class="card ncc">${letter}${t}</div>`;
     status = 'Controllate le parole: se una non va bene toccate «non vale».';
     if (canManage()) controls = `<button class="btn" type="button" data-act="ncc-done">Segna i punti</button><div class="row">${restartCtl('ncc')}</div>`;
