@@ -776,6 +776,187 @@ button.tback:active { transform: scale(.95); }
 /* a long press never selects text or opens the callout; the fields you type in still work as usual */
 html { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
 input, textarea { -webkit-user-select: text; user-select: text; -webkit-touch-callout: default; }
+
+/* ---------- the little faces ---------- */
+.emo { display: block; width: 100%; height: auto; overflow: visible; }
+.emo .ex-stk { fill: #FFFFFF; stroke: #FFFFFF; stroke-width: 12; stroke-linejoin: round; }
+.emo .ex-face { fill: var(--emo-fill); stroke: #1D2340; stroke-width: 4.5; stroke-linejoin: round; }
+.emo .ex-hl { fill: #FFFFFF; opacity: .55; }
+.emo .ex-k { fill: none; stroke: #1D2340; stroke-width: 4.5; stroke-linecap: round; stroke-linejoin: round; }
+.emo .ex-bold { stroke-width: 5.5; }
+.emo .ex-thin { stroke-width: 3; }
+.emo .ex-kf { fill: #1D2340; }
+.emo .ex-mouth { fill: #4A1E2E; stroke: #1D2340; stroke-width: 4; stroke-linejoin: round; }
+.emo .ex-tongue { fill: #FF6F86; stroke: #1D2340; stroke-width: 3; stroke-linejoin: round; }
+.emo .ex-blush { fill: #FF4F7E; opacity: .38; }
+.emo .ex-tear { fill: #6CC6FF; stroke: #1D2340; stroke-width: 2.5; stroke-linejoin: round; }
+.emo .ex-stream { fill: none; stroke: #6CC6FF; stroke-width: 8; stroke-linecap: round; opacity: .92; }
+.emo .ex-heart { fill: #F0475A; stroke: #1D2340; stroke-width: 2.6; stroke-linejoin: round; }
+.emo .ex-white { fill: #FFFFFF; stroke: #1D2340; stroke-width: 3.5; }
+.emo .ex-puff { fill: #EEF0F5; stroke: #1D2340; stroke-width: 3; stroke-linejoin: round; }
+.emo .ex-vein { fill: none; stroke: #E5484D; stroke-width: 4; stroke-linecap: round; }
+.emo .ex-halo { fill: none; stroke: #FFFFFF; stroke-width: 9; stroke-linecap: round; stroke-linejoin: round; }
+.emo .ex-spark { fill: #FFC93C; stroke: #1D2340; stroke-width: 2; stroke-linejoin: round; }
+
+/* they only move when they pop up big */
+.emo .eb { transform-origin: 60px 64px; }
+.emo-go .ex-tear, .emo-go .ex-heart, .emo-go .ex-puff, .emo-go .ex-vein, .emo-go .ex-spark, .emo-go .ex-z, .emo-go .ex-q, .emo-go .ex-thumb, .emo-go .ex-wag { transform-box: fill-box; transform-origin: 50% 50%; }
+.emo-go.e-ride .eb { animation: ex-laugh .3s ease-in-out 9 alternate; }
+@keyframes ex-laugh { from { transform: translateY(1px) rotate(-5deg); } to { transform: translateY(-6px) rotate(5deg); } }
+.emo-go.e-ride .ex-tear { animation: ex-joy .6s ease-out infinite; }
+.emo-go.e-ride .ex-tl { --dx: -7px; }
+.emo-go.e-ride .ex-tr { --dx: 7px; animation-delay: .3s; }
+@keyframes ex-joy { 0% { transform: translate(0, -2px) scale(.6); opacity: 0; } 30% { opacity: 1; } 100% { transform: translate(var(--dx), 12px) scale(1); opacity: 0; } }
+
+.emo-go.e-piange .eb { animation: ex-sob .45s ease-in-out 6 alternate; }
+@keyframes ex-sob { from { transform: rotate(-3deg) translateY(0); } to { transform: rotate(3deg) translateY(2px); } }
+.emo-go.e-piange .ex-stream { stroke-dasharray: 9 7; animation: ex-flow .45s linear infinite; }
+@keyframes ex-flow { to { stroke-dashoffset: -32; } }
+.emo-go.e-piange .ex-tear { animation: ex-drop .7s ease-in infinite; }
+.emo-go.e-piange .ex-dr { animation-delay: .35s; }
+@keyframes ex-drop { 0% { transform: translateY(-8px); opacity: 0; } 30% { opacity: 1; } 100% { transform: translateY(8px); opacity: 0; } }
+
+.emo-go.e-grr .eb { animation: ex-shake .09s linear 26 alternate; }
+@keyframes ex-shake { from { transform: translateX(-3px) rotate(-1deg); } to { transform: translateX(3px) rotate(1deg); } }
+.emo-go.e-grr .ex-puff { animation: ex-steam .9s ease-out infinite; }
+.emo-go.e-grr .pr { animation-delay: .45s; }
+@keyframes ex-steam { 0% { transform: translateY(6px) scale(.5); opacity: 0; } 35% { opacity: 1; } 100% { transform: translateY(-12px) scale(1.15); opacity: 0; } }
+.emo-go.e-grr .ex-vein { animation: ex-throb .22s ease-in-out infinite alternate; }
+@keyframes ex-throb { from { transform: scale(.85); } to { transform: scale(1.2); } }
+
+.emo-go.e-cuore .eb { animation: ex-sway .6s ease-in-out 4 alternate; }
+@keyframes ex-sway { from { transform: rotate(-4deg); } to { transform: rotate(4deg) translateY(-3px); } }
+.emo-go.e-cuore .ex-beat { animation: ex-beat .3s ease-in-out infinite alternate; }
+@keyframes ex-beat { from { transform: scale(.9); } to { transform: scale(1.28); } }
+.emo-go.e-cuore .ex-up { animation: ex-rise 1.3s ease-out infinite; }
+.emo-go.e-cuore .u2 { animation-delay: .4s; }
+.emo-go.e-cuore .u3 { animation-delay: .8s; }
+@keyframes ex-rise { 0% { transform: translateY(14px) scale(.4); opacity: 0; } 30% { opacity: 1; } 100% { transform: translateY(-16px) scale(1.1); opacity: 0; } }
+
+.emo-go.e-bacio .eb { animation: ex-lean .5s ease-in-out 5 alternate; }
+@keyframes ex-lean { from { transform: rotate(0) scale(1); } to { transform: rotate(-7deg) scale(1.05); } }
+.emo-go.e-bacio .ex-kiss { animation: ex-blow 1s ease-out infinite; }
+@keyframes ex-blow { 0% { transform: translate(-34px, 24px) scale(.3); opacity: 0; } 25% { opacity: 1; } 70% { transform: translate(0, 0) scale(1.1); opacity: 1; } 100% { transform: translate(10px, -16px) scale(1.25); opacity: 0; } }
+
+.emo-go.e-lingua .eb { animation: ex-tease .17s ease-in-out 16 alternate; }
+@keyframes ex-tease { from { transform: rotate(-9deg); } to { transform: rotate(9deg); } }
+.emo-go.e-lingua .ex-wag { transform-origin: 50% 0; animation: ex-wag .17s ease-in-out infinite alternate; }
+@keyframes ex-wag { from { transform: scaleY(.85) rotate(-6deg); } to { transform: scaleY(1.1) rotate(6deg); } }
+
+.emo-go.e-wow .eb { animation: ex-jump .5s cubic-bezier(.3, 1.6, .5, 1) 3; }
+@keyframes ex-jump { 0% { transform: scale(1) translateY(0); } 40% { transform: scale(1.14) translateY(-9px); } 100% { transform: scale(1) translateY(0); } }
+.emo-go.e-wow .ex-zap { animation: ex-flash .25s steps(2) infinite; }
+@keyframes ex-flash { 50% { opacity: .25; } }
+
+.emo-go.e-pensa .eb { animation: ex-tilt 1.1s ease-in-out 2 alternate; }
+@keyframes ex-tilt { from { transform: rotate(-8deg); } to { transform: rotate(4deg); } }
+.emo-go.e-pensa .ex-q { animation: ex-bob .55s ease-in-out infinite alternate; }
+@keyframes ex-bob { from { transform: translateY(2px) rotate(-6deg); } to { transform: translateY(-5px) rotate(8deg); } }
+
+.emo-go.e-top .eb { animation: ex-sway .5s ease-in-out 5 alternate; }
+.emo-go.e-top .ex-thumb { transform-origin: 50% 100%; animation: ex-thumb .3s ease-in-out infinite alternate; }
+@keyframes ex-thumb { from { transform: translateY(2px) rotate(4deg); } to { transform: translateY(-8px) rotate(-10deg); } }
+.emo-go.e-top .ex-spark { animation: ex-twinkle .45s ease-in-out infinite alternate; }
+@keyframes ex-twinkle { from { transform: scale(.4) rotate(0); opacity: .4; } to { transform: scale(1.25) rotate(45deg); opacity: 1; } }
+
+.emo-go.e-sonno .eb { animation: ex-breathe 1.2s ease-in-out 2 alternate; }
+@keyframes ex-breathe { from { transform: scale(1) rotate(0); } to { transform: scale(1.05) rotate(-4deg); } }
+.emo-go.e-sonno .ex-z { animation: ex-snore 1.5s ease-out infinite; }
+.emo-go.e-sonno .z2 { animation-delay: .75s; }
+@keyframes ex-snore { 0% { transform: translate(-6px, 10px) scale(.5); opacity: 0; } 30% { opacity: 1; } 100% { transform: translate(6px, -12px) scale(1.15); opacity: 0; } }
+
+/* ---------- the two round buttons in the corner ---------- */
+.dock { position: fixed; z-index: 35; right: max(14px, env(safe-area-inset-right, 0px)); bottom: calc(env(safe-area-inset-bottom, 0px) + 14px); display: flex; gap: 10px; align-items: flex-end; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+.dbtn { position: relative; width: 54px; height: 54px; padding: 0; border-radius: 50%; border: 2px solid var(--ink); background: var(--paper); color: var(--ink); display: grid; place-items: center; box-shadow: var(--shadow); cursor: pointer; touch-action: manipulation; transition: transform .12s ease; }
+.dbtn:active { transform: scale(.92); }
+.dbtn svg { width: 30px; height: 30px; }
+.dbtn .emo { width: 36px; }
+.dbtn[aria-expanded="true"] { background: var(--ink); }
+.dbadge { position: absolute; top: -5px; right: -5px; min-width: 22px; height: 22px; padding: 0 6px; border-radius: 999px; background: #E5484D; color: #FFFFFF; font: 800 12px/22px var(--f-ui); text-align: center; box-shadow: 0 0 0 2px var(--bg); }
+body.dock-on .wrap { padding-bottom: 104px; }
+body.dock-on .toast { bottom: calc(env(safe-area-inset-bottom, 0px) + 84px); }
+
+/* the panel of faces */
+.emo-tray { position: absolute; right: 0; bottom: 66px; width: min(calc(100vw - 28px), 376px); padding: 12px 12px 10px; border-radius: 22px; background: var(--paper); box-shadow: var(--shadow), 0 0 0 1px rgba(29, 35, 64, .06); display: grid; gap: 10px; transform-origin: 90% 100%; animation: tray-in .18s cubic-bezier(.2, 1.4, .5, 1); }
+@keyframes tray-in { from { transform: scale(.85) translateY(8px); opacity: 0; } }
+.emo-hint { margin: 0 4px; font-size: 13px; color: var(--ink-soft); }
+.emo-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 2px; }
+.emo-pick { padding: 4px; border: 0; border-radius: 16px; background: transparent; cursor: pointer; touch-action: manipulation; transition: transform .1s ease, background-color .1s ease; }
+.emo-pick:active { transform: scale(.88); background: var(--paper-2); }
+@media (hover: hover) { .emo-pick:hover { background: var(--paper-2); } }
+.say-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.say-pick { font: 19px/1 var(--f-hand); color: var(--c, var(--ink)); background: var(--paper-2); border: 0; border-radius: 999px; padding: 8px 12px 7px; cursor: pointer; touch-action: manipulation; }
+.say-pick:active { transform: scale(.94); }
+.tray-foot { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.snd-btn { display: inline-flex; align-items: center; gap: 6px; font: 700 13px/1 var(--f-ui); color: var(--ink-soft); background: transparent; border: 0; padding: 6px 4px; cursor: pointer; }
+.snd-btn svg { width: 18px; height: 18px; }
+
+/* where the faces pop up: yours down here, the other one's up top */
+.emo-layer { position: fixed; inset: 0; z-index: 55; pointer-events: none; overflow: hidden; }
+.emo-slot { position: absolute; width: 132px; display: grid; justify-items: center; gap: 2px; }
+.emo-slot.emo-me { left: max(14px, env(safe-area-inset-left, 0px)); bottom: calc(env(safe-area-inset-bottom, 0px) + 82px); }
+.emo-slot.emo-them { right: max(14px, env(safe-area-inset-right, 0px)); top: calc(env(safe-area-inset-top, 0px) + 64px); }
+.emo-pop { display: grid; justify-items: center; gap: 2px; animation: emo-in .4s cubic-bezier(.2, 1.6, .45, 1) both; }
+.emo-pop.out { animation: emo-out .28s ease-in both; }
+.emo-slot.emo-me .emo-pop { transform-origin: 30% 100%; }
+.emo-slot.emo-them .emo-pop { transform-origin: 70% 0; }
+@keyframes emo-in { from { transform: scale(.2) rotate(-12deg); opacity: 0; } }
+@keyframes emo-out { to { transform: scale(.5); opacity: 0; } }
+.emo-pop .emo { width: 124px; filter: drop-shadow(0 10px 14px rgba(17, 22, 40, .28)); }
+.emo-tag { font: 800 12px/1 var(--f-ui); color: #FFFFFF; background: var(--c); padding: 5px 9px; border-radius: 999px; box-shadow: 0 0 0 2px var(--paper); }
+.emo-say { position: relative; max-width: min(240px, calc(100vw - 40px)); font: 26px/1.1 var(--f-hand); color: var(--c); background: var(--paper); padding: 12px 16px 10px; border-radius: 20px; border: 2.5px solid var(--c); box-shadow: var(--shadow); text-align: center; text-wrap: balance; }
+.emo-slot.say-slot { width: auto; }
+.emo-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* a new message while the chat is closed */
+.chat-peek { position: absolute; right: 0; bottom: 66px; width: max-content; max-width: min(calc(100vw - 28px), 300px); display: grid; gap: 2px; text-align: left; padding: 10px 14px 9px; border-radius: 18px 18px 6px 18px; border: 0; background: var(--paper); color: var(--ink); box-shadow: var(--shadow), 0 0 0 1px rgba(29, 35, 64, .06); cursor: pointer; animation: tray-in .2s cubic-bezier(.2, 1.4, .5, 1); transform-origin: 100% 100%; }
+.chat-peek b { font: 800 12px/1.2 var(--f-ui); color: var(--c); }
+.chat-peek span { font: 20px/1.2 var(--f-hand); color: var(--c); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }
+
+/* ---------- the chat ---------- */
+.chat { position: fixed; z-index: 45; left: 0; top: 0; width: 100%; height: 100vh; display: flex; flex-direction: column; justify-content: flex-end; background: var(--scrim); padding-top: calc(env(safe-area-inset-top, 0px) + 10px); }
+.chat-card { flex: 1; min-height: 0; width: 100%; max-width: 560px; margin: 0 auto; display: flex; flex-direction: column; background: var(--paper); border-radius: 22px 22px 0 0; box-shadow: var(--shadow); overflow: hidden; animation: chat-up .22s cubic-bezier(.2, .9, .3, 1); }
+@keyframes chat-up { from { transform: translateY(40px); opacity: 0; } }
+@media (min-width: 640px) { .chat { justify-content: center; padding: 24px; } .chat-card { flex: none; height: min(720px, 100%); border-radius: 22px; } }
+.chat-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px 12px; border-bottom: 2px solid var(--paper-2); }
+.chat-head h3 { margin: 0; font-size: 18px; font-weight: 800; }
+.chat-sub { margin: 2px 0 0; font-size: 13px; color: var(--ink-soft); min-height: 1.3em; }
+.chat-sub.typing { color: var(--c); font-weight: 700; }
+.chat-list { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; padding: 12px 14px 8px; display: flex; flex-direction: column; gap: 3px;
+  background-image: repeating-linear-gradient(to bottom, transparent 0 31px, var(--paper-2) 31px 32px); background-attachment: local; }
+.chat-empty { margin: auto; max-width: 260px; text-align: center; font: 21px/1.25 var(--f-hand); color: var(--ink-soft); }
+.cday { align-self: center; margin: 10px 0 6px; font: 700 12px/1 var(--f-ui); color: var(--ink-soft); background: var(--paper); padding: 5px 10px; border-radius: 999px; box-shadow: 0 0 0 1px var(--paper-2); }
+.cmsg { max-width: 82%; padding: 7px 12px 6px; border-radius: 18px; font: 21px/1.25 var(--f-hand); color: var(--c); overflow-wrap: anywhere; white-space: pre-wrap; }
+.cmsg.cm-me { align-self: flex-end; background: color-mix(in srgb, var(--c) 12%, var(--paper)); border-bottom-right-radius: 6px; }
+.cmsg.cm-you { align-self: flex-start; background: var(--paper-2); border-bottom-left-radius: 6px; }
+.cmsg.cm-gap { margin-top: 8px; }
+.cmsg.cm-new { animation: msg-in .22s cubic-bezier(.2, 1.3, .5, 1); }
+.cmsg.cm-me.cm-new { transform-origin: 100% 100%; }
+.cmsg.cm-you.cm-new { transform-origin: 0 100%; }
+@keyframes msg-in { from { transform: scale(.7); opacity: 0; } }
+.ctime { font: 600 11px/1.2 var(--f-ui); color: var(--muted); margin: 1px 6px 4px; }
+.ctime.cm-me { align-self: flex-end; }
+.ctime.cm-you { align-self: flex-start; }
+.ctyping { align-self: flex-start; display: inline-flex; gap: 5px; padding: 12px 14px; border-radius: 18px; border-bottom-left-radius: 6px; background: var(--paper-2); margin-top: 6px; }
+.ctyping i { width: 7px; height: 7px; border-radius: 50%; background: var(--c); opacity: .35; animation: dots 1s ease-in-out infinite; }
+.ctyping i:nth-child(2) { animation-delay: .15s; }
+.ctyping i:nth-child(3) { animation-delay: .3s; }
+@keyframes dots { 30% { opacity: 1; transform: translateY(-3px); } }
+.chat-form { display: flex; align-items: flex-end; gap: 8px; padding: 10px 12px calc(env(safe-area-inset-bottom, 0px) + 10px); border-top: 2px solid var(--paper-2); background: var(--paper); }
+.chat.kb .chat-form { padding-bottom: 10px; }
+.chat-in { flex: 1; min-width: 0; min-height: 44px; max-height: 132px; resize: none; font: 21px/1.25 var(--f-hand); color: var(--ink); background: var(--paper-2); border: 0; border-radius: 22px; padding: 9px 14px 8px; }
+.chat-in:focus { outline: 2px solid var(--c); outline-offset: 0; }
+.chat-in::placeholder { color: var(--muted); opacity: 1; }
+.chat-send { flex: none; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; background: var(--c); color: #FFFFFF; display: grid; place-items: center; cursor: pointer; transition: transform .1s ease, opacity .15s ease; }
+.chat-send:active { transform: scale(.9); }
+.chat-send:disabled { opacity: .35; }
+.chat-send svg { width: 22px; height: 22px; }
+body.chat-on { overflow: hidden; }
+
+@media (prefers-reduced-motion: reduce) {
+  .emo-go .eb, .emo-go * { animation: none !important; }
+  .emo-pop, .emo-tray, .chat-card, .chat-peek, .cmsg.cm-new { animation: none !important; }
+}
 </style>
 </head>
 <body>
@@ -2358,6 +2539,7 @@ const Game3 = (() => {
       s.ref.remove();
       if (d && typeof d.at === 'number' && Math.abs(Date.now() - d.at) < 60000) onSignal(d.type);
     });
+    startSocial();
   }
   function updatePresence() {
     if (roomRef && fbOnline) roomRef.child('online/' + seat).update({ tab });
@@ -4253,6 +4435,7 @@ const Game3 = (() => {
     renderSheet();
     renderCall();
     postRender();
+    renderSocial();
   }
 
   /* ---------- input ---------- */
@@ -4516,6 +4699,462 @@ const Game3 = (() => {
       const v = G.impView(S.imp);
       if (S.imp.phase === 'play' && !v.over && canAct(v.guesser)) act({ t: 'imp.guess', seat, ch: e.key.toUpperCase() });
     }
+  });
+
+  /* ---------- the little faces: one round felt-tip blob, red for Gabri and blue for Ivi ---------- */
+  const EMO_FILL = { a: '#FF9688', b: '#93AAFF' };
+  const EX_FACE = 'M60 24C83 23 101 41 100 64C99 87 82 104 59 104C37 104 20 87 21 63C22 41 38 25 60 24Z';
+  const EX_HEART = 'M0 6C-2 0-11-1-11 6C-11 12-3 16 0 20C3 16 11 12 11 6C11-1 2 0 0 6Z';
+  const exHeart = (x, y, s, cls) => `<g transform="translate(${x} ${y}) scale(${s})"><path class="ex-heart ${cls || ''}" d="${EX_HEART}"/></g>`;
+  const EX_BLUSH = '<ellipse class="ex-blush" cx="32" cy="72" rx="6.5" ry="3.8"/><ellipse class="ex-blush" cx="88" cy="72" rx="6.5" ry="3.8"/>';
+  const EX_HAPPY = '<path class="ex-k" d="M37 56Q44.5 46 52 56M68 56Q75.5 46 83 56"/>';
+  const exDots = y => `<ellipse class="ex-kf" cx="45" cy="${y}" rx="4.5" ry="5.5"/><ellipse class="ex-kf" cx="75" cy="${y}" rx="4.5" ry="5.5"/>`;
+  const EX_SPARK = 'M0-8L2.2-2.2 8 0 2.2 2.2 0 8-2.2 2.2-8 0-2.2-2.2Z';
+  const exSpark = (x, y, s, d) => `<g transform="translate(${x} ${y}) scale(${s})"><path class="ex-spark" style="animation-delay:${d}s" d="${EX_SPARK}"/></g>`;
+  const EX_PUFF = 'M-10 4a6 6 0 0 1 3-10a7 7 0 0 1 12-1a6 6 0 0 1 6 9a4 4 0 0 1-3 6h-15a4 4 0 0 1-3-4z';
+  const EMOTES = [
+    { id: 'ride', name: 'Ride',
+      art: EX_HAPPY + '<path class="ex-mouth" d="M40 69Q60 73 80 69Q79 93 60 94Q41 93 40 69Z"/><path class="ex-tongue" d="M49 87Q60 79 71 87Q67 93 60 93Q53 93 49 87Z"/>' + EX_BLUSH,
+      extra: '<g class="ex-tears"><path class="ex-tear ex-tl" d="M22 49q-7 10 0 14q7-4 0-14z"/><path class="ex-tear ex-tr" d="M98 49q-7 10 0 14q7-4 0-14z"/></g>' },
+    { id: 'piange', name: 'Piange',
+      art: '<path class="ex-k" d="M35 46L51 40M85 46L69 40"/><path class="ex-k" d="M37 57Q45 51 53 57M67 57Q75 51 83 57"/><path class="ex-mouth" d="M43 91Q60 68 77 91Q60 86 43 91Z"/>',
+      extra: '<path class="ex-stream" d="M44 61Q39 82 45 106M76 61Q81 82 75 106"/><path class="ex-tear ex-dl" d="M30 96q-6 8 0 11q6-3 0-11z"/><path class="ex-tear ex-dr" d="M90 96q-6 8 0 11q6-3 0-11z"/>' },
+    { id: 'grr', name: 'Arrabbiato',
+      art: '<path class="ex-k ex-bold" d="M33 43L52 52M87 43L68 52"/>' + exDots(61) + '<rect class="ex-white" x="41" y="75" width="38" height="15" rx="6"/><path class="ex-k ex-thin" d="M41 82.5H79M50.5 75V90M60 75V90M69.5 75V90"/>',
+      extra: `<g transform="translate(20 30)"><path class="ex-puff pl" d="${EX_PUFF}"/></g><g transform="translate(101 30)"><path class="ex-puff pr" d="${EX_PUFF}"/></g><g transform="translate(86 22)"><path class="ex-vein" d="M-9-3Q-3-3-3-9M3-9Q3-3 9-3M9 3Q3 3 3 9M-3 9Q-3 3-9 3"/></g>` },
+    { id: 'cuore', name: 'Innamorato',
+      art: exHeart(45, 45, 1, 'ex-beat') + exHeart(75, 45, 1, 'ex-beat') + '<path class="ex-mouth" d="M43 74Q60 77 77 74Q74 91 60 91Q46 91 43 74Z"/>' + EX_BLUSH,
+      extra: exHeart(100, 18, 0.55, 'ex-up u1') + exHeart(18, 28, 0.42, 'ex-up u2') + exHeart(92, 4, 0.34, 'ex-up u3') },
+    { id: 'bacio', name: 'Bacio',
+      art: '<ellipse class="ex-kf" cx="45" cy="56" rx="4.5" ry="5.5"/><path class="ex-k" d="M67 57Q75 50 83 57"/><path class="ex-k" d="M56 72Q67 74 58 79.5Q68 82 57 88"/>' + EX_BLUSH,
+      extra: exHeart(95, 60, 0.75, 'ex-kiss') },
+    { id: 'lingua', name: 'Linguaccia',
+      art: '<path class="ex-k" d="M37 50L50 56.5L37 63"/><ellipse class="ex-kf" cx="75" cy="57" rx="4.5" ry="5.5"/><g class="ex-wag"><path class="ex-tongue" d="M52 79Q51 98 60 98Q69 98 68 79Z"/><path class="ex-k ex-thin" d="M60 83V91"/></g><path class="ex-k" d="M41 73Q60 87 79 73"/>' + EX_BLUSH },
+    { id: 'wow', name: 'Sorpreso',
+      art: '<path class="ex-k" d="M36 37Q44 30 52 37M68 37Q76 30 84 37"/><circle class="ex-white" cx="45" cy="54" r="9.5"/><circle class="ex-white" cx="75" cy="54" r="9.5"/><circle class="ex-kf" cx="45" cy="55" r="4.2"/><circle class="ex-kf" cx="75" cy="55" r="4.2"/><ellipse class="ex-mouth" cx="60" cy="84" rx="8" ry="10"/>',
+      extra: '<g class="ex-zap"><path class="ex-halo" d="M13 31L21 37M9 52H18M107 31L99 37M111 52H102M60 4V13"/><path class="ex-k" d="M13 31L21 37M9 52H18M107 31L99 37M111 52H102M60 4V13"/></g>' },
+    { id: 'pensa', name: 'Ci penso',
+      art: '<path class="ex-k" d="M37 45H51"/><path class="ex-k" d="M67 42Q75 35 83 40"/><ellipse class="ex-kf" cx="47" cy="55" rx="4.2" ry="5.2"/><ellipse class="ex-kf" cx="77" cy="53" rx="4.2" ry="5.2"/><path class="ex-k" d="M46 81Q52 77 58 81T72 80"/>',
+      extra: '<g class="ex-q"><path class="ex-halo" d="M95 14Q95 5 103 5Q111 5 111 13Q111 19 103 21V26"/><circle class="ex-halo" cx="103" cy="33" r="2.8"/><path class="ex-k" d="M95 14Q95 5 103 5Q111 5 111 13Q111 19 103 21V26"/><circle class="ex-kf" cx="103" cy="33" r="2.8"/></g>' },
+    { id: 'top', name: 'Grande!',
+      art: EX_HAPPY + '<path class="ex-mouth" d="M41 70Q60 74 79 70Q77 90 60 90Q43 90 41 70Z"/>' + EX_BLUSH +
+        '<g class="ex-thumb"><path class="ex-stk" d="M89 77C86 64 89 53 97 53C104 53 104 61 101 68L100 77Z"/><rect class="ex-stk" x="84" y="74" width="27" height="28" rx="8"/><path class="ex-face" d="M89 77C86 64 89 53 97 53C104 53 104 61 101 68L100 77Z"/><rect class="ex-face" x="84" y="74" width="27" height="28" rx="8"/><path class="ex-k ex-thin" d="M84 83H96M84 91H96"/></g>',
+      extra: exSpark(18, 26, 1, 0) + exSpark(106, 22, 0.7, 0.35) + exSpark(12, 92, 0.6, 0.7) },
+    { id: 'sonno', name: 'Che sonno',
+      art: '<path class="ex-k" d="M37 58Q45 64.5 53 58M67 58Q75 64.5 83 58"/><ellipse class="ex-mouth" cx="60" cy="83" rx="5.5" ry="7"/>' + EX_BLUSH,
+      extra: '<g class="ex-z z1"><path class="ex-halo" d="M80 30h8l-8 10h8"/><path class="ex-k ex-thin" d="M80 30h8l-8 10h8"/></g><g class="ex-z z2"><path class="ex-halo" d="M93 15h11l-11 13h11"/><path class="ex-k ex-thin" d="M93 15h11l-11 13h11"/></g>' },
+  ];
+  const EMO_BY = Object.fromEntries(EMOTES.map(e => [e.id, e]));
+  // Short things to say, like the text bubbles at the end of a match.
+  const SAYS = ['Bella mossa!', 'Ops…', 'Dai, tocca a te!', 'Non vale!', 'Rivincita?', 'Ti amo', 'Aspetta un attimo', 'Buonanotte'];
+  function emoSVG(id, s, go) {
+    const e = EMO_BY[id];
+    if (!e) return '';
+    return `<svg class="emo e-${e.id}${go ? ' emo-go' : ''}" viewBox="0 0 120 120" style="--emo-fill:${EMO_FILL[s] || EMO_FILL.a}" aria-hidden="true" focusable="false">` +
+      `<g class="eb"><path class="ex-stk" d="${EX_FACE}"/><path class="ex-face" d="${EX_FACE}"/><ellipse class="ex-hl" cx="43" cy="38" rx="9" ry="5" transform="rotate(-28 43 38)"/>${e.art}</g>${e.extra || ''}</svg>`;
+  }
+  // The face on the button: just a smile in your own colour.
+  const emoBtnSVG = s => `<svg class="emo" viewBox="0 0 120 120" style="--emo-fill:${EMO_FILL[s] || EMO_FILL.a}" aria-hidden="true" focusable="false"><path class="ex-face" d="${EX_FACE}"/>${exDots(56)}<path class="ex-k" d="M43 74Q60 88 77 74"/>${EX_BLUSH}</svg>`;
+
+  /* ---------- chat and reactions: two round buttons in the corner, on every page ---------- */
+  const SOUND_KEY = 'blocchetto.sound';
+  const CHAT_MAX = 500, CHAT_SHOW = 200, EMO_COOL = 1100, EMO_SHOW = 2600, GROUP_MS = 5 * 60000;
+  let soundOn = store.get(SOUND_KEY) !== '0';
+  let chatRef = null, serverSkew = 0, chatLoaded = false, readLoaded = false, chatOpen = false, trayOpen = false, kbOpen = false;
+  let typingAt = 0, typingSent = 0, typingHooked = false, lastEmoAt = 0, peekTimer = 0, typingTimer = 0, btnSeat = '';
+  const msgs = [];
+  const freshKeys = new Set();
+  const readMark = { a: '', b: '' };
+  const emoTimers = {};
+  let pendingEmo = null;
+  const nowServer = () => Date.now() + serverSkew;
+  const SERVER_TS = () => window.firebase.database.ServerValue.TIMESTAMP;
+
+  const ICON_CHAT = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 5h15A2 2 0 0 1 21.5 7v8.5a2 2 0 0 1-2 2H11l-5 3.8v-3.8H4.5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/><path d="M8 11.3h.01M12 11.3h.01M16 11.3h.01" stroke-width="2.8"/></svg>';
+  const ICON_SEND = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 3.5L10 14"/><path d="M20.5 3.5l-6.5 17-4-6.5-6.5-4z"/></svg>';
+  const iconSound = on => `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/>${on ? '<path d="M15.5 9a4.5 4.5 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/>' : '<path d="M16 9.5l5 5M21 9.5l-5 5"/>'}</svg>`;
+
+  document.body.insertAdjacentHTML('beforeend',
+    '<div class="emo-layer" id="emo-layer" aria-live="polite"><div class="emo-slot emo-them" id="emo-them"></div><div class="emo-slot emo-me" id="emo-me"></div></div>' +
+    '<div class="dock" id="dock" hidden>' +
+      '<button class="chat-peek" id="chat-peek" type="button" data-act="chat-open" hidden></button>' +
+      '<div class="emo-tray" id="emo-tray" role="dialog" aria-label="Reazioni" hidden></div>' +
+      '<button class="dbtn" id="emo-btn" type="button" data-act="emo-tray" aria-label="Reazioni" aria-expanded="false"></button>' +
+      `<button class="dbtn" id="chat-btn" type="button" data-act="chat-open" aria-label="Chat">${ICON_CHAT}<span class="dbadge" id="chat-badge" hidden></span></button>` +
+    '</div>' +
+    '<div class="chat" id="chat" hidden>' +
+      '<div class="chat-card" role="dialog" aria-modal="true" aria-labelledby="chat-title">' +
+        '<div class="chat-head"><div><h3 id="chat-title">Chat</h3><p class="chat-sub" id="chat-sub"></p></div><button class="btn small" type="button" data-act="chat-close">Chiudi</button></div>' +
+        '<div class="chat-list" id="chat-list"></div>' +
+        `<form class="chat-form" id="chat-form" autocomplete="off"><textarea class="chat-in" id="chat-in" rows="1" maxlength="${CHAT_MAX}" enterkeyhint="send" autocapitalize="sentences" aria-label="Messaggio"></textarea><button class="chat-send" id="chat-send" type="submit" aria-label="Invia" disabled>${ICON_SEND}</button></form>` +
+      '</div>' +
+    '</div>');
+
+  function cleanMsg(raw) {
+    const s = String(raw == null ? '' : raw).replace(/\r\n?/g, '\n')
+      .replace(/[\u0000-\u0009\u000B-\u001F\u007F​‌‎‏‪-‮⁠-⁤﻿]/g, '')
+      .replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
+    return Array.from(s).slice(0, CHAT_MAX).join('').trim();
+  }
+
+  /* sounds, made on the spot (quiet, and off with the switch on the side of the iPhone) */
+  function tone(f0, f1, dur, vol, type, at) {
+    if (!soundOn) return;
+    const c = audio();
+    if (!c || c.state !== 'running') return;
+    const t = c.currentTime + (at || 0), o = c.createOscillator(), g = c.createGain();
+    o.type = type || 'sine';
+    o.frequency.setValueAtTime(f0, t);
+    if (f1 && f1 !== f0) o.frequency.exponentialRampToValueAtTime(f1, t + dur);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(vol, t + 0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g).connect(c.destination);
+    o.start(t);
+    o.stop(t + dur + 0.03);
+  }
+  const EMO_SOUND = {
+    ride: () => [0, 0.11, 0.22, 0.33].forEach((d, i) => tone(i % 2 ? 620 : 700, i % 2 ? 560 : 640, 0.09, 0.1, 'triangle', d)),
+    piange: () => { tone(620, 330, 0.55, 0.09); tone(560, 300, 0.5, 0.05, 'triangle', 0.5); },
+    grr: () => { tone(150, 110, 0.3, 0.06, 'sawtooth'); tone(140, 100, 0.32, 0.06, 'sawtooth', 0.28); },
+    cuore: () => [523, 659, 784].forEach((f, i) => tone(f, f, 0.22, 0.1, 'sine', i * 0.1)),
+    bacio: () => { tone(300, 950, 0.14, 0.12); tone(1200, 1200, 0.05, 0.05, 'triangle', 0.14); },
+    lingua: () => { for (let i = 0; i < 6; i++) tone(i % 2 ? 480 : 640, 0, 0.05, 0.07, 'triangle', i * 0.055); },
+    wow: () => tone(380, 1100, 0.28, 0.1, 'triangle'),
+    pensa: () => { tone(330, 320, 0.22, 0.08); tone(294, 280, 0.3, 0.08, 'sine', 0.22); },
+    top: () => { tone(988, 988, 0.3, 0.1); tone(1319, 1319, 0.45, 0.09, 'sine', 0.12); },
+    sonno: () => tone(520, 240, 0.9, 0.07),
+  };
+  const sayTone = () => tone(660, 990, 0.09, 0.08);
+  const msgTone = () => { tone(880, 880, 0.12, 0.07); tone(1320, 1320, 0.18, 0.06, 'sine', 0.1); };
+  const sentTone = () => tone(500, 900, 0.08, 0.04);
+
+  /* ---------- reactions ---------- */
+  function trayHTML() {
+    const o = other();
+    let h = partnerHere() ? '' : `<p class="emo-hint">${esc(nameOf(o))} adesso non c’è: non le vedrà.</p>`;
+    h += '<div class="emo-grid">' + EMOTES.map(e => `<button class="emo-pick" type="button" data-act="emo" data-e="${e.id}" aria-label="${esc(e.name)}">${emoSVG(e.id, seat, false)}</button>`).join('') + '</div>';
+    h += `<div class="say-row" style="--c:var(--pen-${seat})">` + SAYS.map((t, k) => `<button class="say-pick" type="button" data-act="say" data-k="${k}">${esc(t)}</button>`).join('') + '</div>';
+    h += `<div class="tray-foot"><button class="snd-btn" type="button" data-act="emo-sound" aria-pressed="${soundOn}">${iconSound(soundOn)}${soundOn ? 'Con il suono' : 'Senza suono'}</button></div>`;
+    return h;
+  }
+  function openTray() {
+    trayOpen = true;
+    hidePeek();
+    const t = $('#emo-tray');
+    t.innerHTML = trayHTML();
+    t.hidden = false;
+    $('#emo-btn').setAttribute('aria-expanded', 'true');
+  }
+  function closeTray() {
+    if (!trayOpen) return;
+    trayOpen = false;
+    $('#emo-tray').hidden = true;
+    $('#emo-btn').setAttribute('aria-expanded', 'false');
+  }
+  function sendEmo(kind, val) {
+    if (!seat) return;
+    const now = Date.now();
+    if (now - lastEmoAt < EMO_COOL) return;
+    lastEmoAt = now;
+    closeTray();
+    showEmo(seat, kind, val);
+    if (roomRef) roomRef.child('react/' + seat).set({ k: kind, v: val, n: Math.random().toString(36).slice(2, 10), at: SERVER_TS() });
+  }
+  function showEmo(s, kind, val) {
+    const mine = s === seat, slot = $(mine ? '#emo-me' : '#emo-them');
+    const who = esc(nameOf(s)), tag = mine ? '' : `<span class="emo-tag" style="--c:var(--pen-${s})">${who}</span>`;
+    let inner, label;
+    if (kind === 'e') { inner = emoSVG(val, s, true); label = EMO_BY[val].name; }
+    else { inner = `<div class="emo-say" style="--c:var(--pen-${s})">${esc(SAYS[val])}</div>`; label = SAYS[val]; }
+    slot.classList.toggle('say-slot', kind !== 'e');
+    slot.innerHTML = `<div class="emo-pop">${inner}${tag}<span class="emo-sr">${who}: ${esc(label)}</span></div>`;
+    clearTimeout(emoTimers[s]);
+    emoTimers[s] = setTimeout(() => {
+      const p = slot.firstElementChild;
+      if (p) p.classList.add('out');
+      emoTimers[s] = setTimeout(() => { slot.innerHTML = ''; }, 300);
+    }, EMO_SHOW);
+    if (kind === 'e') EMO_SOUND[val](); else sayTone();
+  }
+
+  /* ---------- chat ---------- */
+  const unread = () => (readLoaded ? msgs.filter(m => m.by !== seat && m.k > readMark[seat]).length : 0);
+  function addMsg(k, v) {
+    if (!v || typeof v !== 'object' || !seatOr(v.by) || typeof v.t !== 'string') return;
+    const t = cleanMsg(v.t);
+    if (!t || msgs.some(m => m.k === k)) return;
+    const m = { k, by: v.by, t, at: typeof v.at === 'number' && Number.isFinite(v.at) ? v.at : nowServer() };
+    let i = msgs.length;
+    while (i > 0 && msgs[i - 1].k > k) i--;
+    msgs.splice(i, 0, m);
+    if (msgs.length > CHAT_SHOW * 2) msgs.splice(0, msgs.length - CHAT_SHOW * 2);
+    if (!chatLoaded) return;
+    freshKeys.add(k);
+    if (m.by !== seat) {
+      if (chatOpen && !document.hidden) markRead();
+      else { showPeek(m); msgTone(); }
+    }
+    renderChat(m.by === seat);
+    renderSocial();
+  }
+  function markRead() {
+    const last = msgs.filter(m => m.by !== seat).pop();
+    if (!last || !readLoaded || last.k <= readMark[seat]) return;
+    readMark[seat] = last.k;
+    if (roomRef) roomRef.child('chatRead/' + seat).set(last.k);
+    renderSocial();
+  }
+  const sameDay = (x, y) => new Date(x).toDateString() === new Date(y).toDateString();
+  function dayLabel(at) {
+    const now = nowServer();
+    if (sameDay(at, now)) return 'Oggi';
+    if (sameDay(at, now - 86400000)) return 'Ieri';
+    return new Date(at).toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long' });
+  }
+  const hhmm = at => new Date(at).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+  const partnerTyping = () => !!typingAt && Math.abs(nowServer() - typingAt) < 6000;
+  const seenText = m => hhmm(m.at) + (readMark[other()] >= m.k ? ' · Visto' : '');
+  function renderChat(toBottom) {
+    if (!chatOpen) return;
+    const list = $('#chat-list');
+    const near = list.scrollHeight - list.scrollTop - list.clientHeight < 90;
+    let h = '';
+    if (!msgs.length) h = `<p class="chat-empty">${chatLoaded ? `Ancora niente qui. Scrivi qualcosa a ${esc(nameOf(other()))}.` : 'Carico i messaggi…'}</p>`;
+    msgs.forEach((m, i) => {
+      const prev = msgs[i - 1], next = msgs[i + 1];
+      const newDay = !prev || !sameDay(prev.at, m.at);
+      if (newDay) h += `<div class="cday">${esc(dayLabel(m.at))}</div>`;
+      const gap = !newDay && (prev.by !== m.by || m.at - prev.at > GROUP_MS);
+      const end = !next || next.by !== m.by || next.at - m.at > GROUP_MS || !sameDay(next.at, m.at);
+      const side = m.by === seat ? 'cm-me' : 'cm-you';
+      h += `<div class="cmsg ${side}${gap ? ' cm-gap' : ''}${freshKeys.has(m.k) ? ' cm-new' : ''}" style="--c:var(--pen-${m.by})">${esc(m.t)}</div>`;
+      if (end) h += `<div class="ctime ${side}"${!next && m.by === seat ? ' id="chat-seen"' : ''}>${!next && m.by === seat ? seenText(m) : hhmm(m.at)}</div>`;
+    });
+    h += `<div class="ctyping" id="chat-typing" style="--c:var(--pen-${other()})"${partnerTyping() ? '' : ' hidden'} aria-hidden="true"><i></i><i></i><i></i></div>`;
+    list.innerHTML = h;
+    freshKeys.clear();
+    if (toBottom || near) list.scrollTop = list.scrollHeight;
+    renderChatHead();
+  }
+  function renderSeen() {
+    const el = document.getElementById('chat-seen'), last = msgs[msgs.length - 1];
+    if (el && last && last.by === seat) el.textContent = seenText(last);
+  }
+  function renderChatHead() {
+    if (!chatOpen) return;
+    const o = other(), typing = partnerTyping();
+    $('#chat-title').textContent = nameOf(o);
+    const sub = $('#chat-sub');
+    sub.textContent = typing ? 'sta scrivendo…' : partnerHere() ? 'è qui adesso' : 'adesso non c’è';
+    sub.classList.toggle('typing', typing);
+    sub.style.setProperty('--c', `var(--pen-${o})`);
+    const dots = document.getElementById('chat-typing');
+    if (dots && dots.hidden === typing) {
+      const list = $('#chat-list'), near = list.scrollHeight - list.scrollTop - list.clientHeight < 90;
+      dots.hidden = !typing;
+      if (near) list.scrollTop = list.scrollHeight;
+    }
+    const inp = $('#chat-in');
+    inp.placeholder = `Scrivi a ${nameOf(o)}…`;
+    $('#chat-form').style.setProperty('--c', `var(--pen-${seat})`);
+  }
+  function showPeek(m) {
+    const p = $('#chat-peek');
+    p.style.setProperty('--c', `var(--pen-${m.by})`);
+    p.innerHTML = `<b>${esc(nameOf(m.by))}</b><span>${esc(m.t)}</span>`;
+    p.hidden = trayOpen;
+    clearTimeout(peekTimer);
+    peekTimer = setTimeout(hidePeek, 5000);
+  }
+  function hidePeek() { clearTimeout(peekTimer); $('#chat-peek').hidden = true; }
+
+  function fitChat() {
+    const el = $('#chat');
+    if (el.hidden) return;
+    const vv = window.visualViewport, list = $('#chat-list');
+    const near = list.scrollHeight - list.scrollTop - list.clientHeight < 90;
+    const h = vv ? vv.height : window.innerHeight, top = vv ? vv.offsetTop : 0;
+    el.style.height = Math.round(h) + 'px';
+    el.style.transform = top ? `translateY(${Math.round(top)}px)` : '';
+    el.classList.toggle('kb', !!vv && vv.height < window.innerHeight - 120);
+    // keyboard up: the last message stays in sight
+    if (near) list.scrollTop = list.scrollHeight;
+  }
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', fitChat);
+    window.visualViewport.addEventListener('scroll', fitChat);
+  }
+  window.addEventListener('resize', fitChat);
+
+  function openChat() {
+    if (!seat) return;
+    chatOpen = true;
+    closeTray();
+    hidePeek();
+    $('#chat').hidden = false;
+    document.body.classList.add('chat-on');
+    fitChat();
+    renderChat(true);
+    markRead();
+    renderSocial();
+    clearInterval(typingTimer);
+    typingTimer = setInterval(renderChatHead, 1500);
+    if (window.matchMedia && window.matchMedia('(hover: hover)').matches) $('#chat-in').focus({ preventScroll: true });
+  }
+  function closeChat() {
+    if (!chatOpen) return;
+    chatOpen = false;
+    clearInterval(typingTimer);
+    if (typingSent && roomRef) { typingSent = 0; roomRef.child('typing/' + seat).remove(); }
+    const inp = $('#chat-in');
+    if (document.activeElement === inp) inp.blur();
+    $('#chat').hidden = true;
+    document.body.classList.remove('chat-on');
+    renderSocial();
+    $('#chat-btn').focus({ preventScroll: true });
+  }
+  function noteTyping() {
+    if (!roomRef) return;
+    const has = $('#chat-in').value.trim().length > 0, ref = roomRef.child('typing/' + seat);
+    if (has && Date.now() - typingSent > 2500) {
+      typingSent = Date.now();
+      if (!typingHooked) { ref.onDisconnect().remove(); typingHooked = true; }
+      ref.set(SERVER_TS());
+    } else if (!has && typingSent) {
+      typingSent = 0;
+      ref.remove();
+    }
+  }
+  function growInput() {
+    const inp = $('#chat-in');
+    inp.style.height = 'auto';
+    inp.style.height = Math.min(inp.scrollHeight, 132) + 'px';
+    $('#chat-send').disabled = !cleanMsg(inp.value);
+  }
+  function sendChat() {
+    const inp = $('#chat-in'), t = cleanMsg(inp.value);
+    if (!t || !chatRef || !seat) return;
+    chatRef.push({ by: seat, t, at: SERVER_TS() });
+    inp.value = '';
+    growInput();
+    noteTyping();
+    sentTone();
+  }
+
+  function renderSocial() {
+    const dock = $('#dock');
+    document.body.classList.toggle('dock-on', !!seat);
+    dock.hidden = !seat || ui.sheet || chatOpen || kbOpen;
+    if (!seat) return;
+    if (btnSeat !== seat) { $('#emo-btn').innerHTML = emoBtnSVG(seat); btnSeat = seat; }
+    const n = unread(), b = $('#chat-badge');
+    b.hidden = !n;
+    b.textContent = n > 9 ? '9+' : String(n);
+    $('#chat-btn').setAttribute('aria-label', n ? `Chat, ${n} da leggere` : 'Chat');
+    if (trayOpen) {
+      const hint = $('#emo-tray .emo-hint');
+      if (!!hint === partnerHere()) $('#emo-tray').innerHTML = trayHTML();
+    }
+    renderChatHead();
+  }
+
+  function startSocial() {
+    if (!roomRef || chatRef) return;
+    roomRef.root.child('.info/serverTimeOffset').on('value', s => { serverSkew = Number(s.val()) || 0; });
+    chatRef = roomRef.child('chat');
+    const q = chatRef.limitToLast(CHAT_SHOW);
+    q.on('child_added', s => addMsg(s.key, s.val()));
+    q.once('value', () => { chatLoaded = true; renderChat(true); renderSocial(); });
+    roomRef.child('chatRead').on('value', s => {
+      const v = s.val() || {};
+      for (const k of ['a', 'b']) readMark[k] = typeof v[k] === 'string' ? v[k].slice(0, 40) : '';
+      readLoaded = true;
+      if (chatOpen && !document.hidden) markRead();
+      renderSeen();
+      renderSocial();
+    });
+    roomRef.child('typing/' + other()).on('value', s => {
+      const v = s.val();
+      typingAt = typeof v === 'number' ? v : 0;
+      renderChatHead();
+    });
+    let first = true, last = '';
+    roomRef.child('react/' + other()).on('value', s => {
+      const v = s.val(), wasFirst = first;
+      first = false;
+      if (!v || typeof v !== 'object' || typeof v.n !== 'string' || v.n === last) return;
+      last = v.n;
+      if (typeof v.at !== 'number' || Math.abs(nowServer() - v.at) > (wasFirst ? 6000 : 20000)) return;
+      const ok = (v.k === 'e' && EMO_BY[v.v]) || (v.k === 's' && Number.isInteger(v.v) && SAYS[v.v]);
+      if (!ok) return;
+      // Away for a moment (notification centre, another app)? It shows as soon as you're back, if it's still fresh.
+      if (document.hidden) { pendingEmo = { k: v.k, v: v.v, until: Date.now() + 8000 }; return; }
+      showEmo(other(), v.k, v.v);
+    });
+  }
+
+  document.addEventListener('click', e => {
+    if (trayOpen && !e.target.closest('#emo-tray, #emo-btn')) closeTray();
+    const el = e.target.closest('[data-act]');
+    if (!el) {
+      if (e.target.id === 'chat') closeChat();
+      return;
+    }
+    switch (el.getAttribute('data-act')) {
+      case 'emo-tray': if (trayOpen) closeTray(); else openTray(); break;
+      case 'emo': if (EMO_BY[el.getAttribute('data-e')]) sendEmo('e', el.getAttribute('data-e')); break;
+      case 'say': { const k = Number(el.getAttribute('data-k')); if (SAYS[k]) sendEmo('s', k); break; }
+      case 'emo-sound':
+        soundOn = !soundOn;
+        store.set(SOUND_KEY, soundOn ? '1' : '0');
+        $('#emo-tray').innerHTML = trayHTML();
+        if (soundOn) sayTone();
+        break;
+      case 'chat-open': openChat(); break;
+      case 'chat-close': closeChat(); break;
+      default: break;
+    }
+  });
+  document.addEventListener('submit', e => {
+    if (e.target.id !== 'chat-form') return;
+    e.preventDefault();
+    sendChat();
+  });
+  // Tapping the arrow keeps the keyboard open, like any chat.
+  $('#chat-send').addEventListener('mousedown', e => e.preventDefault());
+  $('#chat-in').addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); sendChat(); }
+  });
+  $('#chat-in').addEventListener('input', () => { growInput(); noteTyping(); });
+  $('#chat').addEventListener('touchmove', e => {
+    if (!e.target.closest('.chat-list, .chat-in')) e.preventDefault();
+  }, { passive: false });
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    if (chatOpen) closeChat();
+    else if (trayOpen) closeTray();
+  });
+  // With the keyboard up, the round buttons step aside.
+  document.addEventListener('focusin', e => {
+    const t = e.target;
+    if (t && t.id !== 'chat-in' && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) { kbOpen = true; renderSocial(); }
+  });
+  document.addEventListener('focusout', () => {
+    setTimeout(() => {
+      const a = document.activeElement;
+      const still = a && a.id !== 'chat-in' && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA');
+      if (kbOpen !== !!still) { kbOpen = !!still; renderSocial(); }
+    }, 60);
+  });
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden && pendingEmo) {
+      const p = pendingEmo;
+      pendingEmo = null;
+      if (Date.now() < p.until) showEmo(other(), p.k, p.v);
+    }
+    if (!document.hidden && chatOpen) markRead();
+    if (document.hidden && typingSent && roomRef) { typingSent = 0; roomRef.child('typing/' + seat).remove(); }
   });
 
   if (seat) load();
