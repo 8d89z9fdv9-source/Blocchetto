@@ -866,7 +866,7 @@ input, textarea { -webkit-user-select: text; user-select: text; -webkit-touch-ca
 @keyframes ex-snore { 0% { transform: translate(-6px, 10px) scale(.5); opacity: 0; } 30% { opacity: 1; } 100% { transform: translate(6px, -12px) scale(1.15); opacity: 0; } }
 
 /* ---------- the two round buttons in the corner ---------- */
-.dock { position: fixed; z-index: 35; right: max(14px, env(safe-area-inset-right, 0px)); bottom: calc(env(safe-area-inset-bottom, 0px) + 14px); display: flex; gap: 10px; align-items: flex-end; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+.dock { position: fixed; z-index: 28; right: max(14px, env(safe-area-inset-right, 0px)); bottom: calc(env(safe-area-inset-bottom, 0px) + 14px); display: flex; gap: 10px; align-items: flex-end; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
 .dbtn { position: relative; width: 54px; height: 54px; padding: 0; border-radius: 50%; border: 2px solid var(--ink); background: var(--paper); color: var(--ink); display: grid; place-items: center; box-shadow: var(--shadow); cursor: pointer; touch-action: manipulation; transition: transform .12s ease; }
 .dbtn:active { transform: scale(.92); }
 .dbtn svg { width: 30px; height: 30px; }
@@ -1039,9 +1039,13 @@ body.chat-on { overflow: hidden; }
 /* the Mirtillo row in the panel */
 .emo-sec { margin: 2px 4px -4px; font: 800 12px/1 var(--f-ui); color: var(--ink-soft); letter-spacing: .02em; }
 .emo-grid.mirt { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+
+/* A thin bar in the page colour on the top edge. In a Home Screen app on iOS 26 the page starts under the clock and iOS paints the notch strip itself, copying whatever sits on that edge and then keeping it: without this the grey veil of a sheet stayed there as a block after the sheet closed. */
+.topcap { position: fixed; z-index: 29; top: 0; left: 0; right: 0; height: max(6px, env(safe-area-inset-top, 0px)); background: var(--bg); }
 </style>
 </head>
 <body>
+<div class="topcap" aria-hidden="true"></div>
 <div class="wrap">
   <header class="cover">
     <div>
@@ -5377,6 +5381,19 @@ const Game3 = (() => {
     if (!document.hidden && chatOpen) markRead();
     if (document.hidden && typingSent && roomRef) { typingSent = 0; roomRef.child('typing/' + seat).remove(); }
   });
+  // iOS keeps the first colour it picks for the strip by the notch for as long as the page is open, so when
+  // the iPhone switches between light and dark the page reloads itself. Never in the middle of a video call.
+  const darkMq = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
+  let themeReload = false;
+  const reloadForTheme = () => {
+    if (callState !== 'idle') { themeReload = true; return; }
+    location.reload();
+  };
+  if (darkMq && 'standalone' in navigator) {
+    if (darkMq.addEventListener) darkMq.addEventListener('change', reloadForTheme);
+    else if (darkMq.addListener) darkMq.addListener(reloadForTheme);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden && themeReload) reloadForTheme(); });
+  }
 
   if (seat) load();
   if (tab !== 'home') openRulesOnce(tab);
