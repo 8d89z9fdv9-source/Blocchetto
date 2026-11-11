@@ -5383,13 +5383,14 @@ const Game3 = (() => {
   });
   // iOS keeps the first colour it picks for the strip by the notch for as long as the page is open, so when
   // the iPhone switches between light and dark the page reloads itself. Never in the middle of a video call.
+  // Inside the Blocchetto app the strip is part of the page and follows the theme, so it isn't needed there.
   const darkMq = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
   let themeReload = false;
   const reloadForTheme = () => {
     if (callState !== 'idle') { themeReload = true; return; }
     location.reload();
   };
-  if (darkMq && 'standalone' in navigator) {
+  if (darkMq && 'standalone' in navigator && !window.blocchettoApp) {
     if (darkMq.addEventListener) darkMq.addEventListener('change', reloadForTheme);
     else if (darkMq.addListener) darkMq.addListener(reloadForTheme);
     document.addEventListener('visibilitychange', () => { if (!document.hidden && themeReload) reloadForTheme(); });
