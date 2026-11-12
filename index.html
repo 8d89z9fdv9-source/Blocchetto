@@ -1044,11 +1044,9 @@ body.chat-on { overflow: hidden; }
 .topcap { position: fixed; z-index: 29; top: 0; left: 0; right: 0; height: max(6px, env(safe-area-inset-top, 0px)); background: var(--bg); }
 
 /* ---------- Christmas: everything below only shows with <html class="xmas"> ---------- */
-:root { --adv: #B8322A; --adv-print: #B8322A; --snow: #FFFFFF; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --adv: #8F2A24; --adv-print: #F09A90; --snow: #E9EEF7; } }
-:root[data-theme="dark"] { --adv: #8F2A24; --adv-print: #F09A90; --snow: #E9EEF7; }
-.page[data-game="adv"], [data-game="adv"] { --frame: var(--adv); --print: var(--adv-print); }
-.gcard[data-game="adv"] { grid-column: 1 / -1; min-height: 100px; }
+:root { --snow: #FFFFFF; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --snow: #E9EEF7; } }
+:root[data-theme="dark"] { --snow: #E9EEF7; }
 
 /* the cards in red, pine, burgundy and night blue, so no two neighbours share a colour */
 :root.xmas {
@@ -1144,49 +1142,12 @@ body.chat-on { overflow: hidden; }
 .emo-go.e-m-regalo .mx-gift { transform-origin: 50% 100%; animation: mx-wobble .16s linear infinite alternate; }
 .emo-go.e-m-regalo .ex-spark { transform-box: fill-box; transform-origin: 50% 50%; animation: ex-twinkle .45s ease-in-out infinite alternate; }
 
-/* the Advent calendar */
-:is(.gart, .rart) .mstar { fill: #F2B632; stroke: var(--ink); stroke-width: 1.6; stroke-linejoin: round; }
-.card.adv { display: grid; gap: 14px; }
-.adv-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 9px; }
-.adv-door {
-  position: relative; aspect-ratio: 1; display: grid; place-items: center; padding: 0; border: 2px dashed var(--print); border-radius: 12px;
-  background: var(--paper-2); color: var(--ink); font: 26px/1 var(--f-hand); transform: rotate(var(--tilt)); cursor: pointer; touch-action: manipulation;
-  transition: transform .12s ease;
-}
-.adv-door:active { transform: rotate(var(--tilt)) scale(.92); }
-.adv-door.shut .adv-n { opacity: .45; }
-.adv-door.ready { border: 2.5px solid var(--me); background: var(--paper); animation: adv-wiggle 2.8s ease-in-out infinite; }
-.adv-door.ready .adv-n { color: var(--me); }
-.adv-door.open { border: 2px solid var(--c); background: var(--paper); }
-.adv-door.sel { box-shadow: 0 0 0 3px var(--paper), 0 0 0 5.5px var(--c); }
-.adv-door .adv-ico { width: 72%; height: 72%; }
-.adv-door .adv-n.small { position: absolute; top: 3px; left: 5px; font-size: 13px; color: var(--c); }
-@keyframes adv-wiggle { 0%, 84%, 100% { transform: rotate(var(--tilt)); } 89% { transform: rotate(calc(var(--tilt) - 6deg)); } 94% { transform: rotate(calc(var(--tilt) + 5deg)); } }
-.adv-ico { display: block; }
-.adv-ico svg { display: block; width: 100%; height: 100%; overflow: visible; }
-.adv-note { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 12px; align-items: start; padding: 12px; border-radius: 14px; background: var(--paper-2); }
-.adv-note.fresh { animation: adv-pop .55s cubic-bezier(.2, 1.5, .4, 1) both; }
-@keyframes adv-pop { from { transform: scale(.85) rotate(-2deg); opacity: 0; } to { transform: none; opacity: 1; } }
-.adv-note .adv-ico { width: 64px; height: 64px; }
-.adv-note h3 { margin: 2px 0 4px; font-size: 19px; font-weight: 800; }
-.adv-note p { margin: 0; }
-.adv-day { font-size: 13px; color: var(--ink-soft); font-weight: 700; }
-.adv-ico .k { fill: none; stroke: var(--ink); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
-.adv-ico .kt { fill: none; stroke: var(--ink); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.adv-ico .kf { fill: var(--ink); }
-.adv-ico .r { fill: #E5484D; } .adv-ico .g { fill: #2F9E63; } .adv-ico .y { fill: #F2B632; } .adv-ico .u { fill: #6C8FEA; }
-.adv-ico .w { fill: #FFFFFF; } .adv-ico .n { fill: #B9824F; } .adv-ico .p { fill: #FF9DB5; }
-.adv-ico .us { fill: none; stroke: #6C8FEA; stroke-width: 3; stroke-linecap: round; }
-.adv-ico .rs { fill: none; stroke: #E5484D; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
-.adv-ico .wl { fill: none; stroke: #FFFFFF; stroke-width: 2.4; stroke-linecap: round; opacity: .85; }
-.adv-ico .t { font: 10px/1 var(--f-hand); fill: var(--ink); text-anchor: middle; dominant-baseline: central; letter-spacing: .04em; }
-
 /* the Christmas row in the reactions panel */
 .say-row.xmas-says { margin-top: -2px; }
 
 @media (prefers-reduced-motion: reduce) {
   .xmas .snow { display: none; }
-  .xl-b, .adv-door.ready, .adv-note.fresh { animation: none; }
+  .xl-b { animation: none; }
 }
 </style>
 </head>
@@ -1597,7 +1558,7 @@ const Game = (() => {
 <script id="logic2">
 // Rules for the games added after the first three. Same contract as Game: apply() returns the next state or null.
 const Game2 = (() => {
-  const GAMES = ['adv', 'taro', 'imp', 'qua', 'tris', 'bri', 'mem', 'dis', 'c4', 'sos', 'num', 'navi', 'ncc', 'chi', 'dom'];
+  const GAMES = ['taro', 'imp', 'qua', 'tris', 'bri', 'mem', 'dis', 'c4', 'sos', 'num', 'navi', 'ncc', 'chi', 'dom'];
   const EXTRA = ['c4', 'sos', 'num', 'navi', 'dom', 'taro'];
   const other = s => (s === 'a' ? 'b' : 'a');
   const isSeat = s => s === 'a' || s === 'b';
@@ -2619,71 +2580,6 @@ const Game3 = (() => {
   };
 })();
 </script>
-<script id="logic4">
-// The Advent calendar: 24 boxes, one more each day from the 1st of December.
-// Same contract as Game, Game2 and Game3: apply() returns the next state or null.
-const Game4 = (() => {
-  const EXTRA = ['adv'];
-  const DAYS = 24;
-  const isSeat = s => s === 'a' || s === 'b';
-  const clone = o => JSON.parse(JSON.stringify(o));
-  const intIn = (v, lo, hi, d) => (typeof v === 'number' && Number.isFinite(v) && Math.trunc(v) >= lo && Math.trunc(v) <= hi ? Math.trunc(v) : d);
-
-  // Today, or a test day saved on this phone as blocchetto.oggi (YYYY-MM-DD).
-  function today() {
-    let t = '';
-    try { t = window.localStorage.getItem('blocchetto.oggi') || ''; } catch (e) { t = ''; }
-    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(t);
-    return m ? new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]), 12) : new Date();
-  }
-  // Which Christmas a day belongs to: January still counts as the December before.
-  const season = d => (d.getMonth() === 0 ? d.getFullYear() - 1 : d.getFullYear());
-  // The last box that can be opened that day: none before December, all of them after the 24th.
-  function openable(d) {
-    if (d.getMonth() === 11) return Math.min(d.getDate(), DAYS);
-    return d.getMonth() === 0 ? DAYS : 0;
-  }
-  // The boxes opened this Christmas; last year's don't count.
-  const openOf = (q, d) => (q && q.y === season(d) ? q.open : {});
-
-  const fresh = () => ({ adv: { y: 0, open: {}, n: 1 }, score: { adv: { a: 0, b: 0 } } });
-  const handles = t => typeof t === 'string' && /^adv\./.test(t);
-
-  function apply(S, a) {
-    if (!S || !a || typeof a !== 'object' || !isSeat(a.seat) || a.t !== 'adv.open') return null;
-    const now = today(), day = a.day;
-    if (!Number.isInteger(day) || day < 1 || day > openable(now)) return null;
-    const N = clone(S), y = season(now);
-    if (N.adv.y !== y) N.adv = { y, open: {}, n: N.adv.n + 1 };
-    if (N.adv.open[day]) return null;
-    N.adv.open[day] = { by: a.seat, at: Date.now() };
-    N.adv.n += 1;
-    return N;
-  }
-
-  function sanitize(raw) {
-    const out = fresh(), A = raw && raw.adv;
-    if (A && typeof A === 'object') {
-      const O = A.open && typeof A.open === 'object' ? A.open : {}, open = {};
-      for (let d = 1; d <= DAYS; d++) {
-        const x = O[d];
-        if (x && typeof x === 'object' && isSeat(x.by)) open[d] = { by: x.by, at: intIn(x.at, 0, 1e15, 0) };
-      }
-      out.adv = { y: intIn(A.y, 0, 9999, 0), open, n: intIn(A.n, 1, 1e9, 1) };
-    }
-    return out;
-  }
-
-  // Both of you have something to do while today's box is still closed.
-  function yourMove(S, g) {
-    const now = today();
-    if (g !== 'adv' || now.getMonth() !== 11 || now.getDate() > DAYS) return null;
-    return openOf(S.adv, now)[now.getDate()] ? null : true;
-  }
-
-  return { EXTRA, DAYS, today, season, openable, openOf, handles, apply, sanitize, fresh, yourMove };
-})();
-</script>
 <script>
 (() => {
   'use strict';
@@ -2693,11 +2589,10 @@ const Game4 = (() => {
   const NCC_CATS = XMAS ? Game3.CATS.map(c => (c === 'Mestiere' ? 'Cosa di Natale' : c)) : Game3.CATS;
   const NAMES = { a: 'Gabri', b: 'Ivi' };
   const GAMES = Game2.GAMES;
-  const TITLES = { adv: 'Calendario dell’Avvento', bri: 'Briscola', mem: 'Memory', dis: 'Disegna e indovina', ncc: 'Nomi, cose, città', chi: 'Chi mi conosce meglio', taro: 'Tarocchi', imp: 'Impiccato', qua: 'Quadratini', tris: 'Tris', c4: 'Quattro in fila', sos: 'SOS', num: 'Indovina il numero', navi: 'Battaglia navale', dom: 'Domanda della buonanotte' };
-  const WHERE = { adv: 'sul calendario dell’Avvento', bri: 'sulla briscola', mem: 'su memory', dis: 'su disegna e indovina', ncc: 'su nomi, cose, città', chi: 'su chi mi conosce meglio', taro: 'sui tarocchi', imp: "sull'impiccato", qua: 'sui quadratini', tris: 'sul tris', c4: 'su quattro in fila', sos: 'su SOS', num: 'su indovina il numero', navi: 'sulla battaglia navale', dom: 'sulla domanda della buonanotte' };
+  const TITLES = { bri: 'Briscola', mem: 'Memory', dis: 'Disegna e indovina', ncc: 'Nomi, cose, città', chi: 'Chi mi conosce meglio', taro: 'Tarocchi', imp: 'Impiccato', qua: 'Quadratini', tris: 'Tris', c4: 'Quattro in fila', sos: 'SOS', num: 'Indovina il numero', navi: 'Battaglia navale', dom: 'Domanda della buonanotte' };
+  const WHERE = { bri: 'sulla briscola', mem: 'su memory', dis: 'su disegna e indovina', ncc: 'su nomi, cose, città', chi: 'su chi mi conosce meglio', taro: 'sui tarocchi', imp: "sull'impiccato", qua: 'sui quadratini', tris: 'sul tris', c4: 'su quattro in fila', sos: 'su SOS', num: 'su indovina il numero', navi: 'sulla battaglia navale', dom: 'sulla domanda della buonanotte' };
   const SYM_NAMES = { x: 'Croce', o: 'Cerchio', s: 'Stella', h: 'Cuore', n: 'Nuvola', f: 'Fiore', l: 'Luna', u: 'Sole' };
   const RULES = {
-    adv: 'Dal 1° al 24 dicembre ogni giorno si apre una casella, con dentro una piccola cosa da fare insieme. Basta che la apra uno dei due: la vedete tutti e due. Le caselle dei giorni passati si possono aprire anche dopo, quelle dei giorni che devono ancora venire no.',
     bri: 'Briscola a due con le carte napoletane. Si danno tre carte a testa e la settima, scoperta sotto il mazzo, decide il seme di briscola. A turno giocate una carta: prende chi tira la più alta del seme uscito per primo, a meno che l’altro non giochi una briscola. Dopo ogni presa si pesca, prima chi ha preso. Valgono l’asso (11), il tre (10), il re (4), il cavallo (3) e il fante (2): in tutto 120 punti, vince chi ne fa più di 60.',
     mem: 'Ci sono 20 carte coperte e ogni disegno c’è due volte. Al tuo turno ne giri due: se sono uguali le tieni e giochi ancora, se no tornano coperte e tocca all’altro. Le carte girate le vedete tutti e due, quindi tenete a mente dove stanno. Vince chi trova più coppie.',
     dis: 'Uno sceglie una parola e la disegna col dito, l’altro prova a indovinarla scrivendo. Niente lettere o numeri nel disegno, per il resto vale tutto. Il disegno arriva tratto per tratto. Se indovini prendi un punto, poi vi scambiate. Se proprio non ci arrivi puoi arrenderti e vedere cos’era.',
@@ -2722,30 +2617,27 @@ const Game4 = (() => {
     const g = String(t).split('.')[0];
     return GAMES.includes(g) ? [g] : [];
   }
-  // One facade over the first three games (Game), the second batch (Game2), the third (Game3) and the Advent calendar (Game4).
+  // One facade over the first three games (Game), the second batch (Game2) and the third (Game3).
   const EXTRA_KEYS = Game2.EXTRA.concat(['pick']);
   const GX = {
     fresh() {
-      const st = G.fresh(), ex = Game2.freshExtra(), e3 = Game3.fresh(), e4 = Game4.fresh();
+      const st = G.fresh(), ex = Game2.freshExtra(), e3 = Game3.fresh();
       for (const k of EXTRA_KEYS) st[k] = ex[k];
       for (const k of Game3.EXTRA) st[k] = e3[k];
-      for (const k of Game4.EXTRA) st[k] = e4[k];
-      Object.assign(st.score, ex.score, e3.score, e4.score);
+      Object.assign(st.score, ex.score, e3.score);
       return st;
     },
     sanitize(raw) {
       const st = G.sanitize(raw);
       if (!st) return null;
-      const ex = Game2.sanitizeExtra(raw), e3 = Game3.sanitize(raw, G.cleanText), e4 = Game4.sanitize(raw);
+      const ex = Game2.sanitizeExtra(raw), e3 = Game3.sanitize(raw, G.cleanText);
       for (const k of EXTRA_KEYS) st[k] = ex[k];
       for (const k of Game3.EXTRA) st[k] = e3[k];
-      for (const k of Game4.EXTRA) st[k] = e4[k];
-      Object.assign(st.score, ex.score, e3.score, e4.score);
+      Object.assign(st.score, ex.score, e3.score);
       return st;
     },
     apply(S0, a) {
       const t = a && a.t;
-      if (Game4.handles(t)) return Game4.apply(S0, a);
       if (Game3.handles(t)) return Game3.apply(S0, a, G.cleanText);
       return Game2.handles(t) ? Game2.apply(S0, a, G.cleanText) : G.apply(S0, a);
     },
@@ -3664,8 +3556,6 @@ const Game4 = (() => {
   function miniArt(g) {
     const pa = 'style="--c:var(--pen-a)"', pb = 'style="--c:var(--pen-b)"';
     switch (g) {
-      case 'adv':
-        return `<rect class="mp" x="7" y="7" width="46" height="46" rx="7"/><path class="mp" d="M30 9V51M9 30H51"/><text class="mt" x="18.5" y="19" ${pa}>1</text><text class="mt" x="18.5" y="41" ${pb}>24</text><text class="mt" x="41.5" y="41" ${pa}>7</text><path class="mstar" d="${advStar(41.5, 19.5, 7.5)}"/>`;
       case 'imp':
         return `<path class="mp" d="M9 52 H33 M15 52 V9 H41 M15 21 L27 9 M41 9 V15"/><path class="mi" ${pa} d="${penCircle(41, 21, 6, 'mi1')} ${penLine(41, 27, 41, 41, 'mi2')} ${penLine(41, 31, 34, 37, 'mi3')} ${penLine(41, 31, 48, 37, 'mi4')}"/>`;
       case 'qua': {
@@ -3877,7 +3767,6 @@ const Game4 = (() => {
   function yourMove(g, s) {
     if (Game2.EXTRA.includes(g)) return Game2.yourMove(S, g, s);
     if (Game3.EXTRA.includes(g)) return Game3.yourMove(S, g, s);
-    if (Game4.EXTRA.includes(g)) return Game4.yourMove(S, g, s);
     const t = G.turnOf(S, g);
     return t ? t === s : null;
   }
@@ -4533,17 +4422,9 @@ const Game4 = (() => {
   });
 
   /* ---------- index of games and the random wheel ---------- */
-  const TILTS = [-0.6, -1.4, 1.1, 0.8, -1, 1.3, -0.7, -1.2, 0.9, 1.2, -0.9, 0.7, -1.3, 1, -0.8];
-  // The calendar is not a game to play now and then, so the wheel leaves it out.
-  const WHEEL = GAMES.filter(g => g !== 'adv');
+  const TILTS = [-0.6, -1.4, 1.1, 0.8, -1, 1.3, -0.7, -1.2, 0.9, 1.2, -0.9, 0.7, -1.3, 1];
   const DICE = '<svg viewBox="0 0 32 32" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="24" height="24" rx="6"/><circle cx="11" cy="11" r="1.7" fill="currentColor"/><circle cx="21" cy="11" r="1.7" fill="currentColor"/><circle cx="16" cy="16" r="1.7" fill="currentColor"/><circle cx="11" cy="21" r="1.7" fill="currentColor"/><circle cx="21" cy="21" r="1.7" fill="currentColor"/></svg>';
   function cardState(g) {
-    if (g === 'adv') {
-      const now = Game4.today(), k = Game4.openable(now), open = Game4.openOf(S.adv, now);
-      if (!k) return { text: 'Dal 1° dicembre', mine: false };
-      if (now.getMonth() === 11 && now.getDate() <= Game4.DAYS) return open[now.getDate()] ? { text: 'Casella di oggi aperta', mine: false } : { text: 'Apri la casella di oggi', mine: true };
-      return { text: 'Buon Natale!', mine: false };
-    }
     if (synced && g === 'bri' && S.bri.phase === 'idle') return { text: 'Dai le carte', mine: false };
     if (synced && g === 'dis') {
       const q = S.dis, me = q.drawer === seat;
@@ -4579,7 +4460,6 @@ const Game4 = (() => {
   function homeHTML() {
     let h = `<button class="spin-btn" type="button" data-act="spin"${ui.spinning || !synced ? ' disabled' : ''}>${DICE}Gira la ruota</button><p class="home-hint">Non sapete a cosa giocare? La ruota sceglie un gioco a caso, uguale per tutti e due.</p><div class="cards">`;
     GAMES.forEach((g, k) => {
-      if (g === 'adv' && !XMAS) return;
       const st = cardState(g);
       h += `<button class="gcard" type="button" data-act="open" data-g="${g}" data-game="${g}" style="--tilt:${TILTS[k]}deg"><span class="gname">${TITLES[g]}</span><span class="gstate${st.mine ? ' mine' : ''}" style="--c:var(--pen-${seat})">${esc(st.text)}</span><span class="gart">${artSVG(g)}</span></button>`;
     });
@@ -4628,7 +4508,7 @@ const Game4 = (() => {
   function startSpin() {
     if (ui.spinning || !synced) return;
     audio();
-    const choices = WHEEL.filter(g => g !== S.pick.g);
+    const choices = GAMES.filter(g => g !== S.pick.g);
     const g = choices[Math.floor(Math.random() * choices.length)];
     if (act({ t: 'pick', seat, g })) {
       lastPickKey = pickKey(S.pick);
@@ -4640,12 +4520,12 @@ const Game4 = (() => {
     ui.spinning = true;
     const el = $('#spin'), reel = $('#reel');
     $('#spin-title').textContent = by === seat ? 'Si gioca a…' : `${nameOf(by)} ha girato la ruota…`;
-    const len = WHEEL.length, start = Math.floor(Math.random() * len), ti = Math.max(0, WHEEL.indexOf(target));
+    const len = GAMES.length, start = Math.floor(Math.random() * len), ti = GAMES.indexOf(target);
     const F = 4 * len + ((ti - start + len) % len);
     // Cards are laid out right to left, so the strip slides from left to right as it spins.
     const items = [];
     for (let k = -1; k <= F + 1; k++) {
-      const g = WHEEL[(((start + k) % len) + len) % len];
+      const g = GAMES[(((start + k) % len) + len) % len];
       items.push(`<div class="rcard" data-game="${g}"><span><i class="rart">${artSVG(g)}</i><b>${TITLES[g]}</b></span></div>`);
     }
     reel.innerHTML = items.reverse().join('');
@@ -4689,127 +4569,6 @@ const Game4 = (() => {
     render();
   }
 
-  /* ---------- calendario dell'Avvento ---------- */
-  // where each number sits, mixed up like on a real calendar, and a little tilt for each door
-  const ADV_ORDER = [7, 15, 1, 20, 12, 3, 22, 9, 18, 5, 14, 24, 2, 10, 17, 6, 21, 13, 8, 16, 4, 23, 11, 19];
-  const ADV_TILT = [-1.5, 1.2, -0.6, 1.8, 0.9, -1.4, 1.5, -0.8, 1.1, -1.7, 0.7, -1.1, 1.6, -0.9, 0.6, -1.3, 1.3, -0.5, 1.9, -1.6, 0.8, -1.2, 1.4, -0.7];
-  function advStar(cx, cy, R) {
-    let d = '';
-    for (let i = 0; i < 10; i++) {
-      const a = -Math.PI / 2 + (i * Math.PI) / 5, r = i % 2 ? R * 0.45 : R;
-      d += `${i ? 'L' : 'M'}${f1(cx + r * Math.cos(a))} ${f1(cy + r * Math.sin(a))}`;
-    }
-    return d + 'Z';
-  }
-  const advHeart = (cx, cy, s, cls) => `<g transform="translate(${cx} ${cy}) scale(${s}) translate(-50 -50)"><path class="${cls}" d="${HEART}"/><path class="k" style="stroke-width:${f1(2.6 / s)}" d="${HEART}"/></g>`;
-  // little felt-tip drawings for what's inside the boxes (viewBox 60)
-  const ADV_ICONS = {
-    bell: '<path class="y" d="M30 13C21 13 17 20 17 29V37L12 43H48L43 37V29C43 20 39 13 30 13Z"/><path class="k" d="M30 13C21 13 17 20 17 29V37L12 43H48L43 37V29C43 20 39 13 30 13Z"/>' +
-      '<circle class="y" cx="30" cy="48" r="4"/><circle class="k" cx="30" cy="48" r="4"/><path class="kt" d="M21 36H39"/>' +
-      '<path class="r" d="M30 13L21 7Q18 13 25 14ZM30 13L39 7Q42 13 35 14Z"/><path class="kt" d="M30 13L21 7Q18 13 25 14ZM30 13L39 7Q42 13 35 14Z"/>',
-    tree: '<path class="g" d="M30 10L43 25H37L47 38H39L50 50H10L21 38H13L23 25H17Z"/><path class="k" d="M30 10L43 25H37L47 38H39L50 50H10L21 38H13L23 25H17Z"/>' +
-      '<rect class="n" x="26" y="50" width="8" height="7" rx="1.5"/><rect class="k" x="26" y="50" width="8" height="7" rx="1.5"/>' +
-      '<circle class="r" cx="25" cy="32" r="2.6"/><circle class="u" cx="35" cy="43" r="2.6"/><circle class="y" cx="22" cy="45" r="2.4"/><circle class="r" cx="36" cy="29" r="2.2"/>' +
-      `<path class="y" d="${advStar(30, 9, 6.5)}"/><path class="kt" d="${advStar(30, 9, 6.5)}"/>`,
-    envelope: '<rect class="w" x="9" y="16" width="42" height="30" rx="4"/><rect class="k" x="9" y="16" width="42" height="30" rx="4"/><path class="k" d="M11 19L30 33L49 19"/>' + advHeart(30, 37, 0.13, 'r'),
-    ticket: '<path class="y" d="M8 19H52V27A4 4 0 0 0 52 35V43H8V35A4 4 0 0 0 8 27Z"/><path class="k" d="M8 19H52V27A4 4 0 0 0 52 35V43H8V35A4 4 0 0 0 8 27Z"/><path class="kt" stroke-dasharray="2.5 3" d="M40 21V41"/><text class="t" x="24" y="31.5">BUONO</text>',
-    star: `<path class="y" d="${advStar(30, 31, 22)}"/><path class="k" d="${advStar(30, 31, 22)}"/><path class="wl" d="M23 25Q25 21 28 19"/>`,
-    heart: advHeart(30, 31, 0.42, 'r') + '<path class="wl" d="M17 25Q19 19 25 18"/>',
-    pencil: '<g transform="rotate(38 30 30)"><rect class="y" x="24" y="8" width="12" height="32"/><rect class="k" x="24" y="8" width="12" height="32"/><path class="w" d="M24 40L30 53L36 40Z"/><path class="k" d="M24 40L30 53L36 40Z"/><path class="kf" d="M28.3 49.3L30 53L31.7 49.3Z"/><rect class="p" x="24" y="3" width="12" height="6" rx="2"/><rect class="k" x="24" y="3" width="12" height="6" rx="2"/></g>',
-    bauble: '<circle class="r" cx="30" cy="35" r="16"/><path class="kt" d="M15 33Q30 41 45 33"/><circle class="k" cx="30" cy="35" r="16"/><rect class="y" x="24.5" y="15" width="11" height="6" rx="1.5"/><rect class="k" x="24.5" y="15" width="11" height="6" rx="1.5"/><path class="k" d="M30 15Q29 9 34 8"/><path class="wl" d="M21 30Q22 25 27 23"/>',
-    mug: '<path class="w" d="M13 22H41V43Q41 50 34 50H20Q13 50 13 43Z"/><path class="n" d="M15 24H39V27H15Z"/><path class="k" d="M13 22H41V43Q41 50 34 50H20Q13 50 13 43Z"/><path class="k" d="M41 27Q50 27 50 34Q50 41 41 41"/><path class="r" d="M20 33H34V36H20Z"/><path class="kt" d="M21 16Q18 12 21 8M29 16Q26 12 29 8M37 16Q34 12 37 8"/>',
-    moon: `<path class="y" d="M37 9A22 22 0 1 0 51 39A17 17 0 1 1 37 9Z"/><path class="k" d="M37 9A22 22 0 1 0 51 39A17 17 0 1 1 37 9Z"/><path class="y" d="${advStar(46, 16, 5)}"/><path class="kt" d="${advStar(46, 16, 5)}"/><path class="y" d="${advStar(52, 29, 3.5)}"/><path class="kt" d="${advStar(52, 29, 3.5)}"/>`,
-    paw: '<ellipse class="kf" cx="30" cy="38" rx="11" ry="9"/><ellipse class="kf" cx="16" cy="27" rx="4.6" ry="5.6" transform="rotate(-25 16 27)"/><ellipse class="kf" cx="24.5" cy="18.5" rx="4.6" ry="5.8" transform="rotate(-8 24.5 18.5)"/><ellipse class="kf" cx="35.5" cy="18.5" rx="4.6" ry="5.8" transform="rotate(8 35.5 18.5)"/><ellipse class="kf" cx="44" cy="27" rx="4.6" ry="5.6" transform="rotate(25 44 27)"/>' + advHeart(30, 39, 0.09, 'r'),
-    cards: '<g transform="rotate(-12 24 32)"><rect class="w" x="12" y="15" width="22" height="31" rx="3"/><rect class="k" x="12" y="15" width="22" height="31" rx="3"/>' + advHeart(23, 30, 0.1, 'r') + '</g><g transform="rotate(11 38 30)"><rect class="w" x="27" y="13" width="22" height="31" rx="3"/><rect class="k" x="27" y="13" width="22" height="31" rx="3"/><circle class="y" cx="38" cy="28.5" r="5.5"/><circle class="k" cx="38" cy="28.5" r="5.5"/><circle class="kt" cx="38" cy="28.5" r="2.2"/></g>',
-    candle: '<rect class="w" x="22" y="25" width="16" height="28" rx="2"/><path class="r" d="M22 33L38 29V35L22 39ZM22 45L38 41V47L22 51Z"/><rect class="k" x="22" y="25" width="16" height="28" rx="2"/><path class="k" d="M30 25V20"/><path class="y" d="M30 5Q38 14 34 19Q30 23 26 19Q22 14 30 5Z"/><path class="k" d="M30 5Q38 14 34 19Q30 23 26 19Q22 14 30 5Z"/><path class="r" d="M30 12Q33 16 31.5 18Q30 19.5 28.5 18Q27 16 30 12Z"/>',
-    cookie: '<circle class="n" cx="30" cy="14" r="8"/><path class="n" d="M22 23H38L47 29Q50 33 46 35L38 32V39L44 50Q45 55 40 54L30 45L20 54Q15 55 16 50L22 39V32L14 35Q10 33 13 29Z"/><circle class="k" cx="30" cy="14" r="8"/><path class="k" d="M22 23H38L47 29Q50 33 46 35L38 32V39L44 50Q45 55 40 54L30 45L20 54Q15 55 16 50L22 39V32L14 35Q10 33 13 29Z"/><circle class="w" cx="27" cy="12.5" r="1.4"/><circle class="w" cx="33" cy="12.5" r="1.4"/><path class="wl" d="M26.5 16.5Q30 19 33.5 16.5"/><circle class="r" cx="30" cy="29" r="2"/><circle class="r" cx="30" cy="36" r="2"/><path class="wl" d="M16 31.5L19 30.5M41 30.5L44 31.5"/>',
-    gift: '<rect class="r" x="12" y="25" width="36" height="27" rx="3"/><rect class="k" x="12" y="25" width="36" height="27" rx="3"/><rect class="r" x="9" y="19" width="42" height="9" rx="2"/><rect class="y" x="27" y="19" width="6" height="33"/><rect class="k" x="9" y="19" width="42" height="9" rx="2"/><path class="kt" d="M27 19V52M33 19V52"/><path class="y" d="M30 19C22 8 13 12 21 19ZM30 19C38 8 47 12 39 19Z"/><path class="k" d="M30 19C22 8 13 12 21 19ZM30 19C38 8 47 12 39 19Z"/>',
-    notes: '<path class="kf" d="M20 18L44 12V17L20 23Z"/><path class="k" d="M20 18V45M44 12V39"/><ellipse class="kf" cx="15.5" cy="45.5" rx="5.5" ry="4.2" transform="rotate(-20 15.5 45.5)"/><ellipse class="kf" cx="39.5" cy="39.5" rx="5.5" ry="4.2" transform="rotate(-20 39.5 39.5)"/>',
-    snowflake: '<path class="us" d="M30 8V52M11 19L49 41M11 41L49 19M30 8L25 13M30 8L35 13M30 52L25 47M30 52L35 47M11 19L18 19.5M11 19L14 25M49 41L42 40.5M49 41L46 35M11 41L14 35M11 41L18 40.5M49 19L46 25M49 19L42 19.5"/><circle class="w" cx="30" cy="30" r="3.4"/><circle class="kt" cx="30" cy="30" r="3.4"/>',
-    stocking: '<path class="r" d="M21 14H39V32L46 39Q52 46 45 52Q39 57 31 50L21 40Z"/><path class="k" d="M21 14H39V32L46 39Q52 46 45 52Q39 57 31 50L21 40Z"/><rect class="w" x="18" y="7" width="24" height="10" rx="3"/><rect class="k" x="18" y="7" width="24" height="10" rx="3"/><path class="wl" d="M41 44Q45 46 45 50"/>',
-    list: '<rect class="w" x="14" y="8" width="32" height="45" rx="3"/><rect class="k" x="14" y="8" width="32" height="45" rx="3"/><path class="kt" d="M27 19H40M27 30H40M27 41H40"/><path class="rs" d="M18 19L20.5 21.5L24 16.5M18 30L20.5 32.5L24 27.5M18 41L20.5 43.5L24 38.5"/>',
-    clock: '<path class="r" d="M16 15L22 9L25.5 12.5L19.5 18.5Z"/><path class="r" d="M44 15L38 9L34.5 12.5L40.5 18.5Z"/><path class="kt" d="M16 15L22 9L25.5 12.5L19.5 18.5ZM44 15L38 9L34.5 12.5L40.5 18.5Z"/><circle class="w" cx="30" cy="33" r="18"/><circle class="k" cx="30" cy="33" r="18"/><path class="k" d="M30 33V22M30 33L37.5 37"/><path class="kt" d="M30 17V19M30 47V49M14 33H16M44 33H46"/>',
-  };
-  const advIcon = k => `<svg viewBox="0 0 60 60" aria-hidden="true" focusable="false">${ADV_ICONS[k] || ''}</svg>`;
-  // what's inside each box: [drawing, title, what to do]
-  const ADV = [
-    ['bell', 'Si comincia', 'Da stasera si apre una casella al giorno. Per cominciare scegliete la canzone di Natale di quest’anno, quella che vi canterete fino a gennaio.'],
-    ['tree', 'L’albero', 'Mandatevi una foto del vostro albero. Se non l’avete ancora fatto, va bene la cosa più natalizia che avete in casa.'],
-    ['envelope', 'La letterina', 'Scrivete in chat tre cose che vorreste trovare sotto l’albero. Una delle tre deve essere impossibile.'],
-    ['ticket', 'Un buono', 'Questa casella vale un buono: il prossimo film da guardare insieme lo sceglie chi l’ha aperta.'],
-    ['star', 'Il Natale più bello', 'Raccontatevi il Natale più bello che ricordate di quando eravate piccoli.'],
-    ['heart', 'San Nicola', 'Oggi è San Nicola, quello dei regali. Il regalo di stasera è facile: un complimento a testa, di quelli che non vi dite mai.'],
-    ['pencil', 'Disegni di Natale', 'Stasera a Disegna e indovina si disegnano solo cose di Natale. Chi ne indovina di meno canta una canzoncina.'],
-    ['bauble', 'L’Immacolata', 'È il giorno in cui in tanti fanno l’albero. Videochiamata e addobbate insieme, anche solo una pallina a testa.'],
-    ['mug', 'Cioccolata calda', 'Preparatevi una cioccolata calda, o una tisana, e bevetela insieme in videochiamata.'],
-    ['moon', 'Film sotto le coperte', 'Scegliete un film di Natale e fatelo partire nello stesso momento, ognuno sotto le sue coperte.'],
-    ['paw', 'Il giorno di Mirtillo', 'Oggi comanda Mirtillo: mandatevi la sua reazione più bella e una sua foto vera, meglio se col cappellino.'],
-    ['cards', 'La sfida', 'Sfida a Briscola: chi vince sceglie il dolce del cenone.'],
-    ['candle', 'Santa Lucia', '«Santa Lucia, la notte più lunga che ci sia», dice il proverbio. Allungate la buonanotte di dieci minuti.'],
-    ['cookie', 'Biscotti', 'Trovate una ricetta di biscotti di Natale da fare insieme la prima volta che vi vedete.'],
-    ['gift', 'Il regalo misterioso', 'Date un indizio sul regalo che state preparando all’altro. Uno solo, e niente bugie.'],
-    ['notes', 'Cantate', 'Mandatevi un vocale col ritornello della vostra canzone di Natale preferita. Stonati va benissimo.'],
-    ['snowflake', 'Fiocchi di neve', 'Ritagliate un fiocco di neve di carta e fatevelo vedere in videochiamata. Il più bello va appeso alla finestra.'],
-    ['heart', 'Il momento più bello', 'Raccontatevi il momento più bello che avete passato insieme quest’anno.'],
-    ['stocking', 'Pigiama', 'Serata in pigiama natalizio, o nel pigiama più brutto che avete. Foto obbligatoria.'],
-    ['list', 'I propositi', 'Scrivete tre propositi per l’anno nuovo: uno a testa e uno da fare insieme.'],
-    ['moon', 'Il giorno più corto', 'Oggi è il giorno più corto dell’anno: da domani la luce ricomincia ad allungarsi. Ditevi una cosa che non vedete l’ora di fare.'],
-    ['gift', 'Pacchetti', 'Incartate i regali in videochiamata, girati dall’altra parte per non spiare.'],
-    ['clock', 'Quasi', 'Manca pochissimo. Raccontatevi come passerete la vigilia, dalla mattina alla sera.'],
-    ['tree', 'Vigilia', 'Buona vigilia! Stasera niente giochi difficili: una domanda della buonanotte, un bacio anche attraverso lo schermo, e a nanna presto, che passa Babbo Natale.'],
-  ];
-  function advLatest(open) {
-    for (let d = Game4.DAYS; d >= 1; d--) if (open[d]) return d;
-    return 0;
-  }
-  function daysToDecember(now) {
-    const a = new Date(now.getFullYear(), now.getMonth(), now.getDate()), b = new Date(now.getFullYear(), 11, 1);
-    return Math.round((b - a) / 864e5);
-  }
-  function viewAdv() {
-    const now = Game4.today(), k = Game4.openable(now), open = Game4.openOf(S.adv, now);
-    const sel = ui.advSel && open[ui.advSel] ? ui.advSel : advLatest(open);
-    let board = `<div class="card adv" style="--me:var(--pen-${seat})"><div class="adv-grid">`;
-    ADV_ORDER.forEach((d, i) => {
-      const o = open[d], ready = !o && d <= k;
-      const state = o ? 'open' : ready ? 'ready' : 'shut';
-      const label = `Casella ${d}${o ? ', aperta' : ready ? ', da aprire' : ''}`;
-      const inner = o ? `<span class="adv-ico">${advIcon(ADV[d - 1][0])}</span><span class="adv-n small">${d}</span>` : `<span class="adv-n">${d}</span>`;
-      board += `<button class="adv-door ${state}${sel === d ? ' sel' : ''}" type="button" data-act="adv-door" data-d="${d}" aria-label="${label}" style="--tilt:${ADV_TILT[i]}deg${o ? `;--c:var(--pen-${o.by})` : ''}">${inner}</button>`;
-    });
-    board += '</div>';
-    if (sel) {
-      const [ic, title, text] = ADV[sel - 1], o = open[sel];
-      const who = o.by === seat ? 'l’hai aperta tu' : `l’ha aperta ${esc(nameOf(o.by))}`;
-      board += `<div class="adv-note${ui.advFresh === sel && Date.now() < (ui.advFreshUntil || 0) ? ' fresh' : ''}"><span class="adv-ico">${advIcon(ic)}</span><div><p class="adv-day">${sel} dicembre · ${who}</p><h3>${esc(title)}</h3><p>${esc(text)}</p></div></div>`;
-    }
-    board += '</div>';
-    let status;
-    if (!k) {
-      const n = daysToDecember(now);
-      status = n <= 1 ? 'Le caselle si aprono domani: ci siamo quasi.' : `Le caselle si aprono dal 1° dicembre. Mancano ${n} giorni.`;
-    } else if (now.getMonth() === 11 && now.getDate() <= Game4.DAYS) {
-      const t = now.getDate(), o = open[t];
-      if (!o) status = t === 1 ? 'Si comincia! Aprite la prima casella.' : 'C’è una casella nuova da aprire.';
-      else if (t === Game4.DAYS) status = 'Buona vigilia! Era l’ultima casella.';
-      else status = o.by === seat ? 'Hai aperto la casella di oggi. A domani!' : `${inkName(o.by)} ha aperto la casella di oggi. A domani!`;
-    } else {
-      status = 'Buon Natale! Le caselle restano qui, potete riaprirle quando volete.';
-    }
-    return { board, status, controls: '' };
-  }
-  function openAdvDoor(d) {
-    const now = Game4.today(), k = Game4.openable(now), open = Game4.openOf(S.adv, now);
-    if (!Number.isInteger(d) || d < 1 || d > Game4.DAYS) return;
-    if (open[d]) { ui.advSel = d; render(); return; }
-    if (d > k) { toast(k ? `Questa si apre il ${d} dicembre. Niente sbirciate!` : 'Le caselle si aprono dal 1° dicembre. Niente sbirciate!'); return; }
-    if (!canManage()) return;
-    ui.advSel = d;
-    ui.advFresh = d;
-    ui.advFreshUntil = Date.now() + 900;
-    if (act({ t: 'adv.open', seat, day: d })) chime();
-  }
-
   // Christmas words for the hangman, if you can't think of one
   const IMP_XMAS = ['panettone', 'pandoro', 'renna', 'slitta', 'vischio', 'presepe', 'ghirlanda', 'camino', 'stella cometa', 'babbo natale', 'tombola', 'torrone',
     'cenone', 'befana', 'zampogna', 'letterina', 'agrifoglio', 'pupazzo di neve', 'fiocco di neve', 'addobbi', 'lenticchie', 'capodanno', 'spumante', 'pacchetto',
@@ -4829,7 +4588,7 @@ const Game4 = (() => {
     const pool = free.length ? free : all.filter(i => i !== S.dom.q);
     return pool[Math.floor(Math.random() * pool.length)];
   }
-  const VIEWS = { adv: viewAdv, bri: viewBri, mem: viewMem, dis: viewDis, ncc: viewNcc, chi: viewChi, taro: viewTaro, imp: viewImp, qua: viewQua, tris: viewTris, c4: viewC4, sos: viewSos, num: viewNum, navi: viewNavi, dom: viewDom };
+  const VIEWS = { bri: viewBri, mem: viewMem, dis: viewDis, ncc: viewNcc, chi: viewChi, taro: viewTaro, imp: viewImp, qua: viewQua, tris: viewTris, c4: viewC4, sos: viewSos, num: viewNum, navi: viewNavi, dom: viewDom };
 
   function whoHTML() {
     const o = other(), name = esc(nameOf(o)), t = partnerTabNow();
@@ -4919,7 +4678,7 @@ const Game4 = (() => {
       $('#page-title').textContent = TITLES[tab];
       $('#rules-text').textContent = RULES[tab];
       const v = VIEWS[tab](anim);
-      $('#page-score').hidden = tab === 'dom' || tab === 'taro' || tab === 'adv';
+      $('#page-score').hidden = tab === 'dom' || tab === 'taro';
       setHTML($('#page-score'), scoreHTML(tab));
       if (!(tab === 'dis' && ui.disLive)) setHTML($('#board'), v.board);
       setHTML($('#status'), v.status);
@@ -5103,7 +4862,6 @@ const Game4 = (() => {
         if (hint && !hint.value) hint.value = 'Una cosa di Natale';
         break;
       }
-      case 'adv-door': openAdvDoor(Number(el.getAttribute('data-d'))); break;
       case 'imp-next': act({ t: 'imp.next', seat }); break;
       case 'imp-cancel': act({ t: 'imp.cancel', seat }); break;
       case 'line': act({ t: 'qua.line', seat, k: el.getAttribute('data-k'), i: Number(el.getAttribute('data-i')) }); break;
